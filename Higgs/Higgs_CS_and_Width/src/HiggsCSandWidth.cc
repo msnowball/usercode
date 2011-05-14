@@ -1,8 +1,6 @@
 #ifndef HIGGSCSANDWIDTH_CC
 #define HIGGSCSANDWIDTH_CC
 
-#define DISCARD_PARAMETER (void)
-
 #include <iostream>
 #include <cmath>
 #include <string>
