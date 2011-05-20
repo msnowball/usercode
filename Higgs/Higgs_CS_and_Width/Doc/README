@@ -28,8 +28,6 @@ and then to compile
 g++ -O2 -Wall -I<path to class>/Higgs_CS_and_Width/include -I<path to class>/Higgs_CS_and_Width/src -c <program name>.cc
 g++ -o <program name>.exe <program name>.o 
 
-See test/Makefile for an example of compiling with root libraries also.
-
 
 There are functions for Higgs width, cross sections, and cross section errors (combined, scale, pdf).
 To use in your program simple declare 
