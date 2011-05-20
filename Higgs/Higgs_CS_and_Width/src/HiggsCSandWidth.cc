@@ -1,6 +1,7 @@
 #ifndef HIGGSCSANDWIDTH_CC
 #define HIGGSCSANDWIDTH_CC
 
+
 #include <iostream>
 #include <cmath>
 #include <string>
@@ -35,7 +36,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.open("../txtFiles/HiggsCS_Official.txt");//directory of input file
   for(int k = 0; k < 50; k++){
 
-    file >> scratchMass >> CS[1][k] >> CS[2][k] >> CS[3][k] >> CS[4][k] >> CS[5][k] >> CS[0][k];
+    file >> scratchMass >> CS[ID_ggToH][k] >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
 
   }
   file.close();
@@ -43,7 +44,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.open("../txtFiles/HiggsCS_ErrorPlus_Official.txt");//directory of input file                       
   for(int k = 0; k < 50; k++){
 
-    file >> scratchMass >> CSerrPlus[1][k] >> CSerrPlus[2][k] >> CSerrPlus[3][k] >> CSerrPlus[4][k] >> CSerrPlus[5][k];
+    file >> scratchMass >> CSerrPlus[ID_ggToH][k] >> CSerrPlus[ID_VBF][k] >> CSerrPlus[ID_WH][k] >> CSerrPlus[ID_ZH][k] >> CSerrPlus[ID_ttH][k];
 
   }
   file.close();
@@ -51,7 +52,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.open("../txtFiles/HiggsCS_ErrorMinus_Official.txt");//directory of input file                                                
   for(int k = 0; k < 50; k++){
 
-    file >> scratchMass >> CSerrMinus[1][k] >> CSerrMinus[2][k] >> CSerrMinus[3][k] >> CSerrMinus[4][k] >> CSerrMinus[5][k];
+    file >> scratchMass >> CSerrMinus[ID_ggToH][k] >> CSerrMinus[ID_VBF][k] >> CSerrMinus[ID_WH][k] >> CSerrMinus[ID_ZH][k] >> CSerrMinus[ID_ttH][k];
 
   }
   file.close();
@@ -59,7 +60,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.open("../txtFiles/HiggsCS_ScaleErrorPlus_Official.txt");//directory of input file                                                
   for(int k = 0; k < 50; k++){
 
-    file >> scratchMass >> CSscaleErrPlus[1][k] >> CSscaleErrPlus[2][k] >> CSscaleErrPlus[3][k] >> CSscaleErrPlus[4][k] >> CSscaleErrPlus[5][k];
+    file >> scratchMass >> CSscaleErrPlus[ID_ggToH][k] >> CSscaleErrPlus[ID_VBF][k] >> CSscaleErrPlus[ID_WH][k] >> CSscaleErrPlus[ID_ZH][k] >> CSscaleErrPlus[ID_ttH][k];
 
   }
   file.close();
@@ -67,7 +68,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.open("../txtFiles/HiggsCS_ScaleErrorMinus_Official.txt");//directory of input file                                     
   for(int k = 0; k < 50; k++){
 
-    file >> scratchMass >> CSscaleErrMinus[1][k] >> CSscaleErrMinus[2][k] >> CSscaleErrMinus[3][k] >> CSscaleErrMinus[4][k] >> CSscaleErrMinus[5][k];
+    file >> scratchMass >> CSscaleErrMinus[ID_ggToH][k] >> CSscaleErrMinus[ID_VBF][k] >> CSscaleErrMinus[ID_WH][k] >> CSscaleErrMinus[ID_ZH][k] >> CSscaleErrMinus[ID_ttH][k];
 
   }
   file.close();
@@ -75,7 +76,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.open("../txtFiles/HiggsCS_PdfErrorPlus_Official.txt");//directory of input file                  
   for(int k = 0; k < 50; k++){
 
-    file >> scratchMass >> CSpdfErrPlus[1][k] >> CSpdfErrPlus[2][k] >> CSpdfErrPlus[3][k] >> CSpdfErrPlus[4][k] >> CSpdfErrPlus[5][k];
+    file >> scratchMass >> CSpdfErrPlus[ID_ggToH][k] >> CSpdfErrPlus[ID_VBF][k] >> CSpdfErrPlus[ID_WH][k] >> CSpdfErrPlus[ID_ZH][k] >> CSpdfErrPlus[ID_ttH][k];
 
   }
   file.close();
@@ -83,7 +84,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.open("../txtFiles/HiggsCS_PdfErrorMinus_Official.txt");//directory of input file                           
   for(int k = 0; k < 50; k++){
 
-    file >> scratchMass >> CSpdfErrMinus[1][k] >> CSpdfErrMinus[2][k] >> CSpdfErrMinus[3][k] >> CSpdfErrMinus[4][k] >> CSpdfErrMinus[5][k];
+    file >> scratchMass >> CSpdfErrMinus[ID_ggToH][k] >> CSpdfErrMinus[ID_VBF][k] >> CSpdfErrMinus[ID_WH][k] >> CSpdfErrMinus[ID_ZH][k] >> CSpdfErrMinus[ID_ttH][k];
 
   }
   file.close();
@@ -120,11 +121,11 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                                                                                                          
-  if(ID > 5 || ID < 0){return -1;}
+  if(ID > ID_ttH || ID < ID_Total){return -1;}
   // If Ecm is not 7 TeV return -1
   if(sqrts != 7){return -1;}
   //Don't interpolate btw 0 and numbers for mH300
-  if(ID > 2 && mH > 300){return 0;}
+  if(ID > ID_VBF && mH > 300){return 0;}
 
 
   // If mH is out of range return -1                                                                                                                                         
@@ -177,12 +178,12 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                                                    
-  if(ID > 5 || ID < 0){return -1;}
-  if(ID == 0){return 0;}
+  if(ID > ID_ttH || ID < ID_Total){return -1;}
+  if(ID == ID_Total){return 0;}
   // If Ecm is not 7 TeV return -1                                                                                                
   if(sqrts != 7){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                        
-  if(ID > 2 && mH > 300){return 0;}
+  if(ID > ID_VBF && mH > 300){return 0;}
 
   // If mH is out of range return -1                                                                        
   // else find what array number to read                                          
@@ -234,12 +235,12 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                                                       
-  if(ID > 5 || ID < 0){return -1;}
-  if(ID == 0){return 0;}
+  if(ID > ID_ttH || ID < ID_Total){return -1;}
+  if(ID == ID_Total){return 0;}
   // If Ecm is not 7 TeV return -1                                                                                           
   if(sqrts != 7){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                                        
-  if(ID > 2 && mH > 300){return 0;}
+  if(ID > ID_VBF && mH > 300){return 0;}
 
 
   // If mH is out of range return -1                                                                           
@@ -291,12 +292,12 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                         
-  if(ID > 5 || ID < 0){return -1;}
-  if(ID == 0){return 0;}
+  if(ID > ID_ttH || ID < ID_Total){return -1;}
+  if(ID == ID_Total){return 0;}
   // If Ecm is not 7 TeV return -1                                                
   if(sqrts != 7){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                           
-  if(ID > 2 && mH > 300){return 0;}
+  if(ID > ID_VBF && mH > 300){return 0;}
 
   // If mH is out of range return -1                                                         
   // else find what array number to read                                                      
@@ -347,12 +348,12 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                     
-  if(ID > 5 || ID < 0){return -1;}
-  if(ID == 0){return 0;}
+  if(ID > ID_ttH || ID < ID_Total){return -1;}
+  if(ID == ID_Total){return 0;}
   // If Ecm is not 7 TeV return -1                                                               
   if(sqrts != 7){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                   
-  if(ID > 2 && mH > 300){return 0;}
+  if(ID > ID_VBF && mH > 300){return 0;}
 
 
   // If mH is out of range return -1                        
@@ -405,12 +406,12 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                                           
-  if(ID > 5 || ID < 0){return -1;}
-  if(ID == 0){return 0;}
+  if(ID > ID_ttH || ID < ID_Total){return -1;}
+  if(ID == ID_Total){return 0;}
   // If Ecm is not 7 TeV return -1                                                                                         
   if(sqrts != 7){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                                  
-  if(ID > 2 && mH > 300){return 0;}
+  if(ID > ID_VBF && mH > 300){return 0;}
 
 
   // If mH is out of range return -1                                                                                  
@@ -463,12 +464,12 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                           
-  if(ID > 5 || ID < 0){return -1;}
-  if(ID == 0){return 0;}
+  if(ID > ID_ttH || ID < ID_Total){return -1;}
+  if(ID == ID_Total){return 0;}
   // If Ecm is not 7 TeV return -1                                                                 
   if(sqrts != 7){return -1;}
   //Don't interpolate btw 0 and numbers for mH300             
-  if(ID > 2 && mH > 300){return 0;}
+  if(ID > ID_VBF && mH > 300){return 0;}
 
 
   // If mH is out of range return -1                                                              

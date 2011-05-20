@@ -3,6 +3,13 @@
 
 #define PI 3.14159
 
+#define  ID_ggToH  1
+#define  ID_VBF    2
+#define  ID_WH     3
+#define  ID_ZH     4
+#define  ID_ttH    5
+#define  ID_Total  0 
+
 #include <iostream>
 #include <cstdlib>
 #include <cmath>

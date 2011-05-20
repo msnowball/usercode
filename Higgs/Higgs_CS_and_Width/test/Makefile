@@ -4,14 +4,9 @@ CFLAGS=-O2 -Wall
 LDFLAGS=-Llib
 PRFFLAGS=-lProof
 THRDFLAGS=-lThread
-INS=-I$(ROOTSYS)/include/root
-INSS=-I../../Higgs_CS_and_Width/include
-INSSS=-I../../Higgs_CS_and_Width/src
+INS=-I../../Higgs_CS_and_Width/include
+INSS=-I../../Higgs_CS_and_Width/src
 
-CFLAGS += `root-config --cflags`
-LIBS += `root-config --glibs`
-
-OBJS=test.o
 OBJSS=validationTest.o
 OBJSSS=validationTest_pdf.o
 OBJSSSS=validationTest_scale.o
@@ -19,10 +14,7 @@ OBJSSSSS=validationTest_BR.o
 
 .PHONY: clean all main test
 
-all: $(OBJS)
-
-main: test.o
-	$(CXX) -o test.exe $(OBJS) $(LIBS)
+all: validate validatePdf validateScale validateBR
 
 validate: validationTest.o
 	$(CXX) -o validationTest.exe $(OBJSS) $(LIBS)
@@ -36,9 +28,6 @@ validateScale: validationTest_scale.o
 validateBR: validationTest_BR.o
 	$(CXX) -o validationTest_BR.exe $(OBJSSSSS) $(LIBS)
 
-test: all main
-	./main
-
 clean:
 	@rm *.o *.exe *~ 
 
@@ -47,8 +36,8 @@ new:
 
 ##############RULES##############
 .cc.o:
-	$(CXX) $(CFLAGS) $(INSS) $(INSSS) -c $<
+	$(CXX) $(CFLAGS) $(INS) $(INSS) -c $<
 .cpp.o:
-	$(CXX) $(CFLAGS) $(INS) -c $<
+	$(CXX) $(CFLAGS) $(INS) $(INSS) -c $<
 
 
