@@ -16,6 +16,9 @@
 ###########################################################
 
 
+All XS are in pb.
+All Widths are in GeV.
+
 To use the class, you must include it into your C++ program
 and compile with it.
 
