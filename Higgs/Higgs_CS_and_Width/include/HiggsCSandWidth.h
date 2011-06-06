@@ -23,6 +23,9 @@
 /*  All numbers for CS and width are taken from official  */
 /*  numbers on Higgs CS Twiki (Spring 2011)               */
 /*                                                        */
+/*  Cross Sections are given in pb                        */
+/*  Widths are given in GeV                               */
+/*                                                        */
 /*  These numbers are taken into memory and a simple      */
 /*  linear interpolation is done.                         */
 /*                                                        */
@@ -33,6 +36,9 @@
 /*         Matt Snowball                                  */
 /*         University of Florida                          */
 /*         snowball@phys.ufl.edu                          */
+/*                                                        */
+/*       Last Update: June 5, 2011                        */
+/*                                                        */
 /**********************************************************/
 
 
@@ -58,14 +64,14 @@ class HiggsCSandWidth
  private:
 
   double scratchMass;
-  double BR[26][103];
-  double CS[6][50];
-  double CSerrPlus[6][50];
-  double CSerrMinus[6][50];
-  double CSscaleErrPlus[6][50];
-  double CSscaleErrMinus[6][50];
-  double CSpdfErrPlus[6][50];
-  double CSpdfErrMinus[6][50];
+  double BR[26][217];
+  double CS[6][197];
+  double CSerrPlus[6][197];
+  double CSerrMinus[6][197];
+  double CSscaleErrPlus[6][197];
+  double CSscaleErrMinus[6][197];
+  double CSpdfErrPlus[6][197];
+  double CSpdfErrMinus[6][197];
 
   std::string FileLoc;
 

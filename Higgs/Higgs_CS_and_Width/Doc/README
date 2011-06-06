@@ -105,7 +105,7 @@ NOTE: Error on *total* cross section is not given as it requires more
       Minus error functions return *negative*.
       
 
-In this way if one want the upper and lower values of errors they would do
+In this way if one wanted the upper and lower values of errors they would do
 
 double CS = myCSW->HiggsCS(<ID>,<mH>,<sqrts>);
 double CSErrPlus = CS + myCSW->HiggsCSErrPlus(<ID>,<mH>,<sqrts>)*CS;

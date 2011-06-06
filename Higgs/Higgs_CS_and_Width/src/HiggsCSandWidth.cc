@@ -22,7 +22,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   FileLoc = "../txtFiles/HiggsBR_7TeV_Official.txt"; //directory of input file
   const char* BranchRatioFileLoc = FileLoc.c_str(); 
   file.open(BranchRatioFileLoc);
-  for(int k = 0; k < 103; k++){
+  for(int k = 0; k < 217; k++){
 
     file >> scratchMass >> BR[0][k] >> BR[1][k] >> BR[2][k] >> BR[3][k] >> BR[4][k] >> BR[5][k] >> BR[6][k] >> BR[7][k] >> BR[8][k] >> BR[9][k]
 	 >> BR[10][k] >> BR[11][k] >> BR[12][k] >> BR[13][k] >> BR[14][k] >> BR[15][k] >> BR[16][k] >> BR[17][k] >> BR[18][k] >> BR[19][k] >> BR[20][k]
@@ -34,7 +34,7 @@ HiggsCSandWidth::HiggsCSandWidth()
 
   // Read CS into memory                                                                                                                                                  
   file.open("../txtFiles/HiggsCS_Official.txt");//directory of input file
-  for(int k = 0; k < 50; k++){
+  for(int k = 0; k < 197; k++){
 
     file >> scratchMass >> CS[ID_ggToH][k] >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
 
@@ -42,7 +42,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.close();
 
   file.open("../txtFiles/HiggsCS_ErrorPlus_Official.txt");//directory of input file                       
-  for(int k = 0; k < 50; k++){
+  for(int k = 0; k < 197; k++){
 
     file >> scratchMass >> CSerrPlus[ID_ggToH][k] >> CSerrPlus[ID_VBF][k] >> CSerrPlus[ID_WH][k] >> CSerrPlus[ID_ZH][k] >> CSerrPlus[ID_ttH][k];
 
@@ -50,7 +50,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.close();
 
   file.open("../txtFiles/HiggsCS_ErrorMinus_Official.txt");//directory of input file                                                
-  for(int k = 0; k < 50; k++){
+  for(int k = 0; k < 197; k++){
 
     file >> scratchMass >> CSerrMinus[ID_ggToH][k] >> CSerrMinus[ID_VBF][k] >> CSerrMinus[ID_WH][k] >> CSerrMinus[ID_ZH][k] >> CSerrMinus[ID_ttH][k];
 
@@ -58,7 +58,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.close();
 
   file.open("../txtFiles/HiggsCS_ScaleErrorPlus_Official.txt");//directory of input file                                                
-  for(int k = 0; k < 50; k++){
+  for(int k = 0; k < 197; k++){
 
     file >> scratchMass >> CSscaleErrPlus[ID_ggToH][k] >> CSscaleErrPlus[ID_VBF][k] >> CSscaleErrPlus[ID_WH][k] >> CSscaleErrPlus[ID_ZH][k] >> CSscaleErrPlus[ID_ttH][k];
 
@@ -66,7 +66,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.close();
 
   file.open("../txtFiles/HiggsCS_ScaleErrorMinus_Official.txt");//directory of input file                                     
-  for(int k = 0; k < 50; k++){
+  for(int k = 0; k < 197; k++){
 
     file >> scratchMass >> CSscaleErrMinus[ID_ggToH][k] >> CSscaleErrMinus[ID_VBF][k] >> CSscaleErrMinus[ID_WH][k] >> CSscaleErrMinus[ID_ZH][k] >> CSscaleErrMinus[ID_ttH][k];
 
@@ -74,7 +74,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.close();
 
   file.open("../txtFiles/HiggsCS_PdfErrorPlus_Official.txt");//directory of input file                  
-  for(int k = 0; k < 50; k++){
+  for(int k = 0; k < 197; k++){
 
     file >> scratchMass >> CSpdfErrPlus[ID_ggToH][k] >> CSpdfErrPlus[ID_VBF][k] >> CSpdfErrPlus[ID_WH][k] >> CSpdfErrPlus[ID_ZH][k] >> CSpdfErrPlus[ID_ttH][k];
 
@@ -82,7 +82,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.close();
 
   file.open("../txtFiles/HiggsCS_PdfErrorMinus_Official.txt");//directory of input file                           
-  for(int k = 0; k < 50; k++){
+  for(int k = 0; k < 197; k++){
 
     file >> scratchMass >> CSpdfErrMinus[ID_ggToH][k] >> CSpdfErrMinus[ID_VBF][k] >> CSpdfErrMinus[ID_WH][k] >> CSpdfErrMinus[ID_ZH][k] >> CSpdfErrMinus[ID_ttH][k];
 
@@ -112,7 +112,7 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
   /**************************/
  
   int i = 0;
-  int closestMass = 0;
+  double closestMass = 0;
   double reqCS = 0;
   double tmpLow = 0, tmpHigh = 0;
   double deltaX = 0, deltaY = 0;
@@ -120,7 +120,7 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
   double step = 0;
 
 
-  // If ID is unavailable return -1                                                                                                                                          
+  // If ID is unavailable return -1                                                                                                
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   // If Ecm is not 7 TeV return -1
   if(sqrts != 7){return -1;}
@@ -128,15 +128,18 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
   if(ID > ID_VBF && mH > 300){return 0;}
 
 
-  // If mH is out of range return -1                                                                                                                                         
+  // If mH is out of range return -1                                           
   // else find what array number to read         
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH-200)/step); closestMass = (int)(200 + step*(i-22));}
-    if(mH >300 && mH <= 400){step = 20; i = (int)(32 + (mH-300)/step); closestMass = (int)(300 + step*(i-32));}
-    if(mH > 400){step = 50; i = (int)(37 + (mH-400)/step); closestMass = (int)(400 + step*(i-37));}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
 
       tmpLow = CS[ID][i];
       tmpHigh = CS[ID][i+1];
@@ -169,7 +172,7 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
   /**************************/
 
   int i = 0;
-  int closestMass = 0;
+  double closestMass = 0;
   double reqCSerr = 0;
   double tmpLow = 0, tmpHigh = 0;
   double deltaX = 0, deltaY = 0;
@@ -190,10 +193,15 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH-200)/step); closestMass = (int)(200 + step*(i-22));}
-    if(mH >300 && mH <= 400){step = 20; i = (int)(32 + (mH-300)/step); closestMass = (int)(300 + step*(i-32));}
-    if(mH > 400){step = 50; i = (int)(37 + (mH-400)/step); closestMass = (int)(400 + step*(i-37));}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+
+
 
     tmpLow = CSerrPlus[ID][i];
     tmpHigh = CSerrPlus[ID][i+1];
@@ -203,7 +211,7 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
     deltaY = tmpHigh - tmpLow;
     slope = deltaY/step;
 
-    // For partial widths                                                                                                                                                     
+    // For partial widths                                                                                                      
     if(deltaX == 0){ reqCSerr = tmpLow;}
     else{ reqCSerr = slope*deltaX + tmpLow;}
     reqCSerr *= .01; //Account for percentage
@@ -226,7 +234,7 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
   /**************************/
 
   int i = 0;
-  int closestMass = 0;
+  double closestMass = 0;
   double reqCSerr = 0;
   double tmpLow = 0, tmpHigh = 0;
   double deltaX = 0, deltaY = 0;
@@ -248,10 +256,15 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH-200)/step); closestMass = (int)(200 + step*(i-22));}
-    if(mH >300 && mH <= 400){step = 20; i = (int)(32 + (mH-300)/step); closestMass = (int)(300 + step*(i-32));}
-    if(mH > 400){step = 50; i = (int)(37 + (mH-400)/step); closestMass = (int)(400 + step*(i-37));}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+
+
 
     tmpLow = CSerrMinus[ID][i];
     tmpHigh = CSerrMinus[ID][i+1];
@@ -264,7 +277,7 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
     // For partial widths                                               
     if(deltaX == 0){ reqCSerr = tmpLow;}
     else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                                                                   
+    reqCSerr *= .01; //Account for percentage                                                                                                   
   }
 
   return reqCSerr;
@@ -283,7 +296,7 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
   /**************************/
 
   int i = 0;
-  int closestMass = 0;
+  double closestMass = 0;
   double reqCSerr = 0;
   double tmpLow = 0, tmpHigh = 0;
   double deltaX = 0, deltaY = 0;
@@ -304,10 +317,15 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH-200)/step); closestMass = (int)(200 + step*(i-22));}
-    if(mH >300 && mH <= 400){step = 20; i = (int)(32 + (mH-300)/step); closestMass = (int)(300 + step*(i-32));}
-    if(mH > 400){step = 50; i = (int)(37 + (mH-400)/step); closestMass = (int)(400 + step*(i-37));}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+
+
 
     tmpLow = CSscaleErrPlus[ID][i];
     tmpHigh = CSscaleErrPlus[ID][i+1];
@@ -320,7 +338,7 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
     // For partial widths                                              
     if(deltaX == 0){ reqCSerr = tmpLow;}
     else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                                                                   
+    reqCSerr *= .01; //Account for percentage                 
   }
 
   return reqCSerr;
@@ -339,7 +357,7 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
   /**************************/
 
   int i = 0;
-  int closestMass = 0;
+  double closestMass = 0;
   double reqCSerr = 0;
   double tmpLow = 0, tmpHigh = 0;
   double deltaX = 0, deltaY = 0;
@@ -361,10 +379,15 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH-200)/step); closestMass = (int)(200 + step*(i-22));}
-    if(mH >300 && mH <= 400){step = 20; i = (int)(32 + (mH-300)/step); closestMass = (int)(300 + step*(i-32));}
-    if(mH > 400){step = 50; i = (int)(37 + (mH-400)/step); closestMass = (int)(400 + step*(i-37));}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+
+
 
     tmpLow = CSscaleErrMinus[ID][i];
     tmpHigh = CSscaleErrMinus[ID][i+1];
@@ -377,7 +400,7 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
     // For partial widths                                             
     if(deltaX == 0){ reqCSerr = tmpLow;}
     else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                                                                   
+    reqCSerr *= .01; //Account for percentage                                                                                          
   }
 
   return reqCSerr;
@@ -397,7 +420,7 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
   /**************************/
 
   int i = 0;
-  int closestMass = 0;
+  double closestMass = 0;
   double reqCSerr = 0;
   double tmpLow = 0, tmpHigh = 0;
   double deltaX = 0, deltaY = 0;
@@ -419,10 +442,15 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH-200)/step); closestMass = (int)(200 + step*(i-22));}
-    if(mH >300 && mH <= 400){step = 20; i = (int)(32 + (mH-300)/step); closestMass = (int)(300 + step*(i-32));}
-    if(mH > 400){step = 50; i = (int)(37 + (mH-400)/step); closestMass = (int)(400 + step*(i-37));}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+
+
 
     tmpLow = CSpdfErrPlus[ID][i];
     tmpHigh = CSpdfErrPlus[ID][i+1];
@@ -435,7 +463,7 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
     // For partial widths                    
     if(deltaX == 0){ reqCSerr = tmpLow;}
     else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                                                                   
+    reqCSerr *= .01; //Account for percentage                                                                                             
   }
 
   return reqCSerr;
@@ -455,7 +483,7 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
   /**************************/
 
   int i = 0;
-  int closestMass = 0;
+  double closestMass = 0;
   double reqCSerr = 0;
   double tmpLow = 0, tmpHigh = 0;
   double deltaX = 0, deltaY = 0;
@@ -477,10 +505,15 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH-200)/step); closestMass = (int)(200 + step*(i-22));}
-    if(mH >300 && mH <= 400){step = 20; i = (int)(32 + (mH-300)/step); closestMass = (int)(300 + step*(i-32));}
-    if(mH > 400){step = 50; i = (int)(37 + (mH-400)/step); closestMass = (int)(400 + step*(i-37));}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+
+
 
     tmpLow = CSpdfErrMinus[ID][i];
     tmpHigh = CSpdfErrMinus[ID][i+1];
@@ -494,7 +527,7 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
     // For partial widths                                                          
     if(deltaX == 0){ reqCSerr = tmpLow;}
     else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                                                                   
+    reqCSerr *= .01; //Account for percentage                                                                                    
   }
 
   return reqCSerr;
@@ -541,7 +574,8 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH){
   double TotalWidth = 0;
   double PartialWidth = 0;
   double Width = 0;
-  int i = 0, closestMass=0;
+  int i = 0;
+  double closestMass = 0;
   double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
   double deltaY2, tmpLow2, tmpHigh2, slope2, step;
 
@@ -556,8 +590,15 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH){
   else{
 
     //Find index and closest higgs mass for which we have numbers
-    if(mH <=200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 200 ){step = 10; i = (int)(22 + (mH-200)/step); closestMass = (int)(200 + step*(i-22));}
+    if(mH <=110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH-110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH-140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH-160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH-290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400 && mH <= 600 ){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH > 600){step = 10; i = (int)(176 + (mH-600)/step); closestMass = (int)(step*(i-176) + 600);}
+
 
       tmpLow1 = BR[ID][i]*BR[0][i];                                                                                                                        
       tmpHigh1 = BR[ID][i+1]*BR[0][i+1];                                                                                                                   
@@ -575,7 +616,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH){
       slope2 = deltaY2/step;
 
 
-      // For partial widths                                                                                                                                                    
+      // For partial widths                                                                                                                 
       if(deltaX == 0){ PartialWidth = tmpLow1;
 	TotalWidth = tmpLow2;}
       else{ PartialWidth = slope1*deltaX + tmpLow1;
