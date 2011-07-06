@@ -82,14 +82,14 @@ double HiggsCSandWidthSM4::HiggsCS(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                                                                
-  if(ID > ID_ggToH || ID < ID_ggToH){return -1;}
+  if(ID > ID_ggToH || ID < ID_ggToH){return 0;}
   // If Ecm is not 7 TeV return -1
   if(sqrts != 7){return -1;}
  
 
   // If mH is out of range return -1                                           
   // else find what array number to read         
-  if( mH < 100 || mH > 600){return -1;}
+  if( mH < 100 || mH > 600){return 0;}
   else{
 
     if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
@@ -140,13 +140,13 @@ double HiggsCSandWidthSM4::HiggsCSErrPlus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                                                    
-  if(ID > ID_ggToH || ID < ID_ggToH){return -1;}
+  if(ID > ID_ggToH || ID < ID_ggToH){return 0;}
   // If Ecm is not 7 TeV return -1                                                                                                
   if(sqrts != 7){return -1;}
  
   // If mH is out of range return -1                                                                        
   // else find what array number to read                                          
-  if( mH < 100 || mH > 600){return -1;}
+  if( mH < 100 || mH > 600){return 0;}
   else{
 
     if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
@@ -199,14 +199,14 @@ double HiggsCSandWidthSM4::HiggsCSErrMinus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                                                       
-  if(ID > ID_ggToH || ID < ID_ggToH){return -1;}
+  if(ID > ID_ggToH || ID < ID_ggToH){return 0;}
 
   // If Ecm is not 7 TeV return -1                                                                                           
   if(sqrts != 7){return -1;}
   
   // If mH is out of range return -1                                                                           
   // else find what array number to read                                                                 
-  if( mH < 100 || mH > 600){return -1;}
+  if( mH < 100 || mH > 600){return 0;}
   else{
 
     if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
@@ -258,14 +258,14 @@ double HiggsCSandWidthSM4::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                         
-  if(ID > ID_ggToH || ID < ID_ggToH){return -1;}
+  if(ID > ID_ggToH || ID < ID_ggToH){return 0;}
 
   // If Ecm is not 7 TeV return -1                                                
   if(sqrts != 7){return -1;}
 
   // If mH is out of range return -1                                                         
   // else find what array number to read                                                      
-  if( mH < 100 || mH > 600){return -1;}
+  if( mH < 100 || mH > 600){return 0;}
   else{
 
     if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
@@ -317,14 +317,14 @@ double HiggsCSandWidthSM4::HiggsCSscaleErrMinus(int ID, double mH, double sqrts)
 
 
   // If ID is unavailable return -1                     
-  if(ID > ID_ggToH || ID < ID_ggToH){return -1;}
+  if(ID > ID_ggToH || ID < ID_ggToH){return 0;}
 
   // If Ecm is not 7 TeV return -1                                                               
   if(sqrts != 7){return -1;}
  
   // If mH is out of range return -1                        
   // else find what array number to read                              
-  if( mH < 100 || mH > 600){return -1;}
+  if( mH < 100 || mH > 600){return 0;}
   else{
 
     if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
@@ -377,7 +377,7 @@ double HiggsCSandWidthSM4::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                                                                           
-  if(ID > ID_ggToH || ID < ID_ggToH){return -1;}
+  if(ID > ID_ggToH || ID < ID_ggToH){return 0;}
 
   // If Ecm is not 7 TeV return -1                                                                                         
   if(sqrts != 7){return -1;}
@@ -386,7 +386,7 @@ double HiggsCSandWidthSM4::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
 
   // If mH is out of range return -1                                                                                  
   // else find what array number to read                                                              
-  if( mH < 100 || mH > 600){return -1;}
+  if( mH < 100 || mH > 600){return 0;}
   else{
 
     if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
@@ -439,14 +439,14 @@ double HiggsCSandWidthSM4::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 
 
   // If ID is unavailable return -1                           
-  if(ID > ID_ggToH || ID < ID_ggToH){return -1;}
+  if(ID > ID_ggToH || ID < ID_ggToH){return 0;}
 
   // If Ecm is not 7 TeV return -1                                                                 
   if(sqrts != 7){return -1;}
   
   // If mH is out of range return -1                                                              
   // else find what array number to read                            
-  if( mH < 100 || mH > 600){return -1;}
+  if( mH < 100 || mH > 600){return 0;}
   else{
 
     if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
@@ -511,12 +511,12 @@ double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH){
 
 
   // If ID is unavailable return -1                                           
-  if(ID > 11 || ID < 0){return -1;}
+  if(ID > 11 || ID < 0){return 0;}
 
 
   // If mH is out of range return -1                                            
   // else find what array number to read                                        
-  if( mH < 90 || mH > 600){return -1;}
+  if( mH < 90 || mH > 600){return 0;}
   else{
 
     //Find index and closest higgs mass for which we have numbers
