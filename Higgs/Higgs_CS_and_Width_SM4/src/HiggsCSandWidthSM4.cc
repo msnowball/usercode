@@ -22,7 +22,7 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
   FileLoc = "../txtFiles/Higgs_BR_SM4.txt"; //directory of input file
   const char* BranchRatioFileLoc = FileLoc.c_str(); 
   file.open(BranchRatioFileLoc);
-  for(int k = 0; k < 184; k++){
+  for(int k = 0; k < 185; k++){
 
     file >> scratchMass >> BR[0][k] >> BR[1][k] >> BR[2][k] >> BR[3][k] >> BR[4][k] >> BR[5][k] >> BR[6][k] >> BR[7][k] >> BR[8][k] >> BR[9][k]
 	 >> BR[10][k] >> BR[11][k];
@@ -33,7 +33,7 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
 
   // Read CS into memory
   file.open("../txtFiles/HiggsCS_Official_SM4.txt");//directory of input file
-  for(int k = 0; k < 180; k++){
+  for(int k = 0; k < 181; k++){
 
     file >> scratchMass >> CS[ID_ggToH][k];// >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
 
@@ -41,7 +41,7 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
   file.close();
 
   file.open("../txtFiles/HiggsCS_Error_Official_SM4.txt");//directory of input file                       
-  for(int k = 0; k < 180; k++){
+  for(int k = 0; k < 181; k++){
 
     file >> scratchMass >> CSerrPlus[ID_ggToH][k] >> CSerrMinus[ID_ggToH][k] >> CSscaleErrPlus[ID_ggToH][k] >> CSscaleErrMinus[ID_ggToH][k]
 	 >> CSpdfErrPlus[ID_ggToH][k] >> CSpdfErrMinus[ID_ggToH][k];
