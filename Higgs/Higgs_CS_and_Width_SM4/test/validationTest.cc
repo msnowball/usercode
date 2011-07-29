@@ -27,7 +27,7 @@ int main()
       double CSErrPlus, CSErrMinus;
       double sqrts = 7;
 
-      for( double j = 110; j < 140; j += 0.5)
+      for( double j = 100; j < 140; j += 0.5)
 	{
 
 	  mH = j;

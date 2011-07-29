@@ -66,13 +66,13 @@ class HiggsCSandWidthSM4
 
   double scratchMass;
   double BR[12][185];
-  double CS[6][181];
-  double CSerrPlus[6][181];
-  double CSerrMinus[6][181];
-  double CSscaleErrPlus[6][181];
-  double CSscaleErrMinus[6][181];
-  double CSpdfErrPlus[6][181];
-  double CSpdfErrMinus[6][181];
+  double CS[6][175];
+  double CSerrPlus[6][175];
+  double CSerrMinus[6][175];
+  double CSscaleErrPlus[6][175];
+  double CSscaleErrMinus[6][175];
+  double CSpdfErrPlus[6][175];
+  double CSpdfErrMinus[6][175];
 
 
   std::string FileLoc;

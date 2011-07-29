@@ -33,15 +33,16 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
 
   // Read CS into memory
   file.open("../txtFiles/HiggsCS_Official_SM4.txt");//directory of input file
-  for(int k = 0; k < 181; k++){
+  for(int k = 0; k < 175; k++){
 
     file >> scratchMass >> CS[ID_ggToH][k];// >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
+
 
   }
   file.close();
 
   file.open("../txtFiles/HiggsCS_Error_Official_SM4.txt");//directory of input file                       
-  for(int k = 0; k < 181; k++){
+  for(int k = 0; k < 175; k++){
 
     file >> scratchMass >> CSerrPlus[ID_ggToH][k] >> CSerrMinus[ID_ggToH][k] >> CSscaleErrPlus[ID_ggToH][k] >> CSscaleErrMinus[ID_ggToH][k]
 	 >> CSpdfErrPlus[ID_ggToH][k] >> CSpdfErrMinus[ID_ggToH][k];
@@ -92,13 +93,13 @@ double HiggsCSandWidthSM4::HiggsCS(int ID, double mH, double sqrts){
   if( mH < 100 || mH > 600){return 0;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(2 + (mH - 110)/step); closestMass = (step*(i-2) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(62 + (mH - 140)/step); closestMass = (int)(step*(i-62) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(82 + (mH - 160)/step); closestMass = (int)(step*(i-82) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(147 + (mH - 290)/step); closestMass = (int)(step*(i-147) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(159 + (mH-350)/step); closestMass = (int)(step*(i-159) + 350);}
+    if(mH > 400){step = 20; i = (int)(164 + (mH-400)/step); closestMass = (int)(step*(i-164) + 400);}
 
       tmpLow = CS[ID][i];
       tmpHigh = CS[ID][i+1];
@@ -149,13 +150,14 @@ double HiggsCSandWidthSM4::HiggsCSErrPlus(int ID, double mH, double sqrts){
   if( mH < 100 || mH > 600){return 0;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(2 + (mH - 110)/step); closestMass = (step*(i-2) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(62 + (mH - 140)/step); closestMass = (int)(step*(i-62) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(82 + (mH - 160)/step); closestMass = (int)(step*(i-82) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(147 + (mH - 290)/step); closestMass = (int)(step*(i-147) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(159 + (mH-350)/step); closestMass = (int)(step*(i-159) + 350);}
+    if(mH > 400){step = 20; i = (int)(164 + (mH-400)/step); closestMass = (int)(step*(i-164) + 400);}
+
 
 
 
@@ -209,13 +211,14 @@ double HiggsCSandWidthSM4::HiggsCSErrMinus(int ID, double mH, double sqrts){
   if( mH < 100 || mH > 600){return 0;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(2 + (mH - 110)/step); closestMass = (step*(i-2) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(62 + (mH - 140)/step); closestMass = (int)(step*(i-62) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(82 + (mH - 160)/step); closestMass = (int)(step*(i-82) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(147 + (mH - 290)/step); closestMass = (int)(step*(i-147) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(159 + (mH-350)/step); closestMass = (int)(step*(i-159) + 350);}
+    if(mH > 400){step = 20; i = (int)(164 + (mH-400)/step); closestMass = (int)(step*(i-164) + 400);}
+
 
 
 
@@ -268,13 +271,14 @@ double HiggsCSandWidthSM4::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
   if( mH < 100 || mH > 600){return 0;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(2 + (mH - 110)/step); closestMass = (step*(i-2) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(62 + (mH - 140)/step); closestMass = (int)(step*(i-62) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(82 + (mH - 160)/step); closestMass = (int)(step*(i-82) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(147 + (mH - 290)/step); closestMass = (int)(step*(i-147) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(159 + (mH-350)/step); closestMass = (int)(step*(i-159) + 350);}
+    if(mH > 400){step = 20; i = (int)(164 + (mH-400)/step); closestMass = (int)(step*(i-164) + 400);}
+
 
 
 
@@ -327,13 +331,13 @@ double HiggsCSandWidthSM4::HiggsCSscaleErrMinus(int ID, double mH, double sqrts)
   if( mH < 100 || mH > 600){return 0;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(2 + (mH - 110)/step); closestMass = (step*(i-2) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(62 + (mH - 140)/step); closestMass = (int)(step*(i-62) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(82 + (mH - 160)/step); closestMass = (int)(step*(i-82) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(147 + (mH - 290)/step); closestMass = (int)(step*(i-147) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(159 + (mH-350)/step); closestMass = (int)(step*(i-159) + 350);}
+    if(mH > 400){step = 20; i = (int)(164 + (mH-400)/step); closestMass = (int)(step*(i-164) + 400);}
 
 
 
@@ -389,13 +393,14 @@ double HiggsCSandWidthSM4::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
   if( mH < 100 || mH > 600){return 0;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(2 + (mH - 110)/step); closestMass = (step*(i-2) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(62 + (mH - 140)/step); closestMass = (int)(step*(i-62) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(82 + (mH - 160)/step); closestMass = (int)(step*(i-82) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(147 + (mH - 290)/step); closestMass = (int)(step*(i-147) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(159 + (mH-350)/step); closestMass = (int)(step*(i-159) + 350);}
+    if(mH > 400){step = 20; i = (int)(164 + (mH-400)/step); closestMass = (int)(step*(i-164) + 400);}
+
 
 
 
@@ -449,13 +454,14 @@ double HiggsCSandWidthSM4::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
   if( mH < 100 || mH > 600){return 0;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH <= 110 ){step = 5; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(2 + (mH - 110)/step); closestMass = (step*(i-2) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(62 + (mH - 140)/step); closestMass = (int)(step*(i-62) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(82 + (mH - 160)/step); closestMass = (int)(step*(i-82) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(147 + (mH - 290)/step); closestMass = (int)(step*(i-147) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(159 + (mH-350)/step); closestMass = (int)(step*(i-159) + 350);}
+    if(mH > 400){step = 20; i = (int)(164 + (mH-400)/step); closestMass = (int)(step*(i-164) + 400);}
+
 
 
 
