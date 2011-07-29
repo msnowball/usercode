@@ -1,6 +1,6 @@
 ###########################################################
 #                                                         #
-#              Higgs Cross Section and Width SM4          #
+#              Higgs Cross Section and Width              #
 #                                                         #
 #  This is a simple class that takes in numbers for       #
 #  cross section and branching ratios produced by         #
@@ -24,18 +24,18 @@ and compile with it.
 
 e.g. 
 
-#include "HiggsCSandWidthSM4.cc"
+#include "HiggsCSandWidth.cc"
 
 and then to compile
 
-g++ -O2 -Wall -I<path to class>/Higgs_CS_and_Width_SM4/include -I<path to class>/Higgs_CS_and_Width_SM4/src -c <program name>.cc
+g++ -O2 -Wall -I<path to class>/Higgs_CS_and_Width/include -I<path to class>/Higgs_CS_and_Width/src -c <program name>.cc
 g++ -o <program name>.exe <program name>.o 
 
 
 There are functions for Higgs width, cross sections, and cross section errors (combined, scale, pdf).
 To use in your program simple declare 
 
-e.g.   HiggsCSandWidthSM4 *myCSW = new HiggsCSandWidthSM4();
+e.g.   HiggsCSandWidth *myCSW = new HiggsCSandWidth();
 
 Then call the function you want
 
@@ -57,14 +57,14 @@ The following function are included:
 
 ID's for CS functions are
 
-  /**********IDs*************/
-  /*     ggToH = 1          */
-  /*       VBF = N/A        */
-  /*        WH = N/A        */
-  /*        ZH = N/A        */
-  /*       ttH = N/A        */
-  /*     Total = N/A        */
-  /**************************/
+  /**********IDs***********/
+  /*     ggToH = 1        */
+  /*       VBF = 2        */
+  /*        WH = 3        */
+  /*        ZH = 4        */
+  /*       ttH = 5        */
+  /*     Total = 0        */
+  /************************/
 
   For width
         double HiggsWidth(int ID,double mH);
@@ -84,6 +84,20 @@ ID's for Width are
   /*                     H->gamZ = 9                */
   /*                       H->WW = 10               */
   /*                       H->ZZ = 11               */
+  /*                       H->4e = 12               */
+  /*                    H->2e2mu = 13               */
+  /*              H->4lep (e,mu) = 14               */
+  /*          H->4lep (e,mu,tau) = 15               */
+  /*                H->e+nu e-nu = 16               */
+  /*               H->e+nu mu-nu = 17               */
+  /*    H->2l2nu(l=e,mu)(nu=any) = 18               */
+  /* H->2l2nu(l=e,mu,tau)(nu=any) = 19              */
+  /*    H->2l2q (l=e,mu)(q=udcsb) = 20              */
+  /* H->2l2q(l=e,mu,tau)(q=udcsb) = 21              */
+  /* H->l+nu qq(*) (l=e,mu)(q=udcsb) = 22           */
+  /*  H->2nu2q (nu=any)(q=udcsb) = 23               */
+  /*            H->4q (q=udcsb) = 24                */
+  /*      H->4f (f=any fermion) = 25                */
   /**************************************************/
 
 
