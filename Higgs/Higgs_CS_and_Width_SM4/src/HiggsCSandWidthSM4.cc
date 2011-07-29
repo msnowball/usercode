@@ -527,7 +527,7 @@ double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH){
     if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH-290)/step); closestMass = (int)(step*(i-149) + 290);}
     if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
     if(mH > 400 && mH <= 600 ){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
-    if(mH > 600){step = 10; i = (int)(176 + (mH-600)/step); closestMass = (int)(step*(i-176) + 600);}
+   
 
 
       tmpLow1 = BR[ID][i]*BR[0][i];                                                                                                                        
