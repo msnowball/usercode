@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 
-#include "HiggsCSandWidthSM4.cc"
+#include "HiggsCSandWidth.cc"
 
 using namespace std;
 
