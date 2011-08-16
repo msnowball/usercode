@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 
-#include "HiggsCSandWidthSM4.cc"
+#include "HiggsCSandWidth.cc"
 
 using namespace std;
 
@@ -18,7 +18,7 @@ int main()
 			 "H->ZZ->4e","H->ZZ->2e2mu","H->ZZ->4lep(emu)","H->ZZ->4lep(emutau)","H->WW->2e2nu","H->WW->eNuMuNu","H->ZZ->2l2nu(emu)",
 			"H->ZZ->2l2nu(emutau)","H->ZZ->2l2q(emu)","H->ZZ->2l2q(emutau)","H->WW->lnuqq(emu)","H->ZZ->2nu2q","H->4q","H->4f"};
 
-  HiggsCSandWidthSM4 *myCSW = new HiggsCSandWidthSM4();
+  HiggsCSandWidth *myCSW = new HiggsCSandWidth();
 
   for( int i = 0; i < 25; i++)
     {

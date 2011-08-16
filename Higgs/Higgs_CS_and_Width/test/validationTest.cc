@@ -13,7 +13,7 @@ int main()
   ofstream fileOut;
   char* fileName_[6] = {"Total_cs.txt","GluGlu_cs.txt","VBF_cs.txt","WH_cs.txt","ZH_cs.txt","ttH_cs.txt"};
 
-  HiggsCSandWidthSM4 *myCSW = new HiggsCSandWidthSM4();
+  HiggsCSandWidth *myCSW = new HiggsCSandWidth();
 
   for( int i = 0; i < 6; i++)
     {

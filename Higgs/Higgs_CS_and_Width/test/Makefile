@@ -4,8 +4,8 @@ CFLAGS=-O2 -Wall
 LDFLAGS=-Llib
 PRFFLAGS=-lProof
 THRDFLAGS=-lThread
-INS=-I../../Higgs_CS_and_Width_SM4/include
-INSS=-I../../Higgs_CS_and_Width_SM4/src
+INS=-I../../Higgs_CS_and_Width/include
+INSS=-I../../Higgs_CS_and_Width/src
 
 OBJSS=validationTest.o
 OBJSSS=validationTest_pdf.o
