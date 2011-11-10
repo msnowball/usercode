@@ -65,8 +65,8 @@ class HiggsCSandWidthSM4
  private:
 
   double scratchMass;
-  double BR[12][185];
-  double CS[6][175];
+  double BR[18][102];
+  double CS[6][109];
   double CSerrPlus[6][175];
   double CSerrMinus[6][175];
   double CSscaleErrPlus[6][175];
