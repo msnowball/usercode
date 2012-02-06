@@ -35,11 +35,11 @@ g++ -o <program name>.exe <program name>.o
 There are functions for Higgs width, cross sections, and cross section errors (combined, scale, pdf).
 To use in your program simple declare 
 
-e.g.   HiggsCSandWidthSM4 *myCSW = new HiggsCSandWidthSM4();
+e.g.   HiggsCSandWidthSM4 *myCSWSM4 = new HiggsCSandWidthSM4();
 
 Then call the function you want
 
-e.g.   double TotalWidth = myCSW->HiggsWidth(0,<mH>);
+e.g.   double TotalWidth = myCSWSM4->HiggsWidth(0,<mH>);
 
 The following function are included:
 
@@ -59,7 +59,7 @@ ID's for CS functions are
 
   /**********IDs*************/
   /*     ggToH = 1          */
-  /*       VBF = N/A        */
+  /*       VBF = N/A        */  ---> These are the same as SM so use HCSaW SM
   /*        WH = N/A        */
   /*        ZH = N/A        */
   /*       ttH = N/A        */
@@ -96,9 +96,9 @@ NOTE: Error on *total* cross section is not given as it requires more
 
 In this way if one wanted the upper and lower values of errors they would do
 
-double CS = myCSW->HiggsCS(<ID>,<mH>,<sqrts>);
-double CSErrPlus = CS + myCSW->HiggsCSErrPlus(<ID>,<mH>,<sqrts>)*CS;
-double CSErrMinus = CS + myCSW->HiggsCSErrMinus(<ID>,<mH>,<sqrts>)*CS;
+double CS = myCSWSM4->HiggsCS(<ID>,<mH>,<sqrts>);
+double CSErrPlus = CS + myCSWSM4->HiggsCSErrPlus(<ID>,<mH>,<sqrts>)*CS;
+double CSErrMinus = CS + myCSWSM4->HiggsCSErrMinus(<ID>,<mH>,<sqrts>)*CS;
 
 In keeping to this, we make this class the most flexible for the user.
 
@@ -107,8 +107,8 @@ Only numbers for sqrts = 7 are given in this version.
 NOTE: The HiggsWidth function returns width in GeV. 
       If one wants the BR, they would use
 
-double Width = myCSW->HiggsWidth(0,<mH>);
-double BR = myCSW->HiggsWidth(<ID>,<mH>)/Width;
+double Width = myCSWSM4->HiggsWidth(0,<mH>);
+double BR = myCSWSM4->HiggsWidth(<ID>,<mH>)/Width;
          
 
 
