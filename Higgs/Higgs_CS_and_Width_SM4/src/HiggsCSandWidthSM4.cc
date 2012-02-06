@@ -37,7 +37,7 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
 
     file >> scratchMass >> CS[ID_ggToH][k];// >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
 
-    cout << scratchMass << "  " << CS[ID_ggToH][k] << endl;
+    // cout << scratchMass << "  " << CS[ID_ggToH][k] << endl;
 
   }
   file.close();
