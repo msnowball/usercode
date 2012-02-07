@@ -1,6 +1,6 @@
 ###########################################################
 #                                                         #
-#              Higgs Cross Section and Width SM4          #
+#         Higgs Cross Section and Width SM4               #
 #                                                         #
 #  This is a simple class that takes in numbers for       #
 #  cross section and branching ratios produced by         #
@@ -14,6 +14,13 @@
 #              snowball@phys.ufl.edu                      #
 #                                                         #
 ###########################################################
+
+
+*********IMPORTANT*********
+This SM version of the	original HCSaW only contains the difference
+with respect to	SM.  In this case, it means that gg->H cross sections 
+and SM4 Branching ratios are available.  For all other cross sections,
+use the original SM version.
 
 
 All XS are in pb.
@@ -84,6 +91,12 @@ ID's for Width are
   /*                     H->gamZ = 9                */
   /*                       H->WW = 10               */
   /*                       H->ZZ = 11               */
+  /*                   H->4e/4mu = 12               */
+  /*                    H->2e2mu = 13               */
+  /*             H->4l(e/mu/tau) = 14               */
+  /*                       H->4q = 15               */
+  /*                     H->2l2q = 16               */
+  /*                       H->4f = 17               */
   /**************************************************/
 
 
