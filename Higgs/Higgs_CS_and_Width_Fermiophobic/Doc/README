@@ -15,6 +15,14 @@
 #                                                         #
 ###########################################################
 
+*********IMPORTANT*********
+This FF version of the original HCSaW only contains the difference 
+with respect to SM.  In this case, it means that only the widths
+of H->bosons are available.  All other requests will return -1.
+You must use the SM version of HCSaW if you need cross sections
+(don't forget there is not gg->H in FF).
+
+
 
 All XS are in pb.
 All Widths are in GeV.
