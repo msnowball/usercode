@@ -17,15 +17,23 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
 
 
   ifstream file;
- 
+  double scratchHgg;
   // Read Widths into memory
-  FileLoc = "../txtFiles/Higgs_BR_SM4.txt"; //directory of input file
-  const char* BranchRatioFileLoc = FileLoc.c_str(); 
-  file.open(BranchRatioFileLoc);
+  file.open("../txtFiles/Higgs_BR_SM4.txt");
   for(int k = 0; k < 102; k++){
 
-    file >> scratchMass >> BR[0][k] >> BR[1][k] >> BR[2][k] >> BR[3][k] >> BR[4][k] >> BR[5][k] >> BR[6][k] >> BR[7][k] >> BR[8][k] >> BR[9][k]
+    file >> scratchMass >> BR[0][k] >> BR[1][k] >> BR[2][k] >> BR[3][k] >> BR[4][k] >> BR[5][k] >> BR[6][k] >> BR[7][k] >> scratchHgg >> BR[9][k]
 	 >> BR[10][k] >> BR[11][k] >> BR[12][k] >> BR[13][k] >> BR[14][k] >> BR[15][k] >> BR[16][k] >> BR[17][k];
+
+
+  }
+  file.close();
+
+  // Read Widths into memory
+  file.open("../txtFiles/Higgs_BR_SM4_Hgg.txt");
+  for(int k = 0; k < 6; k++){
+
+    file >> scratchMass >> BR[8][k];
 
 
   }
@@ -37,7 +45,7 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
 
     file >> scratchMass >> CS[ID_ggToH][k];// >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
 
-    // cout << scratchMass << "  " << CS[ID_ggToH][k] << endl;
+    //cout << scratchMass << "  " << CS[ID_ggToH][k] << endl;
 
   }
   file.close();
@@ -542,23 +550,29 @@ double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH){
   if( mH < 100 || mH > 1000){return 0;}
   else{
 
-    //Find index and closest higgs mass for which we have numbers
-    if(mH <= 140){step = 10; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
-    if(mH > 140 && mH <= 150 ){step = 5; i = (int)(4 + (mH-140)/step); closestMass = (step*(i-4) + 140);}
-    if(mH > 150 && mH <= 190 ){step = 1; i = (int)(6 + (mH-150)/step); closestMass = (int)(step*(i-6) + 150);}
-    if(mH > 190 && mH <= 200 ){step = 5; i = (int)(46 + (mH-190)/step); closestMass = (int)(step*(i-46) + 190);}
-    if(mH > 200 && mH <= 330 ){step = 10; i = (int)(48 + (mH-200)/step); closestMass = (int)(step*(i-48) + 200);}
-    if(mH > 330 && mH <= 335 ){step = 5; i = (int)(61 + (mH-330)/step); closestMass = (int)(step*(i-61) + 330);}
-    if(mH > 335 && mH <= 340 ){step = 1; i = (int)(62 + (mH-335)/step); closestMass = (int)(step*(i-62) + 335);}
-    if(mH > 340 && mH <= 345 ){step = 5; i = (int)(67 + (mH-340)/step); closestMass = (int)(step*(i-67) + 340);}
-    if(mH > 345 && mH <= 355 ){step = 1; i = (int)(68 + (mH-345)/step); closestMass = (int)(step*(i-68) + 345);}
-    if(mH > 355 && mH <= 360 ){step = 5; i = (int)(78 + (mH-355)/step); closestMass = (int)(step*(i-78) + 355);}
-    if(mH > 360 && mH <= 370 ){step = 10; i = (int)(79 + (mH-360)/step); closestMass = (int)(step*(i-79) + 360);}
-    if(mH > 370 && mH <= 380 ){step = 5; i = (int)(80 + (mH-370)/step); closestMass = (int)(step*(i-80) + 370);}
-    if(mH > 380 && mH <= 500 ){step = 10; i = (int)(82 + (mH-380)/step); closestMass = (int)(step*(i-82) + 380);}
-    if(mH > 500 && mH <= 800 ){step = 50; i = (int)(94 + (mH-500)/step); closestMass = (int)(step*(i-94) + 500);}
-    if(mH > 800 && mH <= 1000 ){step = 200; i = (int)(100 + (mH-800)/step); closestMass = (int)(step*(i-100) + 800);}
-
+    if( ID == 8 )
+      {
+	if(mH <= 150){step = 10; i = (int)((mH-100)/step); closestMass = (int)(step*i + 100);}
+	else{ return 0;}
+      }
+    else{
+      //Find index and closest higgs mass for which we have numbers
+      if(mH <= 140){step = 10; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+      if(mH > 140 && mH <= 150 ){step = 5; i = (int)(4 + (mH-140)/step); closestMass = (step*(i-4) + 140);}
+      if(mH > 150 && mH <= 190 ){step = 1; i = (int)(6 + (mH-150)/step); closestMass = (int)(step*(i-6) + 150);}
+      if(mH > 190 && mH <= 200 ){step = 5; i = (int)(46 + (mH-190)/step); closestMass = (int)(step*(i-46) + 190);}
+      if(mH > 200 && mH <= 330 ){step = 10; i = (int)(48 + (mH-200)/step); closestMass = (int)(step*(i-48) + 200);}
+      if(mH > 330 && mH <= 335 ){step = 5; i = (int)(61 + (mH-330)/step); closestMass = (int)(step*(i-61) + 330);}
+      if(mH > 335 && mH <= 340 ){step = 1; i = (int)(62 + (mH-335)/step); closestMass = (int)(step*(i-62) + 335);}
+      if(mH > 340 && mH <= 345 ){step = 5; i = (int)(67 + (mH-340)/step); closestMass = (int)(step*(i-67) + 340);}
+      if(mH > 345 && mH <= 355 ){step = 1; i = (int)(68 + (mH-345)/step); closestMass = (int)(step*(i-68) + 345);}
+      if(mH > 355 && mH <= 360 ){step = 5; i = (int)(78 + (mH-355)/step); closestMass = (int)(step*(i-78) + 355);}
+      if(mH > 360 && mH <= 370 ){step = 10; i = (int)(79 + (mH-360)/step); closestMass = (int)(step*(i-79) + 360);}
+      if(mH > 370 && mH <= 380 ){step = 5; i = (int)(80 + (mH-370)/step); closestMass = (int)(step*(i-80) + 370);}
+      if(mH > 380 && mH <= 500 ){step = 10; i = (int)(82 + (mH-380)/step); closestMass = (int)(step*(i-82) + 380);}
+      if(mH > 500 && mH <= 800 ){step = 50; i = (int)(94 + (mH-500)/step); closestMass = (int)(step*(i-94) + 500);}
+      if(mH > 800 && mH <= 1000 ){step = 200; i = (int)(100 + (mH-800)/step); closestMass = (int)(step*(i-100) + 800);}
+    }
 
 
       tmpLow1 = BR[ID][i]*BR[0][i];                                                                                                                        
