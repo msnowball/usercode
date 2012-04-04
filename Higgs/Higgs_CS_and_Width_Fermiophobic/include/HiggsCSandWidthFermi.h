@@ -45,6 +45,7 @@ class HiggsCSandWidthFermi
   ~HiggsCSandWidthFermi();
 
   double HiggsWidth(int ID,double mH);
+  double HiggsBR(int ID,double mH);
 
 
  private:

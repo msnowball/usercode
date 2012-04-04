@@ -110,6 +110,63 @@ double HiggsCSandWidthFermi::HiggsWidth(int ID, double mH){
 
 
 
+double HiggsCSandWidthFermi::HiggsBR(int ID, double mH){
+
+
+  /***********************IDs************************/
+  /*                   H->gamgam = 8                */
+  /*                     H->gamZ = 9                */
+  /*                       H->WW = 10               */
+  /*                       H->ZZ = 11               */
+  /**************************************************/
+
+
+
+  double TotalWidth = 0;
+  double PartialWidth = 0;
+  double Width = 0;
+  int i = 0;
+  double closestMass = 0;
+  double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
+  double deltaY2, tmpLow2, tmpHigh2, slope2, step;
+
+
+  // If ID is unavailable return -1                                           
+  if((ID > 11 || ID < 8) && ID != 0){return 0;}
+
+
+  // If mH is out of range return -1                                            
+  // else find what array number to read                                        
+  if( mH < 80 || mH > 250){return 0;}
+  else{
+
+    //Find index and closest higgs mass for which we have numbers
+    step = 0.25; i = (int)((mH - 80)/step); closestMass = (double)(step*i + 80);
+    
+    tmpLow1 = BR[ID][i];
+    tmpHigh1 = BR[ID][i+1];
+
+
+    deltaX = mH - closestMass;
+
+      deltaY1 = tmpHigh1 - tmpLow1;
+      slope1 = deltaY1/step;
+
+
+      // For partial widths                                                                                                                 
+      if(deltaX == 0){ PartialWidth = tmpLow1;}
+      else{ PartialWidth = slope1*deltaX + tmpLow1;}
+	
+      Width = PartialWidth;
+
+  }
+
+  return Width;
+
+} 
+
+
+
 
 
 #endif

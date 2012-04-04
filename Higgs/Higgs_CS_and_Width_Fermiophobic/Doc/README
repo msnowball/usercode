@@ -68,10 +68,10 @@ ID's for Width are
 Only numbers for sqrts = 7 are given in this version.
 
 NOTE: The HiggsWidth function returns width in GeV. 
-      If one wants the BR, they would use
+
 
 double Width = myCSWFF->HiggsWidth(0,<mH>);
-double BR = myCSWFF->HiggsWidth(<ID>,<mH>)/Width;
+double BR = myCSWFF->HiggsBR(<ID>,<mH>);
          
 
 
