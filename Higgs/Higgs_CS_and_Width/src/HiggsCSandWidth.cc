@@ -667,14 +667,12 @@ double HiggsCSandWidth::HiggsBR(int ID, double mH){
   /**************************************************/
 
 
-
-  double TotalWidth = 0;
   double PartialWidth = 0;
   double Width = 0;
   int i = 0;
   double closestMass = 0;
   double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
-  double deltaY2, tmpLow2, tmpHigh2, slope2, step;
+  double step;
 
 
   // If ID is unavailable return -1                                           
@@ -706,7 +704,7 @@ double HiggsCSandWidth::HiggsBR(int ID, double mH){
       slope1 = deltaY1/step;
 
       // For partial widths                                                                                                                 
-      if(deltaX == 0){ PartialWidth = tmpLow1}
+      if(deltaX == 0){ PartialWidth = tmpLow1;}
       else{ PartialWidth = slope1*deltaX + tmpLow1;}
 
       Width = PartialWidth;

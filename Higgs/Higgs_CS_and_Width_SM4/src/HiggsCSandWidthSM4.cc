@@ -632,15 +632,12 @@ double HiggsCSandWidthSM4::HiggsBR(int ID, double mH){
   /*                       H->4f = 17               */
   /**************************************************/
 
-
-
-  double TotalWidth = 0;
   double PartialWidth = 0;
   double Width = 0;
   int i = 0;
   double closestMass = 0;
   double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
-  double deltaY2, tmpLow2, tmpHigh2, slope2, step;
+  double step;
 
 
   // If ID is unavailable return -1                                           
