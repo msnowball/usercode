@@ -76,7 +76,7 @@ ID's for CS functions are
   For width
         double HiggsWidth(int ID,double mH);
 
-ID's for Width are 
+ID's for Width/BR are 
 
   /***********************IDs************************/
   /*                       Total = 0                */
@@ -118,10 +118,9 @@ In keeping to this, we make this class the most flexible for the user.
 Only numbers for sqrts = 7 are given in this version.
 
 NOTE: The HiggsWidth function returns width in GeV. 
-      If one wants the BR, they would use
 
 double Width = myCSWSM4->HiggsWidth(0,<mH>);
-double BR = myCSWSM4->HiggsWidth(<ID>,<mH>)/Width;
+double BR = myCSWSM4->HiggsBR(<ID>,<mH>);
          
 
 

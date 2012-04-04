@@ -37,7 +37,7 @@
 /*         University of Florida                          */
 /*         snowball@phys.ufl.edu                          */
 /*                                                        */
-/*       Last Update: Feb 6, 2012                         */
+/*       Last Update: April 3, 2012                       */
 /*                                                        */
 /**********************************************************/
 
@@ -59,7 +59,7 @@ class HiggsCSandWidth
   double HiggsCSpdfErrPlus(int ID, double mH, double sqrts);
   double HiggsCSpdfErrMinus(int ID, double mH, double sqrts);
   double HiggsWidth(int ID,double mH);
-
+  double HiggsBR(int ID,double mH);
 
  private:
 

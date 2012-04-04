@@ -60,6 +60,7 @@ class HiggsCSandWidthSM4
   double HiggsCSpdfErrMinus(int ID, double mH, double sqrts);
 
   double HiggsWidth(int ID,double mH);
+  double HiggsBR(int ID,double mH);
 
 
  private:

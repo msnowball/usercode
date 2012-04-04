@@ -609,6 +609,97 @@ double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH){
 
 
 
+double HiggsCSandWidthSM4::HiggsBR(int ID, double mH){
+
+
+  /***********************IDs************************/
+  /*                       H->bb = 1                */
+  /*                   H->tautau = 2                */
+  /*                     H->mumu = 3                */
+  /*                       H->ss = 4                */
+  /*                       H->cc = 5                */
+  /*                       H->tt = 6                */
+  /*                       H->gg = 7                */
+  /*                   H->gamgam = 8                */
+  /*                     H->gamZ = 9                */
+  /*                       H->WW = 10               */
+  /*                       H->ZZ = 11               */
+  /*                   H->4e/4mu = 12               */
+  /*                    H->2e2mu = 13               */
+  /*             H->4l(e/mu/tau) = 14               */
+  /*                       H->4q = 15               */
+  /*                     H->2l2q = 16               */
+  /*                       H->4f = 17               */
+  /**************************************************/
+
+
+
+  double TotalWidth = 0;
+  double PartialWidth = 0;
+  double Width = 0;
+  int i = 0;
+  double closestMass = 0;
+  double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
+  double deltaY2, tmpLow2, tmpHigh2, slope2, step;
+
+
+  // If ID is unavailable return -1                                           
+  if(ID > 17 || ID < 1){return 0;}
+
+
+  // If mH is out of range return -1                                            
+  // else find what array number to read                                        
+  if( mH < 100 || mH > 1000){return 0;}
+  else{
+
+    if( ID == 8 )
+      {
+	if(mH <= 150){step = 10; i = (int)((mH-100)/step); closestMass = (int)(step*i + 100);}
+	else{ return 0;}
+      }
+    else{
+      //Find index and closest higgs mass for which we have numbers
+      if(mH <= 140){step = 10; i = (int)((mH - 100)/step); closestMass = (int)(step*i + 100);}
+      if(mH > 140 && mH <= 150 ){step = 5; i = (int)(4 + (mH-140)/step); closestMass = (step*(i-4) + 140);}
+      if(mH > 150 && mH <= 190 ){step = 1; i = (int)(6 + (mH-150)/step); closestMass = (int)(step*(i-6) + 150);}
+      if(mH > 190 && mH <= 200 ){step = 5; i = (int)(46 + (mH-190)/step); closestMass = (int)(step*(i-46) + 190);}
+      if(mH > 200 && mH <= 330 ){step = 10; i = (int)(48 + (mH-200)/step); closestMass = (int)(step*(i-48) + 200);}
+      if(mH > 330 && mH <= 335 ){step = 5; i = (int)(61 + (mH-330)/step); closestMass = (int)(step*(i-61) + 330);}
+      if(mH > 335 && mH <= 340 ){step = 1; i = (int)(62 + (mH-335)/step); closestMass = (int)(step*(i-62) + 335);}
+      if(mH > 340 && mH <= 345 ){step = 5; i = (int)(67 + (mH-340)/step); closestMass = (int)(step*(i-67) + 340);}
+      if(mH > 345 && mH <= 355 ){step = 1; i = (int)(68 + (mH-345)/step); closestMass = (int)(step*(i-68) + 345);}
+      if(mH > 355 && mH <= 360 ){step = 5; i = (int)(78 + (mH-355)/step); closestMass = (int)(step*(i-78) + 355);}
+      if(mH > 360 && mH <= 370 ){step = 10; i = (int)(79 + (mH-360)/step); closestMass = (int)(step*(i-79) + 360);}
+      if(mH > 370 && mH <= 380 ){step = 5; i = (int)(80 + (mH-370)/step); closestMass = (int)(step*(i-80) + 370);}
+      if(mH > 380 && mH <= 500 ){step = 10; i = (int)(82 + (mH-380)/step); closestMass = (int)(step*(i-82) + 380);}
+      if(mH > 500 && mH <= 800 ){step = 50; i = (int)(94 + (mH-500)/step); closestMass = (int)(step*(i-94) + 500);}
+      if(mH > 800 && mH <= 1000 ){step = 200; i = (int)(100 + (mH-800)/step); closestMass = (int)(step*(i-100) + 800);}
+    }
+
+
+    tmpLow1 = BR[ID][i];
+    tmpHigh1 = BR[ID][i+1];
+
+      deltaX = mH - closestMass;
+
+      deltaY1 = tmpHigh1 - tmpLow1;
+      slope1 = deltaY1/step;
+
+
+      // For partial widths                                                                                                                 
+      if(deltaX == 0){ PartialWidth = tmpLow1;}
+      else{ PartialWidth = slope1*deltaX + tmpLow1;}
+
+      Width = PartialWidth;
+
+  }
+
+  return Width;
+
+} 
+
+
+
 
 
 #endif

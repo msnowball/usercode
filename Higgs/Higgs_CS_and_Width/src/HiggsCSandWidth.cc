@@ -633,6 +633,91 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH){
 } 
 
 
+// HiggsWidth takes process ID and higgs mass mH
+double HiggsCSandWidth::HiggsBR(int ID, double mH){
+
+
+  /***********************IDs************************/
+  /*                       Total = 0                */
+  /*                       H->bb = 1                */
+  /*                   H->tautau = 2                */
+  /*                     H->mumu = 3                */
+  /*                       H->ss = 4                */
+  /*                       H->cc = 5                */
+  /*                       H->tt = 6                */
+  /*                       H->gg = 7                */
+  /*                   H->gamgam = 8                */
+  /*                     H->gamZ = 9                */
+  /*                       H->WW = 10               */
+  /*                       H->ZZ = 11               */
+  /*                       H->4e = 12               */
+  /*                    H->2e2mu = 13               */
+  /*              H->4lep (e,mu) = 14               */
+  /*          H->4lep (e,mu,tau) = 15               */
+  /*                H->e+nu e-nu = 16               */
+  /*               H->e+nu mu-nu = 17               */
+  /*    H->2l2nu(l=e,mu)(nu=any) = 18               */
+  /* H->2l2nu(l=e,mu,tau)(nu=any) = 19              */  
+  /*    H->2l2q (l=e,mu)(q=udcsb) = 20              */
+  /* H->2l2q(l=e,mu,tau)(q=udcsb) = 21              */
+  /* H->l+nu qq(*) (l=e,mu)(q=udcsb) = 22           */
+  /*  H->2nu2q (nu=any)(q=udcsb) = 23               */
+  /*            H->4q (q=udcsb) = 24                */
+  /*      H->4f (f=any fermion) = 25                */
+  /**************************************************/
+
+
+
+  double TotalWidth = 0;
+  double PartialWidth = 0;
+  double Width = 0;
+  int i = 0;
+  double closestMass = 0;
+  double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
+  double deltaY2, tmpLow2, tmpHigh2, slope2, step;
+
+
+  // If ID is unavailable return -1                                           
+  if(ID > 25 || ID < 1){return -1;}
+
+
+  // If mH is out of range return -1                                            
+  // else find what array number to read                                        
+  if( mH < 90 || mH > 1000){return -1;}
+  else{
+
+    //Find index and closest higgs mass for which we have numbers
+    if(mH <=110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH-110)/step); closestMass = (step*(i-4) + 110);}
+    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH-140)/step); closestMass = (int)(step*(i-64) + 140);}
+    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH-160)/step); closestMass = (int)(step*(i-84) + 160);}
+    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH-290)/step); closestMass = (int)(step*(i-149) + 290);}
+    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+    if(mH > 400 && mH <= 600 ){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(mH > 600){step = 10; i = (int)(176 + (mH-600)/step); closestMass = (int)(step*(i-176) + 600);}
+
+
+      tmpLow1 = BR[ID][i];                                                                                                                        
+      tmpHigh1 = BR[ID][i+1];                                                                                                                   
+
+      deltaX = mH - closestMass;
+
+      deltaY1 = tmpHigh1 - tmpLow1;
+      slope1 = deltaY1/step;
+
+      // For partial widths                                                                                                                 
+      if(deltaX == 0){ PartialWidth = tmpLow1}
+      else{ PartialWidth = slope1*deltaX + tmpLow1;}
+
+      Width = PartialWidth;
+
+  }
+
+  return Width;
+
+} 
+
+
 
 
 
