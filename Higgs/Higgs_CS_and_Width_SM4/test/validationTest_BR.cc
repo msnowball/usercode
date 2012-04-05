@@ -32,15 +32,16 @@ int main()
       double BRHZZ;
       double BRChan;
       double sqrts = 7;
+      bool spline = true;
 
       for( double j = 110; j < 140; j += 0.5)
 	{
 
 	  mH = j;
-	  Width = myCSW->HiggsWidth(0,mH);
-	  CS = myCSW->HiggsCS(0,mH,sqrts);
-	  BRHZZ = myCSW->HiggsWidth(11,mH)/myCSW->HiggsWidth(0,mH);
-	  BRChan = myCSW->HiggsWidth(i+1,mH)/myCSW->HiggsWidth(0,mH);
+	  Width = myCSW->HiggsWidth(0,mH,spline);
+	  CS = myCSW->HiggsCS(0,mH,sqrts,spline);
+	  BRHZZ = myCSW->HiggsBR(11,mH,spline);
+	  BRChan = myCSW->HiggsBR(i+1,mH,spline);
 	 
 
 	  fileOut << setw(6) << mH << " " << setw(6) << Width << "   " << setw(6) << CS << "   " << setw(6) << BRHZZ << "   " << setw(6) << BRChan << endl;
@@ -53,10 +54,10 @@ int main()
 	{
 
           mH = k;
-          Width = myCSW->HiggsWidth(0,mH);
-          CS = myCSW->HiggsCS(0,mH,sqrts);
-          BRHZZ = myCSW->HiggsWidth(11,mH)/myCSW->HiggsWidth(0,mH);
-          BRChan = myCSW->HiggsWidth(i+1,mH)/myCSW->HiggsWidth(0,mH);
+          Width = myCSW->HiggsWidth(0,mH,spline);
+          CS = myCSW->HiggsCS(0,mH,sqrts,spline);
+          BRHZZ = myCSW->HiggsBR(11,mH,spline);
+          BRChan = myCSW->HiggsBR(i+1,mH,spline);
 
 
           fileOut << setw(6) << mH << " " << setw(6) << Width << "   " << setw(6) << CS << "   " << setw(6) << BRHZZ << "   " << setw(6) << BRChan << endl;
@@ -68,10 +69,10 @@ int main()
       for( double l = 160; l < 290; l += 2)
 	{
           mH = l;
-          Width = myCSW->HiggsWidth(0,mH);
-          CS = myCSW->HiggsCS(0,mH,sqrts);
-          BRHZZ = myCSW->HiggsWidth(11,mH)/myCSW->HiggsWidth(0,mH);
-          BRChan = myCSW->HiggsWidth(i+1,mH)/myCSW->HiggsWidth(0,mH);
+          Width = myCSW->HiggsWidth(0,mH,spline);
+          CS = myCSW->HiggsCS(0,mH,sqrts,spline);
+          BRHZZ = myCSW->HiggsBR(11,mH,spline);
+          BRChan = myCSW->HiggsBR(i+1,mH,spline);
 
 
           fileOut << setw(6) << mH << " " << setw(6) << Width << "   " << setw(6) << CS << "   " << setw(6) << BRHZZ << "   " << setw(6) << BRChan << endl;
@@ -83,10 +84,10 @@ int main()
 	{
 
           mH = m;
-          Width = myCSW->HiggsWidth(0,mH);
-          CS = myCSW->HiggsCS(0,mH,sqrts);
-          BRHZZ = myCSW->HiggsWidth(11,mH)/myCSW->HiggsWidth(0,mH);
-          BRChan = myCSW->HiggsWidth(i+1,mH)/myCSW->HiggsWidth(0,mH);
+          Width = myCSW->HiggsWidth(0,mH,spline);
+          CS = myCSW->HiggsCS(0,mH,sqrts,spline);
+          BRHZZ = myCSW->HiggsBR(11,mH,spline);
+          BRChan = myCSW->HiggsBR(i+1,mH,spline);
 
 
           fileOut << setw(6) << mH << " " << setw(6) << Width << " " << setw(6) << CS << " " << setw(6) << BRHZZ << " " << setw(6) << BRChan << endl;
@@ -99,10 +100,10 @@ int main()
 	{
 
           mH = n;
-          Width = myCSW->HiggsWidth(0,mH);
-          CS = myCSW->HiggsCS(0,mH,sqrts);
-          BRHZZ = myCSW->HiggsWidth(11,mH)/myCSW->HiggsWidth(0,mH);
-          BRChan = myCSW->HiggsWidth(i+1,mH)/myCSW->HiggsWidth(0,mH);
+          Width = myCSW->HiggsWidth(0,mH,spline);
+          CS = myCSW->HiggsCS(0,mH,sqrts,spline);
+          BRHZZ = myCSW->HiggsBR(11,mH,spline);
+          BRChan = myCSW->HiggsBR(i+1,mH,spline);
 
 
           fileOut << setw(6) << mH << " " << setw(6) << Width << "   " << setw(6) << CS << "   " << setw(6) << BRHZZ << "   " << setw(6) << BRChan << endl;
@@ -115,10 +116,10 @@ int main()
 	{
 
           mH = q;
-          Width = myCSW->HiggsWidth(0,mH);
-          CS = myCSW->HiggsCS(0,mH,sqrts);
-          BRHZZ = myCSW->HiggsWidth(11,mH)/myCSW->HiggsWidth(0,mH);
-          BRChan = myCSW->HiggsWidth(i+1,mH)/myCSW->HiggsWidth(0,mH);
+          Width = myCSW->HiggsWidth(0,mH,spline);
+          CS = myCSW->HiggsCS(0,mH,sqrts,spline);
+          BRHZZ = myCSW->HiggsBR(11,mH,spline);
+          BRChan = myCSW->HiggsBR(i+1,mH,spline);
 
 
           fileOut << setw(6) << mH << " " << setw(6) << Width << "   " << setw(6) << CS << "   " << setw(6) << BRHZZ << "   " << setw(6) << BRChan << endl;
