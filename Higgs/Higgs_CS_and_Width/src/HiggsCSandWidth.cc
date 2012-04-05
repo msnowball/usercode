@@ -171,7 +171,7 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts, bool spline){
 	  double xmh[index], sig[index];
 	  xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
 	  sig[0]=CS[ID][i-1]; sig[1]=CS[ID][i]; sig[2]=CS[ID][i+1]; sig[3]=CS[ID][i+2];
-	  gROOT->Reset();
+	  
 	  TGraph *graph = new TGraph(index, xmh, sig);
 	  TSpline3 *gs = new TSpline3("gs",graph);
 	  gs->Draw();
@@ -663,7 +663,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH, bool spline){
 	      double xmhW[indexW], sigW[indexW];
 	      xmhW[0]=mass_BR[i-1];xmhW[1]=mass_BR[i];xmhW[2]=mass_BR[i+1];xmhW[3]=mass_BR[i+2];
 	      sigW[0]=BR[ID][i-1]; sigW[1]=BR[ID][i]; sigW[2]=BR[ID][i+1]; sigW[3]=BR[ID][i+2];
-	      gROOT->Reset();
+	      
 	      TGraph *graphW = new TGraph(indexW, xmhW, sigW);
 	      TSpline3 *gsW = new TSpline3("gsW",graphW);
 	      gsW->Draw();
@@ -679,7 +679,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH, bool spline){
 	      double xmhW[indexW], sigW[indexW];
 	      xmhW[0]=mass_BR[i-1];xmhW[1]=mass_BR[i];xmhW[2]=mass_BR[i+1];xmhW[3]=mass_BR[i+2];
 	      sigW[0]=BR[0][i-1]; sigW[1]=BR[0][i]; sigW[2]=BR[0][i+1]; sigW[3]=BR[0][i+2];
-	      gROOT->Reset();
+	      
 	      TGraph *graphW = new TGraph(indexW, xmhW, sigW);
 	      TSpline3 *gsW = new TSpline3("gsW",graphW);
 	      gsW->Draw();
@@ -691,7 +691,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH, bool spline){
 	      double xmhPW[indexPW], sigPW[indexPW];
 	      xmhPW[0]=mass_BR[i-1];xmhPW[1]=mass_BR[i];xmhPW[2]=mass_BR[i+1];xmhPW[3]=mass_BR[i+2];
 	      sigPW[0]=BR[ID][i-1]; sigPW[1]=BR[ID][i]; sigPW[2]=BR[ID][i+1]; sigPW[3]=BR[ID][i+2];
-	      gROOT->Reset();
+	      
 	      TGraph *graphPW = new TGraph(indexPW, xmhPW, sigPW);
 	      TSpline3 *gsPW = new TSpline3("gsPW",graphPW);
 	      gsPW->Draw();
@@ -796,7 +796,7 @@ double HiggsCSandWidth::HiggsBR(int ID, double mH, bool spline){
 	  double xmhBR[indexBR], sigBR[indexBR];
 	  xmhBR[0]=mass_BR[i-1];xmhBR[1]=mass_BR[i];xmhBR[2]=mass_BR[i+1];xmhBR[3]=mass_BR[i+2];
 	  sigBR[0]=BR[ID][i-1]; sigBR[1]=BR[ID][i]; sigBR[2]=BR[ID][i+1]; sigBR[3]=BR[ID][i+2];
-	  gROOT->Reset();
+	  
 	  TGraph *graphBR = new TGraph(indexBR, xmhBR, sigBR);
 	  TSpline3 *gsBR = new TSpline3("gsBR",graphBR);
 	  gsBR->Draw();

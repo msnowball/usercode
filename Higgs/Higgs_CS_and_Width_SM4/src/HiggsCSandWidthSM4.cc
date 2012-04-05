@@ -150,7 +150,7 @@ double HiggsCSandWidthSM4::HiggsCS(int ID, double mH, double sqrts, bool spline)
 	  double xmhSM4[indexSM4], sigSM4[indexSM4];
 	  xmhSM4[0]=mass_XS[i-1];xmhSM4[1]=mass_XS[i];xmhSM4[2]=mass_XS[i+1];xmhSM4[3]=mass_XS[i+2];
 	  sigSM4[0]=CS[ID][i-1]; sigSM4[1]=CS[ID][i]; sigSM4[2]=CS[ID][i+1]; sigSM4[3]=CS[ID][i+2];
-          gROOT->Reset();
+          
 	  TGraph *graphSM4 = new TGraph(indexSM4, xmhSM4, sigSM4);
 	  TSpline3 *gsSM4 = new TSpline3("gsSM4",graphSM4);
 	  gsSM4->Draw();
@@ -641,7 +641,7 @@ double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH, bool spline){
 	      double xmhWSM4[indexWSM4], sigWSM4[indexWSM4];
 	      xmhWSM4[0]=mass_BR[i-1];xmhWSM4[1]=mass_BR[i];xmhWSM4[2]=mass_BR[i+1];xmhWSM4[3]=mass_BR[i+2];
 	      sigWSM4[0]=BR[ID][i-1]; sigWSM4[1]=BR[ID][i]; sigWSM4[2]=BR[ID][i+1]; sigWSM4[3]=BR[ID][i+2];
-	      gROOT->Reset();
+	      
 	      TGraph *graphWSM4 = new TGraph(indexWSM4, xmhWSM4, sigWSM4);
 	      TSpline3 *gsWSM4 = new TSpline3("gsWSM4",graphWSM4);
 	      gsWSM4->Draw();
@@ -658,7 +658,7 @@ double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH, bool spline){
 	    double xmhWSM4[indexWSM4], sigWSM4[indexWSM4];
 	    xmhWSM4[0]=mass_BR[i-1];xmhWSM4[1]=mass_BR[i];xmhWSM4[2]=mass_BR[i+1];xmhWSM4[3]=mass_BR[i+2];
 	    sigWSM4[0]=BR[0][i-1]; sigWSM4[1]=BR[0][i]; sigWSM4[2]=BR[0][i+1]; sigWSM4[3]=BR[0][i+2];
-	    gROOT->Reset();
+	    
 	    TGraph *graphWSM4 = new TGraph(indexWSM4, xmhWSM4, sigWSM4);
 	    TSpline3 *gsWSM4 = new TSpline3("gsWSM4",graphWSM4);
 	    gsWSM4->Draw();
@@ -670,7 +670,7 @@ double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH, bool spline){
 	    double xmhPWSM4[indexPWSM4], sigPWSM4[indexPWSM4];
 	    xmhPWSM4[0]=mass_BR[i-1];xmhPWSM4[1]=mass_BR[i];xmhPWSM4[2]=mass_BR[i+1];xmhPWSM4[3]=mass_BR[i+2];
 	    sigPWSM4[0]=BR[ID][i-1]; sigPWSM4[1]=BR[ID][i]; sigPWSM4[2]=BR[ID][i+1]; sigPWSM4[3]=BR[ID][i+2];
-	    gROOT->Reset();
+	    
 	    TGraph *graphPWSM4 = new TGraph(indexPWSM4, xmhPWSM4, sigPWSM4);
 	    TSpline3 *gsPWSM4 = new TSpline3("gsPWSM4",graphPWSM4);
 	    gsPWSM4->Draw();
@@ -782,7 +782,7 @@ double HiggsCSandWidthSM4::HiggsBR(int ID, double mH, bool spline){
 	  double xmhBRSM4[indexBRSM4], sigBRSM4[indexBRSM4];
 	  xmhBRSM4[0]=mass_BR[i-1];xmhBRSM4[1]=mass_BR[i];xmhBRSM4[2]=mass_BR[i+1];xmhBRSM4[3]=mass_BR[i+2];
 	  sigBRSM4[0]=BR[ID][i-1]; sigBRSM4[1]=BR[ID][i]; sigBRSM4[2]=BR[ID][i+1]; sigBRSM4[3]=BR[ID][i+2];
-	  gROOT->Reset();
+	  
 	  TGraph *graphBRSM4 = new TGraph(indexBRSM4, xmhBRSM4, sigBRSM4);
 	  TSpline3 *gsBRSM4 = new TSpline3("gsBRSM4",graphBRSM4);
 	  gsBRSM4->Draw();
