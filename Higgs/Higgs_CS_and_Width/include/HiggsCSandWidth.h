@@ -16,6 +16,11 @@
 #include <fstream>
 #include <string>
 
+#include "TROOT.h"
+#include "TF1.h"
+#include "TGraph.h"
+#include "TCanvas.h"
+
 
 /**********************************************************/
 /*            Class for Higgs Width and CS                */
@@ -37,7 +42,7 @@
 /*         University of Florida                          */
 /*         snowball@phys.ufl.edu                          */
 /*                                                        */
-/*       Last Update: April 3, 2012                       */
+/*       Last Update: April 5, 2012                       */
 /*                                                        */
 /**********************************************************/
 
@@ -51,19 +56,21 @@ class HiggsCSandWidth
   HiggsCSandWidth();
   ~HiggsCSandWidth();
 
-  double HiggsCS(int ID, double mH, double sqrts);
+  double HiggsCS(int ID, double mH, double sqrts, bool spline);
   double HiggsCSErrPlus(int ID, double mH, double sqrts);
   double HiggsCSErrMinus(int ID, double mH, double sqrts);
   double HiggsCSscaleErrPlus(int ID, double mH, double sqrts);
   double HiggsCSscaleErrMinus(int ID, double mH, double sqrts);
   double HiggsCSpdfErrPlus(int ID, double mH, double sqrts);
   double HiggsCSpdfErrMinus(int ID, double mH, double sqrts);
-  double HiggsWidth(int ID,double mH);
-  double HiggsBR(int ID,double mH);
+  double HiggsWidth(int ID,double mH, bool spline);
+  double HiggsBR(int ID,double mH, bool spline);
 
  private:
 
   double scratchMass;
+  double mass_BR[217];
+  double mass_XS[197];
   double BR[26][217];
   double CS[6][197];
   double CSerrPlus[6][197];
@@ -73,6 +80,8 @@ class HiggsCSandWidth
   double CSpdfErrPlus[6][197];
   double CSpdfErrMinus[6][197];
 
+  int N_BR;
+  int N_CS;
   std::string FileLoc;
 
 
