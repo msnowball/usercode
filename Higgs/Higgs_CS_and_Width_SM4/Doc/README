@@ -15,10 +15,17 @@
 #                                                         #
 ###########################################################
 
+April 12, 2012
+
+Errors on Higgs BR have been included 
+
+-----------------------------------------
+
 April 5, 2012
 
 ***SPLINE IS NOW AVAILABLE***
 
+-----------------------------------------
 
 
 *********IMPORTANT*********
@@ -114,6 +121,18 @@ double CSErrPlus = CS + myCSWSM4->HiggsCSErrPlus(<ID>,<mH>,<sqrts>)*CS;
 double CSErrMinus = CS + myCSWSM4->HiggsCSErrMinus(<ID>,<mH>,<sqrts>)*CS;
 
 In keeping to this, we make this class the most flexible for the user.
+
+
+  For branching ratio errors
+	double HiggsBRErr_Hff(int ID,double mH,double sqrts);
+	double HiggsBRErr_HVV(int ID,double mH,double sqrts);
+        double HiggsBRErr_Hgluglu(int ID,double mH,double sqrts);
+        double HiggsBRErr_Hgamgam(int ID,double mH,double sqrts);
+
+These are only available for H->tautau, H->gamgam, H->WW, and H->ZZ.
+ID conventions follow the HiggsBR function.
+
+
 
 Only numbers for sqrts = 7 are given in this version.
 
