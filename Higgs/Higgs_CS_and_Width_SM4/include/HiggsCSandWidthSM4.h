@@ -62,6 +62,14 @@ class HiggsCSandWidthSM4
   double HiggsWidth(int ID,double mH, bool spline);
   double HiggsBR(int ID,double mH, bool spline);
 
+  double HiggsBRErr_Hff(int ID, double mH, double sqrts);
+  double HiggsBRErr_HVV(int ID, double mH, double sqrts);
+  double HiggsBRErr_Hgluglu(int ID, double mH, double sqrts);
+  double HiggsBRErr_Hgamgam(int ID, double mH, double sqrts);
+
+  double kappaFunc1(double sigma, double BR);
+  double kappaFunc2(double sigma, double BR);
+
 
  private:
 

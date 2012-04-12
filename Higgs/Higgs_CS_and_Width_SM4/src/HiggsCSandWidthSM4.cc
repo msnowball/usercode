@@ -801,6 +801,162 @@ double HiggsCSandWidthSM4::HiggsBR(int ID, double mH, bool spline){
 } 
 
 
+double HiggsCSandWidthSM4::HiggsBRErr_Hff(int ID, double mH, double sqrts)
+{
+
+  /***********************IDs************************/
+  /*                   H->tautau = 2                */
+  /*                   H->gamgam = 8                */
+  /*                       H->WW = 10               */
+  /*                       H->ZZ = 11               */
+  /**************************************************/
+
+
+  double sigma = 0.1;
+  double err = 0;
+  double BR = HiggsBR(1,mH,true)+HiggsBR(2,mH,true)+HiggsBR(3,mH,true)+HiggsBR(4,mH,true)+HiggsBR(5,mH,true)+HiggsBR(6,mH,true);
+
+  // If ID is unavailable return -1                                           
+  if(ID != 2 && ID != 8 && ID != 10 && ID != 11){return 0;}
+
+  // If mH is out of range return -1                                            
+  // else find what array number to read                                        
+  if( mH < 100 || mH > 1000){return 0;}
+  else{
+
+    if( ID == 2 )
+      {
+	err = kappaFunc1(sigma,BR);
+      }
+    else 
+      {
+	err = kappaFunc2(sigma,BR);
+      }
+  
+  }
+
+  return err;
+
+}
+
+  
+
+double HiggsCSandWidthSM4::HiggsBRErr_HVV(int ID, double mH, double sqrts)
+{
+
+  /***********************IDs************************/
+  /*                   H->tautau = 2                */
+  /*                   H->gamgam = 8                */
+  /*                       H->WW = 10               */
+  /*                       H->ZZ = 11               */
+  /**************************************************/
+
+
+  double sigma = 0.5;
+  double err = 0;
+  double BR = HiggsBR(10,mH,true)+HiggsBR(11,mH,true);
+
+  // If ID is unavailable return -1                                           
+  if(ID != 2 && ID != 8 && ID != 10 && ID != 11){return 0;}
+
+  // If mH is out of range return -1                                            
+  // else find what array number to read                                        
+  if( mH < 100 || mH > 1000){return 0;}
+  else{
+
+    if( ID == 10 || ID == 11)
+      {
+	err = kappaFunc1(sigma,BR);
+      }
+    else 
+      {
+	err = kappaFunc2(sigma,BR);
+      }
+  
+  }
+
+  return err;
+
+}
+
+
+
+double HiggsCSandWidthSM4::HiggsBRErr_Hgluglu(int ID, double mH, double sqrts)
+{
+
+  /***********************IDs************************/
+  /*                   H->tautau = 2                */
+  /*                   H->gamgam = 8                */
+  /*                       H->WW = 10               */
+  /*                       H->ZZ = 11               */
+  /**************************************************/
+
+
+  double sigma = 0.05;
+  double err = 0;
+  double BR = HiggsBR(7,mH,true);
+
+  // If ID is unavailable return -1                                           
+  if(ID != 2 && ID != 8 && ID != 10 && ID != 11){return 0;}
+
+  // If mH is out of range return -1                                            
+  // else find what array number to read                                        
+  if( mH < 100 || mH > 1000){return 0;}
+  else{
+	err = kappaFunc2(sigma,BR);
+  }
+
+  return err;
+
+}
+
+
+double HiggsCSandWidthSM4::HiggsBRErr_Hgamgam(int ID, double mH, double sqrts)
+{
+
+  /***********************IDs************************/
+  /*                   H->gamgam = 8                */
+  /**************************************************/
+
+
+  double sigma = 0.15;
+  double err = 0;
+  double BR = HiggsBR(8,mH,true);
+
+  // If ID is unavailable return -1                                           
+  if(ID != 8){return 0;}
+
+  // If mH is out of range return -1                                            
+  // else find what array number to read                                        
+  if( mH < 100 || mH > 1000){return 0;}
+  else{
+	err = kappaFunc1(sigma,BR);
+  }
+
+  return err;
+
+}
+
+
+
+double HiggsCSandWidthSM4::kappaFunc1(double sigma, double BR)
+{
+
+  double kappa = 1 + sigma*(1-BR);
+
+  return kappa;
+
+}
+
+
+double HiggsCSandWidthSM4::kappaFunc2(double sigma, double BR)
+{
+
+  double kappa = 1/(1+sigma*BR);
+
+  return kappa;
+
+}
 
 
 

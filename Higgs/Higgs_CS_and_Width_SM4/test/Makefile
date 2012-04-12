@@ -16,10 +16,11 @@ OBJSS=validationTest.o
 OBJSSS=validationTest_pdf.o
 OBJSSSS=validationTest_scale.o
 OBJSSSSS=validationTest_BR.o
+OBJ4=validationTest_BRerr.o
 
 .PHONY: clean all main test
 
-all: validate validatePdf validateScale validateBR
+all: validate validatePdf validateScale validateBR validationTest_BRerr
 
 validate: validationTest.o
 	$(CXX) -o validationTest.exe $(OBJSS) $(LIBS)
@@ -32,6 +33,9 @@ validateScale: validationTest_scale.o
 
 validateBR: validationTest_BR.o
 	$(CXX) -o validationTest_BR.exe $(OBJSSSSS) $(LIBS)
+
+validationTest_BRerr: validationTest_BRerr.o
+	$(CXX) -o validationTest_BRerr.exe $(OBJ4) $(LIBS)
 
 clean:
 	@rm *.o *.exe *~ 
