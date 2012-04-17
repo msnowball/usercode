@@ -144,7 +144,7 @@ double HiggsCSandWidthSM4::HiggsCS(int ID, double mH, double sqrts, bool spline)
       else if(spline)
 	{
 	  if(i < 1){i = 1;}
-	  if(i+2 >= N_BR){i = N_BR - 3;}
+	  if(i+2 >= N_CS){i = N_CS - 3;}
 	  
 	  int indexSM4 = 4;
 	  double xmhSM4[indexSM4], sigSM4[indexSM4];
