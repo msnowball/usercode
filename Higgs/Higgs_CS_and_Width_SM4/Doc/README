@@ -15,18 +15,6 @@
 #                                                         #
 ###########################################################
 
-April 12, 2012
-
-Errors on Higgs BR have been included 
-
------------------------------------------
-
-April 5, 2012
-
-***SPLINE IS NOW AVAILABLE***
-
------------------------------------------
-
 
 *********IMPORTANT*********
 This SM version of the	original HCSaW only contains the difference
@@ -39,9 +27,16 @@ All XS are in pb.
 All Widths are in GeV.
 
 To use the class, you must include it into your C++ program
-and compile with it.  You must also compile with ROOT, since
-spline is dependent on TSpline3. An example Makefile is 
-available in the test directory.
+and compile with it.
+
+e.g. 
+
+#include "HiggsCSandWidthSM4.cc"
+
+and then to compile
+
+g++ -O2 -Wall -I<path to class>/Higgs_CS_and_Width_SM4/include -I<path to class>/Higgs_CS_and_Width_SM4/src -c <program name>.cc
+g++ -o <program name>.exe <program name>.o 
 
 
 There are functions for Higgs width, cross sections, and cross section errors (combined, scale, pdf).
@@ -51,13 +46,12 @@ e.g.   HiggsCSandWidthSM4 *myCSWSM4 = new HiggsCSandWidthSM4();
 
 Then call the function you want
 
-e.g.   	bool spline = true;
-	double TotalWidth = myCSWSM4->HiggsWidth(0,<mH>,spline);
+e.g.   double TotalWidth = myCSWSM4->HiggsWidth(0,<mH>);
 
 The following function are included:
 
   For cross section
-	 double HiggsCS(int ID, double mH, double sqrts,bool spline);
+	 double HiggsCS(int ID, double mH, double sqrts);
 
   For cross section errors
 	double HiggsCSErrPlus(int ID, double mH, double sqrts);
@@ -80,8 +74,7 @@ ID's for CS functions are
   /**************************/
 
   For width
-        double HiggsWidth(int ID,double mH,bool spline);
-        double HiggsBR(int ID,double mH,bool spline);
+        double HiggsWidth(int ID,double mH);
 
 ID's for Width/BR are 
 
@@ -122,23 +115,12 @@ double CSErrMinus = CS + myCSWSM4->HiggsCSErrMinus(<ID>,<mH>,<sqrts>)*CS;
 
 In keeping to this, we make this class the most flexible for the user.
 
-
-  For branching ratio errors
-	double HiggsBRErr_Hff(int ID,double mH,double sqrts);
-	double HiggsBRErr_HVV(int ID,double mH,double sqrts);
-        double HiggsBRErr_Hgluglu(int ID,double mH,double sqrts);
-        double HiggsBRErr_Hgamgam(int ID,double mH,double sqrts);
-
-These are only available for H->tautau, H->gamgam, H->WW, and H->ZZ.
-ID conventions follow the HiggsBR function.
-
-
-
 Only numbers for sqrts = 7 are given in this version.
 
 NOTE: The HiggsWidth function returns width in GeV. 
 
-
+double Width = myCSWSM4->HiggsWidth(0,<mH>);
+double BR = myCSWSM4->HiggsBR(<ID>,<mH>);
          
 
 

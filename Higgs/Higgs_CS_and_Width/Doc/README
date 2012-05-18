@@ -15,18 +15,22 @@
 #                                                         #
 ###########################################################
 
-April 5, 2012
-
-***SPLINE IS NOW AVAILABLE***
-
-
 
 All XS are in pb.
 All Widths are in GeV.
 
 To use the class, you must include it into your C++ program
-and compile with it and ROOT now since spline uses TSpline3.
-See the test section for sample Makefile.
+and compile with it.
+
+e.g. 
+
+#include "HiggsCSandWidth.cc"
+
+and then to compile
+
+g++ -O2 -Wall -I<path to class>/Higgs_CS_and_Width/include -I<path to class>/Higgs_CS_and_Width/src -c <program name>.cc
+g++ -o <program name>.exe <program name>.o 
+
 
 There are functions for Higgs width, cross sections, and cross section errors (combined, scale, pdf).
 To use in your program simple declare 
@@ -35,13 +39,12 @@ e.g.   HiggsCSandWidth *myCSW = new HiggsCSandWidth();
 
 Then call the function you want
 
-e.g.    bool spline = true;
-	double TotalWidth = myCSW->HiggsWidth(0,<mH>,spline);
+e.g.   double TotalWidth = myCSW->HiggsWidth(0,<mH>);
 
 The following function are included:
 
   For cross section
-	 double HiggsCS(int ID, double mH, double sqrts, bool spline);
+	 double HiggsCS(int ID, double mH, double sqrts);
 
   For cross section errors
 	double HiggsCSErrPlus(int ID, double mH, double sqrts);
@@ -64,9 +67,7 @@ ID's for CS functions are
   /************************/
 
   For width
-	double Width = myCSW->HiggsWidth(0,<mH>, spline);
-	double BR = myCSW->HiggsBR(<ID>,<mH>, spline);
-
+        double HiggsWidth(int ID,double mH);
 
 ID's for Width/BR are 
 
@@ -114,12 +115,14 @@ double CSErrPlus = CS + myCSW->HiggsCSErrPlus(<ID>,<mH>,<sqrts>)*CS;
 double CSErrMinus = CS + myCSW->HiggsCSErrMinus(<ID>,<mH>,<sqrts>)*CS;
 
 In keeping to this, we make this class the most flexible for the user.
-Errors on CS are always linearly interpolated, as they are never rapidly changing.
-
 
 Only numbers for sqrts = 7 are given in this version.
 
 NOTE: The HiggsWidth function returns width in GeV. 
+  
+
+double Width = myCSW->HiggsWidth(0,<mH>);
+double BR = myCSW->HiggsBR(<ID>,<mH>);
          
 
 

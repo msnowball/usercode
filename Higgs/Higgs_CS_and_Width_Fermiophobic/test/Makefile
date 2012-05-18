@@ -4,13 +4,8 @@ CFLAGS=-O2 -Wall
 LDFLAGS=-Llib
 PRFFLAGS=-lProof
 THRDFLAGS=-lThread
-IN=-I$(ROOTSYS)/include/root
 INS=-I../../Higgs_CS_and_Width_Fermiophobic/include
 INSS=-I../../Higgs_CS_and_Width_Fermiophobic/src
-
-CFLAGS += `root-config --cflags`
-LIBS += `root-config --glibs`
-
 
 OBJSS=validationTest.o
 OBJSSS=validationTest_pdf.o
@@ -32,8 +27,8 @@ new:
 
 ##############RULES##############
 .cc.o:
-	$(CXX) $(CFLAGS) $(IN) $(INS) $(INSS) -c $<
+	$(CXX) $(CFLAGS) $(INS) $(INSS) -c $<
 .cpp.o:
-	$(CXX) $(CFLAGS) $(IN) $(INS) $(INSS) -c $<
+	$(CXX) $(CFLAGS) $(INS) $(INSS) -c $<
 
 

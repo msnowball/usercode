@@ -8,12 +8,6 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "TROOT.h"
-#include "TF1.h"
-#include "TGraph.h"
-#include "TCanvas.h"
-#include "TSpline.h"
-
 #include "HiggsCSandWidthSM4.h"
 
 using namespace std;
@@ -21,18 +15,14 @@ using namespace std;
 HiggsCSandWidthSM4::HiggsCSandWidthSM4()
 {
 
-  N_BR = 102;
-  N_CS = 109;
-  N_CSE = 175;
-  N_BR_gg = 6;
 
   ifstream file;
   double scratchHgg;
   // Read Widths into memory
   file.open("../txtFiles/Higgs_BR_SM4.txt");
-  for(int k = 0; k < N_BR; k++){
+  for(int k = 0; k < 102; k++){
 
-    file >> mass_BR[k] >> BR[0][k] >> BR[1][k] >> BR[2][k] >> BR[3][k] >> BR[4][k] >> BR[5][k] >> BR[6][k] >> BR[7][k] >> scratchHgg >> BR[9][k]
+    file >> scratchMass >> BR[0][k] >> BR[1][k] >> BR[2][k] >> BR[3][k] >> BR[4][k] >> BR[5][k] >> BR[6][k] >> BR[7][k] >> scratchHgg >> BR[9][k]
 	 >> BR[10][k] >> BR[11][k] >> BR[12][k] >> BR[13][k] >> BR[14][k] >> BR[15][k] >> BR[16][k] >> BR[17][k];
 
 
@@ -41,9 +31,9 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
 
   // Read Widths into memory
   file.open("../txtFiles/Higgs_BR_SM4_Hgg.txt");
-  for(int k = 0; k < N_BR_gg; k++){
+  for(int k = 0; k < 6; k++){
 
-    file >> mass_BR_gg[k] >> BR[8][k];
+    file >> scratchMass >> BR[8][k];
 
 
   }
@@ -51,9 +41,9 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
 
   // Read CS into memory
   file.open("../txtFiles/HiggsCS_Official_SM4.txt");//directory of input file
-  for(int k = 0; k < N_CS; k++){
+  for(int k = 0; k < 109; k++){
 
-    file >> mass_XS[k] >> CS[ID_ggToH][k];// >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
+    file >> scratchMass >> CS[ID_ggToH][k];// >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
 
     //cout << scratchMass << "  " << CS[ID_ggToH][k] << endl;
 
@@ -61,7 +51,7 @@ HiggsCSandWidthSM4::HiggsCSandWidthSM4()
   file.close();
 
   file.open("../txtFiles/HiggsCS_Error_Official_SM4.txt");//directory of input file                       
-  for(int k = 0; k < N_CSE; k++){
+  for(int k = 0; k < 175; k++){
 
     file >> scratchMass >> CSerrPlus[ID_ggToH][k] >> CSerrMinus[ID_ggToH][k] >> CSscaleErrPlus[ID_ggToH][k] >> CSscaleErrMinus[ID_ggToH][k]
 	 >> CSpdfErrPlus[ID_ggToH][k] >> CSpdfErrMinus[ID_ggToH][k];
@@ -81,7 +71,7 @@ HiggsCSandWidthSM4::~HiggsCSandWidthSM4()
 
 
 //Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV (numbers are for 7 TeV only in this version)
-double HiggsCSandWidthSM4::HiggsCS(int ID, double mH, double sqrts, bool spline){
+double HiggsCSandWidthSM4::HiggsCS(int ID, double mH, double sqrts){
 
   /**********IDs*************/ 
   /*     ggToH = 1          */
@@ -136,29 +126,9 @@ double HiggsCSandWidthSM4::HiggsCS(int ID, double mH, double sqrts, bool spline)
       deltaY = tmpHigh - tmpLow;
       slope = deltaY/step;
 
-      if(!spline)
-	{
-	  if(deltaX == 0){ reqCS = tmpLow;}
-	  else{ reqCS = slope*deltaX + tmpLow;}
-	}
-      else if(spline)
-	{
-	  if(i < 1){i = 1;}
-	  if(i+2 >= N_CS){i = N_CS - 3;}
-	  
-	  int indexSM4 = 4;
-	  double xmhSM4[indexSM4], sigSM4[indexSM4];
-	  xmhSM4[0]=mass_XS[i-1];xmhSM4[1]=mass_XS[i];xmhSM4[2]=mass_XS[i+1];xmhSM4[3]=mass_XS[i+2];
-	  sigSM4[0]=CS[ID][i-1]; sigSM4[1]=CS[ID][i]; sigSM4[2]=CS[ID][i+1]; sigSM4[3]=CS[ID][i+2];
-          
-	  TGraph *graphSM4 = new TGraph(indexSM4, xmhSM4, sigSM4);
-	  TSpline3 *gsSM4 = new TSpline3("gsSM4",graphSM4);
-	  gsSM4->Draw();
-	  reqCS = gsSM4->Eval(mH);
-	  delete gsSM4;
-	  delete graphSM4;
-	}
-     
+      // For partial widths   
+      if(deltaX == 0){ reqCS = tmpLow;}
+      else{ reqCS = slope*deltaX + tmpLow;}
 
     }
 
@@ -536,7 +506,7 @@ double HiggsCSandWidthSM4::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 
 
 // HiggsWidth takes process ID and higgs mass mH
-double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH, bool spline){
+double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH){
 
 
   /***********************IDs************************/
@@ -621,77 +591,25 @@ double HiggsCSandWidthSM4::HiggsWidth(int ID, double mH, bool spline){
       slope2 = deltaY2/step;
 
 
-      if(!spline)
-	{
-	  // For partial widths                                                                                                                 
-	  if(deltaX == 0){ PartialWidth = tmpLow1;
-	    TotalWidth = tmpLow2;}
-	  else{ PartialWidth = slope1*deltaX + tmpLow1;
-	    TotalWidth = slope2*deltaX + tmpLow2;}
-	  // For total width  
-	  if( ID == 0 ){ Width = TotalWidth; }
-	  else{ Width = PartialWidth;}
-	}
-      else if(spline)
-	{
-	  if( ID == 0 )
-	    {
-	      if(i < 1){i = 1;}
-	      int indexWSM4 = 4;
-	      double xmhWSM4[indexWSM4], sigWSM4[indexWSM4];
-	      xmhWSM4[0]=mass_BR[i-1];xmhWSM4[1]=mass_BR[i];xmhWSM4[2]=mass_BR[i+1];xmhWSM4[3]=mass_BR[i+2];
-	      sigWSM4[0]=BR[ID][i-1]; sigWSM4[1]=BR[ID][i]; sigWSM4[2]=BR[ID][i+1]; sigWSM4[3]=BR[ID][i+2];
-	      
-	      TGraph *graphWSM4 = new TGraph(indexWSM4, xmhWSM4, sigWSM4);
-	      TSpline3 *gsWSM4 = new TSpline3("gsWSM4",graphWSM4);
-	      gsWSM4->Draw();
-	      Width = gsWSM4->Eval(mH);
-	      delete gsWSM4;
-	      delete graphWSM4;
-	    }
-	  else{
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_BR){i = N_BR - 3;}
-	    if(ID == 8 && i+2 >= N_BR){i = N_BR_gg - 3;}
+      // For partial widths                                                                                                                 
+      if(deltaX == 0){ PartialWidth = tmpLow1;
+	TotalWidth = tmpLow2;}
+      else{ PartialWidth = slope1*deltaX + tmpLow1;
+	TotalWidth = slope2*deltaX + tmpLow2;}
 
-	    int indexWSM4 = 4;
-	    double xmhWSM4[indexWSM4], sigWSM4[indexWSM4];
-	    xmhWSM4[0]=mass_BR[i-1];xmhWSM4[1]=mass_BR[i];xmhWSM4[2]=mass_BR[i+1];xmhWSM4[3]=mass_BR[i+2];
-	    sigWSM4[0]=BR[0][i-1]; sigWSM4[1]=BR[0][i]; sigWSM4[2]=BR[0][i+1]; sigWSM4[3]=BR[0][i+2];
-	    
-	    TGraph *graphWSM4 = new TGraph(indexWSM4, xmhWSM4, sigWSM4);
-	    TSpline3 *gsWSM4 = new TSpline3("gsWSM4",graphWSM4);
-	    gsWSM4->Draw();
-	    PartialWidth = gsWSM4->Eval(mH);
-	    delete gsWSM4;
-	    delete graphWSM4;
-	    
-	    int indexPWSM4 = 4;
-	    double xmhPWSM4[indexPWSM4], sigPWSM4[indexPWSM4];
-	    xmhPWSM4[0]=mass_BR[i-1];xmhPWSM4[1]=mass_BR[i];xmhPWSM4[2]=mass_BR[i+1];xmhPWSM4[3]=mass_BR[i+2];
-	    sigPWSM4[0]=BR[ID][i-1]; sigPWSM4[1]=BR[ID][i]; sigPWSM4[2]=BR[ID][i+1]; sigPWSM4[3]=BR[ID][i+2];
-	    
-	    TGraph *graphPWSM4 = new TGraph(indexPWSM4, xmhPWSM4, sigPWSM4);
-	    TSpline3 *gsPWSM4 = new TSpline3("gsPWSM4",graphPWSM4);
-	    gsPWSM4->Draw();
-	    PartialWidth *= gsPWSM4->Eval(mH);
-	    delete gsPWSM4;
-	    delete graphPWSM4;
-	    
-	    Width = PartialWidth;
-	    
-	  }
-	}
-  
+      // For total width  
+      if( ID == 0 ){ Width = TotalWidth; }
+      else{ Width = PartialWidth;}
+
   }
-  
+
   return Width;
-  
-  
-}
+
+} 
 
 
-double HiggsCSandWidthSM4::HiggsBR(int ID, double mH, bool spline){
+
+double HiggsCSandWidthSM4::HiggsBR(int ID, double mH){
 
 
   /***********************IDs************************/
@@ -714,10 +632,8 @@ double HiggsCSandWidthSM4::HiggsBR(int ID, double mH, bool spline){
   /*                       H->4f = 17               */
   /**************************************************/
 
-
-
-  double PartialBR = 0;
-  double BranchRatio = 0;
+  double PartialWidth = 0;
+  double Width = 0;
   int i = 0;
   double closestMass = 0;
   double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
@@ -767,196 +683,19 @@ double HiggsCSandWidthSM4::HiggsBR(int ID, double mH, bool spline){
       slope1 = deltaY1/step;
 
 
-      if(!spline)
-	{
-	  if(deltaX == 0){ PartialBR = tmpLow1;}
-	  else{ PartialBR = slope1*deltaX + tmpLow1;}
-	}
-      else if(spline)
-	{
-	  if(i < 1){i = 1;}
-          if(i+2 >= N_BR){i = N_BR - 3;}
-          if(ID == 8 && i+2 >= N_BR){i = N_BR_gg - 3;}
+      // For partial widths                                                                                                                 
+      if(deltaX == 0){ PartialWidth = tmpLow1;}
+      else{ PartialWidth = slope1*deltaX + tmpLow1;}
 
-	  int indexBRSM4 = 4;
-	  double xmhBRSM4[indexBRSM4], sigBRSM4[indexBRSM4];
-	  xmhBRSM4[0]=mass_BR[i-1];xmhBRSM4[1]=mass_BR[i];xmhBRSM4[2]=mass_BR[i+1];xmhBRSM4[3]=mass_BR[i+2];
-	  sigBRSM4[0]=BR[ID][i-1]; sigBRSM4[1]=BR[ID][i]; sigBRSM4[2]=BR[ID][i+1]; sigBRSM4[3]=BR[ID][i+2];
-	  
-	  TGraph *graphBRSM4 = new TGraph(indexBRSM4, xmhBRSM4, sigBRSM4);
-	  TSpline3 *gsBRSM4 = new TSpline3("gsBRSM4",graphBRSM4);
-	  gsBRSM4->Draw();
-	  PartialBR = gsBRSM4->Eval(mH);
-	  delete gsBRSM4;
-	  delete graphBRSM4;
-	}
+      Width = PartialWidth;
 
-      BranchRatio = PartialBR;
-      
   }
-  
-  
-  return BranchRatio;
-  
+
+  return Width;
+
 } 
 
 
-double HiggsCSandWidthSM4::HiggsBRErr_Hff(int ID, double mH, double sqrts)
-{
-
-  /***********************IDs************************/
-  /*                   H->tautau = 2                */
-  /*                   H->gamgam = 8                */
-  /*                       H->WW = 10               */
-  /*                       H->ZZ = 11               */
-  /**************************************************/
-
-
-  double sigma = 0.1;
-  double err = 0;
-  double BR_ = HiggsBR(1,mH,true)+HiggsBR(2,mH,true)+HiggsBR(3,mH,true)+HiggsBR(4,mH,true)+HiggsBR(5,mH,true)+HiggsBR(6,mH,true);
-
-  // If ID is unavailable return -1                                           
-  if(ID != 2 && ID != 8 && ID != 10 && ID != 11){return 0;}
-
-  // If mH is out of range return -1                                            
-  // else find what array number to read                                        
-  if( mH < 100 || mH > 1000){return 0;}
-  else{
-
-    if( ID == 2 )
-      {
-	err = kappaFunc1(sigma,BR_);
-      }
-    else 
-      {
-	err = kappaFunc2(sigma,BR_);
-      }
-  
-  }
-
-  return err;
-
-}
-
-  
-
-double HiggsCSandWidthSM4::HiggsBRErr_HVV(int ID, double mH, double sqrts)
-{
-
-  /***********************IDs************************/
-  /*                   H->tautau = 2                */
-  /*                   H->gamgam = 8                */
-  /*                       H->WW = 10               */
-  /*                       H->ZZ = 11               */
-  /**************************************************/
-
-
-  double sigma = 0.5;
-  double err = 0;
-  double BR_ = HiggsBR(10,mH,true)+HiggsBR(11,mH,true);
-
-  // If ID is unavailable return -1                                           
-  if(ID != 2 && ID != 8 && ID != 10 && ID != 11){return 0;}
-
-  // If mH is out of range return -1                                            
-  // else find what array number to read                                        
-  if( mH < 100 || mH > 1000){return 0;}
-  else{
-
-    if( ID == 10 || ID == 11)
-      {
-	err = kappaFunc1(sigma,BR_);
-      }
-    else 
-      {
-	err = kappaFunc2(sigma,BR_);
-      }
-  
-  }
-
-  return err;
-
-}
-
-
-
-double HiggsCSandWidthSM4::HiggsBRErr_Hgluglu(int ID, double mH, double sqrts)
-{
-
-  /***********************IDs************************/
-  /*                   H->tautau = 2                */
-  /*                   H->gamgam = 8                */
-  /*                       H->WW = 10               */
-  /*                       H->ZZ = 11               */
-  /**************************************************/
-
-
-  double sigma = 0.05;
-  double err = 0;
-  double BR_ = HiggsBR(7,mH,true);
-
-  // If ID is unavailable return -1                                           
-  if(ID != 2 && ID != 8 && ID != 10 && ID != 11){return 0;}
-
-  // If mH is out of range return -1                                            
-  // else find what array number to read                                        
-  if( mH < 100 || mH > 1000){return 0;}
-  else{
-	err = kappaFunc2(sigma,BR_);
-  }
-
-  return err;
-
-}
-
-
-double HiggsCSandWidthSM4::HiggsBRErr_Hgamgam(int ID, double mH, double sqrts)
-{
-
-  /***********************IDs************************/
-  /*                   H->gamgam = 8                */
-  /**************************************************/
-
-
-  double sigma = 0.15;
-  double err = 0;
-  double BR_ = HiggsBR(8,mH,true);
-
-  // If ID is unavailable return -1                                           
-  if(ID != 8){return 0;}
-
-  // If mH is out of range return -1                                            
-  // else find what array number to read                                        
-  if( mH < 100 || mH > 1000){return 0;}
-  else{
-	err = kappaFunc1(sigma,BR_);
-  }
-
-  return err;
-
-}
-
-
-
-double HiggsCSandWidthSM4::kappaFunc1(double sigma, double BR_)
-{
-
-  double kappa = 1 + sigma*(1-BR_);
-
-  return kappa;
-
-}
-
-
-double HiggsCSandWidthSM4::kappaFunc2(double sigma, double BR_)
-{
-
-  double kappa = 1/(1+sigma*BR_);
-
-  return kappa;
-
-}
 
 
 

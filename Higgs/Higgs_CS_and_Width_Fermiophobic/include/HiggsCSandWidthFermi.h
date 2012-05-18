@@ -30,7 +30,7 @@
 /*         University of Florida                          */
 /*         snowball@phys.ufl.edu                          */
 /*                                                        */
-/*       Last Update: April 5, 2012                       */
+/*       Last Update: July 6, 2011                        */
 /*                                                        */
 /**********************************************************/
 
@@ -44,17 +44,15 @@ class HiggsCSandWidthFermi
   HiggsCSandWidthFermi();
   ~HiggsCSandWidthFermi();
 
-  double HiggsWidth(int ID,double mH,bool spline);
-  double HiggsBR(int ID,double mH,bool spline);
+  double HiggsWidth(int ID,double mH);
+  double HiggsBR(int ID,double mH);
 
 
  private:
 
+  double scratchMass;
   double BR[12][681];
-  double mass_BR[681];
 
-  int N_BR;
-  
   std::string FileLoc;
 
 
