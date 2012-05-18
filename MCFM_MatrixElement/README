@@ -1,0 +1,28 @@
+######################################
+#                                    #
+#              MCFM NLOME            #
+#                                    #
+#       Campbell,Giele,Williams      #
+#     h2p://arxiv.org/abs/1205.3434  #
+#                                    #
+#       wrapper by M.Snowball        #
+#         snowball@cern.ch           #
+######################################
+
+
+Compiling NLOME is as simple as 
+
+cd NLOME
+./Install
+
+
+An example .cc file is provided as well as fortran.
+The .cc takes in a root file with a tree with four vectors of 
+final state leptons. Order matters when passing to the code
+(see .cc for details).  You can look at the Makefile to get an 
+idea of how to compile with NLOME as a library.  This is just
+designed as an example for you to get started using NLOME.
+  
+
+
+
