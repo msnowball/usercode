@@ -24,7 +24,7 @@ OBJ5=splitTrees.o
 
 .PHONY: clean all main test
 
-all: nlome splitTrees
+all: nlome 
 
 nlome: nlome_root.o
 	$(CXX) -o nlome_root.exe $(OBJ1) -lgfortran -lNLOME $(LIBS) -LNLOME 
