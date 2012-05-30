@@ -56,15 +56,15 @@ class HiggsCSandWidth
   HiggsCSandWidth();
   ~HiggsCSandWidth();
 
-  double HiggsCS(int ID, double mH, double sqrts, bool spline);
+  double HiggsCS(int ID, double mH, double sqrts);
   double HiggsCSErrPlus(int ID, double mH, double sqrts);
   double HiggsCSErrMinus(int ID, double mH, double sqrts);
   double HiggsCSscaleErrPlus(int ID, double mH, double sqrts);
   double HiggsCSscaleErrMinus(int ID, double mH, double sqrts);
   double HiggsCSpdfErrPlus(int ID, double mH, double sqrts);
   double HiggsCSpdfErrMinus(int ID, double mH, double sqrts);
-  double HiggsWidth(int ID,double mH, bool spline);
-  double HiggsBR(int ID,double mH, bool spline);
+  double HiggsWidth(int ID,double mH);
+  double HiggsBR(int ID,double mH);
 
  private:
 
@@ -80,8 +80,20 @@ class HiggsCSandWidth
   double CSpdfErrPlus[6][197];
   double CSpdfErrMinus[6][197];
 
+
+  double mass_XS_8tev[6][223];
+  double CS_8tev[6][223];
+  double CSerrPlus_8tev[6][223];
+  double CSerrMinus_8tev[6][223];
+  double CSscaleErrPlus_8tev[6][223];
+  double CSscaleErrMinus_8tev[6][223];
+  double CSpdfErrPlus_8tev[6][223];
+  double CSpdfErrMinus_8tev[6][223];
+
   int N_BR;
   int N_CS;
+  int N_CSggToH_8tev;  
+  int N_CSvbf_8tev;
   std::string FileLoc;
 
 

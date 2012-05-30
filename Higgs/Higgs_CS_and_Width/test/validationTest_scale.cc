@@ -32,7 +32,7 @@ int main()
 	{
 
 	  mH = j;
-	  CS = myCSW->HiggsCS(i,mH,sqrts,spline);
+	  CS = myCSW->HiggsCS(i,mH,sqrts);
 	  CSErrPlusPercent = myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*100;
 	  CSErrPlus = CS+myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*CS;
 	  CSErrMinusPercent = myCSW->HiggsCSscaleErrMinus(i,mH,sqrts)*100;
@@ -49,7 +49,7 @@ int main()
 	{
 
           mH = k;
-          CS = myCSW->HiggsCS(i,mH,sqrts,spline);
+          CS = myCSW->HiggsCS(i,mH,sqrts);
           CSErrPlusPercent = myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*100;
           CSErrPlus = CS+myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*CS;
           CSErrMinusPercent = myCSW->HiggsCSscaleErrMinus(i,mH,sqrts)*100;
@@ -64,7 +64,7 @@ int main()
       for( double l = 160; l < 290; l += 2)
 	{
           mH = l;
-          CS = myCSW->HiggsCS(i,mH,sqrts,spline);
+          CS = myCSW->HiggsCS(i,mH,sqrts);
           CSErrPlusPercent = myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*100;
           CSErrPlus = CS+myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*CS;
           CSErrMinusPercent = myCSW->HiggsCSscaleErrMinus(i,mH,sqrts)*100;
@@ -80,7 +80,7 @@ int main()
 	{
 
           mH = m;
-          CS = myCSW->HiggsCS(i,mH,sqrts,spline);
+          CS = myCSW->HiggsCS(i,mH,sqrts);
           CSErrPlusPercent = myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*100;
           CSErrPlus = CS+myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*CS;
           CSErrMinusPercent = myCSW->HiggsCSscaleErrMinus(i,mH,sqrts)*100;
@@ -96,7 +96,7 @@ int main()
 	{
 
           mH = n;
-          CS = myCSW->HiggsCS(i,mH,sqrts,spline);
+          CS = myCSW->HiggsCS(i,mH,sqrts);
           CSErrPlusPercent = myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*100;
           CSErrPlus = CS+myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*CS;
           CSErrMinusPercent = myCSW->HiggsCSscaleErrMinus(i,mH,sqrts)*100;
@@ -112,7 +112,7 @@ int main()
 	{
 
           mH = q;
-          CS = myCSW->HiggsCS(i,mH,sqrts,spline);
+          CS = myCSW->HiggsCS(i,mH,sqrts);
           CSErrPlusPercent = myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*100;
           CSErrPlus = CS+myCSW->HiggsCSscaleErrPlus(i,mH,sqrts)*CS;
           CSErrMinusPercent = myCSW->HiggsCSscaleErrMinus(i,mH,sqrts)*100;

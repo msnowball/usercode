@@ -24,13 +24,13 @@ HiggsCSandWidth::HiggsCSandWidth()
 
   N_BR = 217;
   N_CS = 197;
+  N_CSggToH_8tev = 178;
+  N_CSvbf_8tev = 223;
 
   ifstream file;
  
   // Read Widths into memory
-  FileLoc = "../txtFiles/HiggsBR_7TeV_Official.txt"; //directory of input file
-  const char* BranchRatioFileLoc = FileLoc.c_str(); 
-  file.open(BranchRatioFileLoc);
+  file.open("../txtFiles/HiggsBR_7TeV_Official.txt");
   for(int k = 0; k < N_BR; k++){
 
     file >> mass_BR[k] >> BR[0][k] >> BR[1][k] >> BR[2][k] >> BR[3][k] >> BR[4][k] >> BR[5][k] >> BR[6][k] >> BR[7][k] >> BR[8][k] >> BR[9][k]
@@ -41,7 +41,7 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  // Read CS into memory                                                                                                                                                  
+  // ---------------- Read 7 TeV CS into memory ------------------ //         
   file.open("../txtFiles/HiggsCS_Official.txt");//directory of input file
   for(int k = 0; k < N_CS; k++){
 
@@ -98,6 +98,29 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
+
+  // ---------------- Read 8 TeV CS into memory ------------------ //         
+  file.open("../txtFiles/8TeV-ggH.txt");//directory of input file
+  if(!file) std::cout << "file not found!" << std::endl;
+  for(int k = 0; k < N_CSggToH_8tev; k++){
+
+    file >> mass_XS_8tev[ID_ggToH][k] >> CS_8tev[ID_ggToH][k] >> CSerrPlus_8tev[ID_ggToH][k] >> CSerrMinus_8tev[ID_ggToH][k] 
+	 >> CSscaleErrPlus_8tev[ID_ggToH][k] >> CSscaleErrMinus_8tev[ID_ggToH][k] >> CSpdfErrPlus_8tev[ID_ggToH][k] >> CSpdfErrMinus_8tev[ID_ggToH][k];
+    
+
+
+  }
+  file.close();
+
+  file.open("../txtFiles/8TeV-vbfH.txt");//directory of input file
+  for(int k = 0; k < N_CSvbf_8tev; k++){
+
+    file >> mass_XS_8tev[ID_VBF][k] >> CS_8tev[ID_VBF][k] >> CSerrPlus_8tev[ID_VBF][k] >> CSerrMinus_8tev[ID_VBF][k] >> CSscaleErrPlus_8tev[ID_VBF][k]
+	 >> CSscaleErrMinus_8tev[ID_VBF][k] >> CSpdfErrPlus_8tev[ID_VBF][k] >> CSpdfErrMinus_8tev[ID_VBF][k];
+
+  }
+  file.close();
+
 }
 
 
@@ -108,8 +131,8 @@ HiggsCSandWidth::~HiggsCSandWidth()
 }
 
 
-//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV (numbers are for 7 TeV only in this version)
-double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts, bool spline){
+//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV 
+double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
 
   /**********IDs*************/ 
   /*     ggToH = 1          */
@@ -123,71 +146,98 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts, bool spline){
   int i = 0;
   double closestMass = 0;
   double reqCS = 0;
-  double tmpLow = 0, tmpHigh = 0;
-  double deltaX = 0, deltaY = 0;
-  double slope = 0;
   double step = 0;
+  int index = 4;
+  double xmh[index], sig[index];
 
 
   // If ID is unavailable return -1                                                                                                
-  if(ID > ID_ttH || ID < ID_Total){return -1;}
-  // If Ecm is not 7 TeV return -1
-  if(sqrts != 7){return -1;}
+  if(ID > ID_ttH || ID < ID_Total) return -1;
+  // If Ecm is not 7 or 8 TeV return -1
+  if(sqrts != 7 && sqrts != 8) return -1;
   //Don't interpolate btw 0 and numbers for mH300
-  if(ID > ID_VBF && mH > 300){return 0;}
-
+  if(ID > ID_VBF && mH > 300) return 0;
 
   // If mH is out of range return -1                                           
   // else find what array number to read         
-  if( mH < 90 || mH > 1000){return -1;}
+  if( mH < 90 || mH > 1000){ return -1;}
   else{
-
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
-
-      tmpLow = CS[ID][i];
-      tmpHigh = CS[ID][i+1];
-
-      deltaX = mH - closestMass;
-
-      deltaY = tmpHigh - tmpLow;
-      slope = deltaY/step;
-
-      if(!spline)
-	{
-	  if(deltaX == 0){ reqCS = tmpLow;}
-	  else{ reqCS = slope*deltaX + tmpLow;}
-	}
-      else if(spline)
-	{
-	  if(i < 1){i = 1;}
-	  if(i+2 >= N_CS){i = N_CS - 3;}
-	  int index = 4;
-	  double xmh[index], sig[index];
-	  xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
-	  sig[0]=CS[ID][i-1]; sig[1]=CS[ID][i]; sig[2]=CS[ID][i+1]; sig[3]=CS[ID][i+2];
-	  
-	  TGraph *graph = new TGraph(index, xmh, sig);
-	  TSpline3 *gs = new TSpline3("gs",graph);
-	  gs->Draw();
-	  reqCS = gs->Eval(mH);
-	  delete gs;
-	  delete graph;
-	}
-      
-  }
+    
+    if(sqrts == 7)
+      {
+	
+	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+	
+        
+	if(i < 1){i = 1;}
+	if(i+2 >= N_CS){i = N_CS - 3;}
+	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
+	sig[0]=CS[ID][i-1]; sig[1]=CS[ID][i]; sig[2]=CS[ID][i+1]; sig[3]=CS[ID][i+2];
+	
+      }
+    else if (sqrts == 8)
+      {
+	
+	if(ID == ID_ggToH)
+	  {
+	    //for(int j = 0;j < N_CSggToH_8tev; j++)
+	    //  {
+	    //	cout << mass_XS_8tev[ID][j] << "  " << CS_8tev[ID][j] << endl;
+	    // }
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
+	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+	
+      }
+    else{cout << "HiggsCSandWidth::HiggsCS --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
+  }  
+  
+  TGraph *graph = new TGraph(index, xmh, sig);
+  TSpline3 *gs = new TSpline3("gs",graph);
+  gs->Draw();
+  reqCS = gs->Eval(mH);
+  delete gs;
+  delete graph;
   
   return reqCS;
-  
 }
+  
+  
 
-
-//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV (numbers are for 7 TeV only in this version)                   
+//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV 
 double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
 
   /**********IDs*************/
@@ -201,17 +251,16 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
   int i = 0;
   double closestMass = 0;
   double reqCSerr = 0;
-  double tmpLow = 0, tmpHigh = 0;
-  double deltaX = 0, deltaY = 0;
-  double slope = 0;
   double step = 0;
+  int index = 4;
+  double xmh[index], sig[index];
 
 
   // If ID is unavailable return -1                                                                                    
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
-  // If Ecm is not 7 TeV return -1                                                                                                
-  if(sqrts != 7){return -1;}
+  // If Ecm is not 7 or 8 TeV return -1                                                                                                
+  if(sqrts != 7 && sqrts != 8){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                        
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -220,36 +269,77 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
-
-
-
-    tmpLow = CSerrPlus[ID][i];
-    tmpHigh = CSerrPlus[ID][i+1];
-
-    deltaX = mH - closestMass;
-
-    deltaY = tmpHigh - tmpLow;
-    slope = deltaY/step;
-
-    // For partial widths                                                                                                      
-    if(deltaX == 0){ reqCSerr = tmpLow;}
-    else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage
+    if(sqrts == 7)
+      {
+	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+	
+	
+	if(i < 1){i = 1;}
+	if(i+2 >= N_CS){i = N_CS - 3;}
+	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
+	sig[0]=CSerrPlus[ID][i-1]; sig[1]=CSerrPlus[ID][i]; sig[2]=CSerrPlus[ID][i+1]; sig[3]=CSerrPlus[ID][i+2];
+	
+      }
+    else if (sqrts == 8)
+      {
+	
+	if(ID == ID_ggToH)
+	  {
+	    
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
+	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+      }
+    else{cout << "HiggsCSandWidth::HiggsCSErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
   }
-
+  TGraph *graph = new TGraph(index, xmh, sig);
+  TSpline3 *gs = new TSpline3("gs",graph);
+  gs->Draw();
+  reqCSerr = gs->Eval(mH);
+  delete gs;
+  delete graph;
+  
+  reqCSerr *= .01; //Account for percentage  
+  
   return reqCSerr;
-
+  
 }
 
 
-//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV (numbers are for 7 TeV only in this version)      
+//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV
 double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
 
   /**********IDs*************/
@@ -263,17 +353,16 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
   int i = 0;
   double closestMass = 0;
   double reqCSerr = 0;
-  double tmpLow = 0, tmpHigh = 0;
-  double deltaX = 0, deltaY = 0;
-  double slope = 0;
   double step = 0;
+  int index = 4;
+  double xmh[index], sig[index];
 
 
   // If ID is unavailable return -1                                                                                       
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
-  // If Ecm is not 7 TeV return -1                                                                                           
-  if(sqrts != 7){return -1;}
+  // If Ecm is not 7 or 8 TeV return -1                                                                                           
+  if(sqrts != 7 && sqrts != 8){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                                        
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -283,35 +372,76 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(sqrts == 7)
+      {
+	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+	
+	if(i < 1){i = 1;}
+	if(i+2 >= N_CS){i = N_CS - 3;}
+	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
+	sig[0]=CSerrMinus[ID][i-1]; sig[1]=CSerrMinus[ID][i]; sig[2]=CSerrMinus[ID][i+1]; sig[3]=CSerrMinus[ID][i+2];
+	
+      }
+    else if (sqrts == 8)
+      {
+	
+	if(ID == ID_ggToH)
+	  {
+	    
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
+	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+      }
+    else{cout << "HiggsCSandWidth::HiggsCSErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
-
-
-    tmpLow = CSerrMinus[ID][i];
-    tmpHigh = CSerrMinus[ID][i+1];
-
-    deltaX = mH - closestMass;
-
-    deltaY = tmpHigh - tmpLow;
-    slope = deltaY/step;
-
-    // For partial widths                                               
-    if(deltaX == 0){ reqCSerr = tmpLow;}
-    else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                                   
   }
-
+  TGraph *graph = new TGraph(index, xmh, sig);
+  TSpline3 *gs = new TSpline3("gs",graph);
+  gs->Draw();
+  reqCSerr = gs->Eval(mH);
+  delete gs;
+  delete graph;
+  
+  reqCSerr *= .01; //Account for percentage  
+  
   return reqCSerr;
 
 }
 
-//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV (numbers are for 7 TeV only in this version)          
+//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV
 double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
 
   /**********IDs*************/
@@ -325,17 +455,16 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
   int i = 0;
   double closestMass = 0;
   double reqCSerr = 0;
-  double tmpLow = 0, tmpHigh = 0;
-  double deltaX = 0, deltaY = 0;
-  double slope = 0;
   double step = 0;
+  int index = 4;
+  double xmh[index], sig[index];
 
 
   // If ID is unavailable return -1                                                         
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
-  // If Ecm is not 7 TeV return -1                                                
-  if(sqrts != 7){return -1;}
+  // If Ecm is not 7 or 8 TeV return -1                                                
+  if(sqrts != 7 && sqrts != 8){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                           
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -343,36 +472,79 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
   // else find what array number to read                                                      
   if( mH < 90 || mH > 1000){return -1;}
   else{
+    
+    
+    if(sqrts == 7)
+      {
+	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+	
+	if(i < 1){i = 1;}
+	if(i+2 >= N_CS){i = N_CS - 3;}
+	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
+	sig[0]=CSscaleErrPlus[ID][i-1]; sig[1]=CSscaleErrPlus[ID][i]; sig[2]=CSscaleErrPlus[ID][i+1]; sig[3]=CSscaleErrPlus[ID][i+2];
+	
+      }
+    else if (sqrts == 8)
+      {
+	
+	if(ID == ID_ggToH)
+	  {
+	    
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
+	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+      }
+    else{cout << "HiggsCSandWidth::HiggsCSscaleErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
-
-
-
-    tmpLow = CSscaleErrPlus[ID][i];
-    tmpHigh = CSscaleErrPlus[ID][i+1];
-
-    deltaX = mH - closestMass;
-
-    deltaY = tmpHigh - tmpLow;
-    slope = deltaY/step;
-
-    // For partial widths                                              
-    if(deltaX == 0){ reqCSerr = tmpLow;}
-    else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                 
   }
-
+  
+  TGraph *graph = new TGraph(index, xmh, sig);
+  TSpline3 *gs = new TSpline3("gs",graph);
+  gs->Draw();
+  reqCSerr = gs->Eval(mH);
+  delete gs;
+  delete graph;
+  
+  reqCSerr *= .01; //Account for percentage  
+  
   return reqCSerr;
-
+  
 }
 
-//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV (numbers are for 7 TeV only in this version)    
+//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV
 double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
 
   /**********IDs*************/
@@ -386,17 +558,16 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
   int i = 0;
   double closestMass = 0;
   double reqCSerr = 0;
-  double tmpLow = 0, tmpHigh = 0;
-  double deltaX = 0, deltaY = 0;
-  double slope = 0;
   double step = 0;
+  int index = 4;
+  double xmh[index], sig[index];
 
 
   // If ID is unavailable return -1                     
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
-  // If Ecm is not 7 TeV return -1                                                               
-  if(sqrts != 7){return -1;}
+  // If Ecm is not 7 or 8 TeV return -1                                                               
+  if(sqrts != 7 && sqrts != 8){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                   
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -406,36 +577,77 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
-
-
-
-    tmpLow = CSscaleErrMinus[ID][i];
-    tmpHigh = CSscaleErrMinus[ID][i+1];
-
-    deltaX = mH - closestMass;
-
-    deltaY = tmpHigh - tmpLow;
-    slope = deltaY/step;
-
-    // For partial widths                                             
-    if(deltaX == 0){ reqCSerr = tmpLow;}
-    else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                          
+    if(sqrts == 7)
+      {
+	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+	
+	if(i < 1){i = 1;}
+	if(i+2 >= N_CS){i = N_CS - 3;}
+	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
+	sig[0]=CSscaleErrMinus[ID][i-1]; sig[1]=CSscaleErrMinus[ID][i]; sig[2]=CSscaleErrMinus[ID][i+1]; sig[3]=CSscaleErrMinus[ID][i+2];
+	
+      }
+    else if (sqrts == 8)
+      {
+	
+	if(ID == ID_ggToH)
+	  {
+	    
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSscaleErrMinus_8tev[ID][i-1]; sig[1]=CSscaleErrMinus_8tev[ID][i]; sig[2]=CSscaleErrMinus_8tev[ID][i+1]; sig[3]=CSscaleErrMinus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
+	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSscaleErrMinus_8tev[ID][i-1]; sig[1]=CSscaleErrMinus_8tev[ID][i]; sig[2]=CSscaleErrMinus_8tev[ID][i+1]; sig[3]=CSscaleErrMinus_8tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+      }
+    else{cout << "HiggsCSandWidth::HiggsCSscaleErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
   }
-
+  
+  TGraph *graph = new TGraph(index, xmh, sig);
+  TSpline3 *gs = new TSpline3("gs",graph);
+  gs->Draw();
+  reqCSerr = gs->Eval(mH);
+  delete gs;
+  delete graph;
+  
+  reqCSerr *= .01; //Account for percentage  
+  
   return reqCSerr;
 
 }
 
 
-//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV (numbers are for 7 TeV only in this version)                  
+//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV
 double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
 
   /**********IDs*************/
@@ -449,56 +661,97 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
   int i = 0;
   double closestMass = 0;
   double reqCSerr = 0;
-  double tmpLow = 0, tmpHigh = 0;
-  double deltaX = 0, deltaY = 0;
-  double slope = 0;
   double step = 0;
+  int index = 4;
+  double xmh[index], sig[index];
 
 
   // If ID is unavailable return -1                                                                           
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
-  // If Ecm is not 7 TeV return -1                                                                                         
-  if(sqrts != 7){return -1;}
+  // If Ecm is not 7 or 8 TeV return -1                                                                                         
+  if(sqrts != 7 && sqrts != 8){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                                  
   if(ID > ID_VBF && mH > 300){return 0;}
-
 
   // If mH is out of range return -1                                                                                  
   // else find what array number to read                                                              
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(sqrts == 7)
+      {
+	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+	
+	if(i < 1){i = 1;}
+	if(i+2 >= N_CS){i = N_CS - 3;}
+	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
+	sig[0]=CSpdfErrPlus[ID][i-1]; sig[1]=CSpdfErrPlus[ID][i]; sig[2]=CSpdfErrPlus[ID][i+1]; sig[3]=CSpdfErrPlus[ID][i+2];
+	
+      }
+    else if (sqrts == 8)
+      {
+	
+	if(ID == ID_ggToH)
+	  {
+	    
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
+	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+      }
+    else{cout << "HiggsCSandWidth::HiggsCSpdfErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
-
-
-    tmpLow = CSpdfErrPlus[ID][i];
-    tmpHigh = CSpdfErrPlus[ID][i+1];
-
-    deltaX = mH - closestMass;
-
-    deltaY = tmpHigh - tmpLow;
-    slope = deltaY/step;
-
-    // For partial widths                    
-    if(deltaX == 0){ reqCSerr = tmpLow;}
-    else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                             
   }
-
+  
+  TGraph *graph = new TGraph(index, xmh, sig);
+  TSpline3 *gs = new TSpline3("gs",graph);
+  gs->Draw();
+  reqCSerr = gs->Eval(mH);
+  delete gs;
+  delete graph;
+  
+  reqCSerr *= .01; //Account for percentage  
+  
   return reqCSerr;
+
 
 }
 
 
-//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV (numbers are for 7 TeV only in this version)         
+//Higgs CS takes process ID, higgs mass mH, and COM energy sqrts in TeV
 double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 
   /**********IDs*************/
@@ -512,17 +765,16 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
   int i = 0;
   double closestMass = 0;
   double reqCSerr = 0;
-  double tmpLow = 0, tmpHigh = 0;
-  double deltaX = 0, deltaY = 0;
-  double slope = 0;
   double step = 0;
+  int index = 4;
+  double xmh[index], sig[index];
 
 
   // If ID is unavailable return -1                           
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
-  // If Ecm is not 7 TeV return -1                                                                 
-  if(sqrts != 7){return -1;}
+  // If Ecm is not 7 or 8 TeV return -1                                                                 
+  if(sqrts != 7 && sqrts != 8){return -1;}
   //Don't interpolate btw 0 and numbers for mH300             
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -532,31 +784,72 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
   if( mH < 90 || mH > 1000){return -1;}
   else{
 
-    if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
-    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
-    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
-    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
-    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
-    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
-    if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+    if(sqrts == 7)
+      {
+	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); closestMass = (step*(i-4) + 110);}
+	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); closestMass = (int)(step*(i-64) + 140);}
+	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); closestMass = (int)(step*(i-84) + 160);}
+	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); closestMass = (int)(step*(i-149) + 290);}
+	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); closestMass = (int)(step*(i-161) + 350);}
+	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
+	
+	if(i < 1){i = 1;}
+	if(i+2 >= N_CS){i = N_CS - 3;}
+	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
+	sig[0]=CSpdfErrMinus[ID][i-1]; sig[1]=CSpdfErrMinus[ID][i]; sig[2]=CSpdfErrMinus[ID][i+1]; sig[3]=CSpdfErrMinus[ID][i+2];
+	
+      }
+    else if (sqrts == 8)
+      {
+	
+	if(ID == ID_ggToH)
+	  {
+	    
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSpdfErrMinus_8tev[ID][i-1]; sig[1]=CSpdfErrMinus_8tev[ID][i]; sig[2]=CSpdfErrMinus_8tev[ID][i+1]; sig[3]=CSpdfErrMinus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
+	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSpdfErrMinus_8tev[ID][i-1]; sig[1]=CSpdfErrMinus_8tev[ID][i]; sig[2]=CSpdfErrMinus_8tev[ID][i+1]; sig[3]=CSpdfErrMinus_8tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+      }
+    else{cout << "HiggsCSandWidth::HiggsCSpdfErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
-
-
-    tmpLow = CSpdfErrMinus[ID][i];
-    tmpHigh = CSpdfErrMinus[ID][i+1];
-
-    deltaX = mH - closestMass;
-
-
-    deltaY = tmpHigh - tmpLow;
-    slope = deltaY/step;
-
-    // For partial widths                                                          
-    if(deltaX == 0){ reqCSerr = tmpLow;}
-    else{ reqCSerr = slope*deltaX + tmpLow;}
-    reqCSerr *= .01; //Account for percentage                                                                                    
   }
-
+  
+  TGraph *graph = new TGraph(index, xmh, sig);
+  TSpline3 *gs = new TSpline3("gs",graph);
+  gs->Draw();
+  reqCSerr = gs->Eval(mH);
+  delete gs;
+  delete graph;
+  
+  reqCSerr *= .01; //Account for percentage  
+  
   return reqCSerr;
 
 }
@@ -564,7 +857,7 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 
 
 // HiggsWidth takes process ID and higgs mass mH
-double HiggsCSandWidth::HiggsWidth(int ID, double mH, bool spline){
+double HiggsCSandWidth::HiggsWidth(int ID, double mH){
 
 
   /***********************IDs************************/
@@ -603,9 +896,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH, bool spline){
   double Width = 0;
   int i = 0;
   double closestMass = 0;
-  double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
-  double deltaY2, tmpLow2, tmpHigh2, slope2, step;
-
+  double step;
 
   // If ID is unavailable return -1                                           
   if(ID > 25 || ID < 0){return -1;}
@@ -627,84 +918,54 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH, bool spline){
     if(mH > 600){step = 10; i = (int)(176 + (mH-600)/step); closestMass = (int)(step*(i-176) + 600);}
 
 
-      tmpLow1 = BR[ID][i]*BR[0][i];                                                                                                                        
-      tmpHigh1 = BR[ID][i+1]*BR[0][i+1];                                                                                                                   
-
-
-      tmpLow2 = BR[0][i];
-      tmpHigh2 = BR[0][i+1];
-      deltaX = mH - closestMass;
-
-      deltaY1 = tmpHigh1 - tmpLow1;
-      slope1 = deltaY1/step;
-
-
-      deltaY2 = tmpHigh2 - tmpLow2;
-      slope2 = deltaY2/step;
-
-      if(!spline)
-	{
-	  // For partial widths                                                                                                                 
-	  if(deltaX == 0){ PartialWidth = tmpLow1;
-	    TotalWidth = tmpLow2;}
-	  else{ PartialWidth = slope1*deltaX + tmpLow1;
-	    TotalWidth = slope2*deltaX + tmpLow2;}
-	  // For total width  
-	  if( ID == 0 ){ Width = TotalWidth; }
-	  else{ Width = PartialWidth;}
-	}
-      else if(spline)
-	{
-	  if( ID == 0 )
-	    {
-	      if(i < 1){i = 1;}
-	      if(i+2 >= N_BR){i = N_BR - 3;}
-	      int indexW = 4;
-	      double xmhW[indexW], sigW[indexW];
-	      xmhW[0]=mass_BR[i-1];xmhW[1]=mass_BR[i];xmhW[2]=mass_BR[i+1];xmhW[3]=mass_BR[i+2];
-	      sigW[0]=BR[ID][i-1]; sigW[1]=BR[ID][i]; sigW[2]=BR[ID][i+1]; sigW[3]=BR[ID][i+2];
-	      
-	      TGraph *graphW = new TGraph(indexW, xmhW, sigW);
-	      TSpline3 *gsW = new TSpline3("gsW",graphW);
-	      gsW->Draw();
-	      Width = gsW->Eval(mH);
-	      delete gsW;
-	      delete graphW;
-	    }
-	  else{
-	      if(i < 1){i = 1;}
-	      if(i+2 >= N_BR){i = N_BR - 3;}
-
-	      int indexW = 4;
-	      double xmhW[indexW], sigW[indexW];
-	      xmhW[0]=mass_BR[i-1];xmhW[1]=mass_BR[i];xmhW[2]=mass_BR[i+1];xmhW[3]=mass_BR[i+2];
-	      sigW[0]=BR[0][i-1]; sigW[1]=BR[0][i]; sigW[2]=BR[0][i+1]; sigW[3]=BR[0][i+2];
-	      
-	      TGraph *graphW = new TGraph(indexW, xmhW, sigW);
-	      TSpline3 *gsW = new TSpline3("gsW",graphW);
-	      gsW->Draw();
-	      PartialWidth = gsW->Eval(mH);
-	      delete gsW;
-	      delete graphW;
-   
-	      int indexPW = 4;
-	      double xmhPW[indexPW], sigPW[indexPW];
-	      xmhPW[0]=mass_BR[i-1];xmhPW[1]=mass_BR[i];xmhPW[2]=mass_BR[i+1];xmhPW[3]=mass_BR[i+2];
-	      sigPW[0]=BR[ID][i-1]; sigPW[1]=BR[ID][i]; sigPW[2]=BR[ID][i+1]; sigPW[3]=BR[ID][i+2];
-	      
-	      TGraph *graphPW = new TGraph(indexPW, xmhPW, sigPW);
-	      TSpline3 *gsPW = new TSpline3("gsPW",graphPW);
-	      gsPW->Draw();
-	      PartialWidth *= gsPW->Eval(mH);
-	      delete gsPW;
-	      delete graphPW;
-
-	      Width = PartialWidth;
-	  
-	  }
-		  
-	}
-            
+    if( ID == 0 )
+      {
+	if(i < 1){i = 1;}
+	if(i+2 >= N_BR){i = N_BR - 3;}
+	int indexW = 4;
+	double xmhW[indexW], sigW[indexW];
+	xmhW[0]=mass_BR[i-1];xmhW[1]=mass_BR[i];xmhW[2]=mass_BR[i+1];xmhW[3]=mass_BR[i+2];
+	sigW[0]=BR[ID][i-1]; sigW[1]=BR[ID][i]; sigW[2]=BR[ID][i+1]; sigW[3]=BR[ID][i+2];
+	
+	TGraph *graphW = new TGraph(indexW, xmhW, sigW);
+	TSpline3 *gsW = new TSpline3("gsW",graphW);
+	gsW->Draw();
+	Width = gsW->Eval(mH);
+	delete gsW;
+	delete graphW;
+      }
+    else{
+      if(i < 1){i = 1;}
+      if(i+2 >= N_BR){i = N_BR - 3;}
+      
+      int indexW = 4;
+      double xmhW[indexW], sigW[indexW];
+      xmhW[0]=mass_BR[i-1];xmhW[1]=mass_BR[i];xmhW[2]=mass_BR[i+1];xmhW[3]=mass_BR[i+2];
+      sigW[0]=BR[0][i-1]; sigW[1]=BR[0][i]; sigW[2]=BR[0][i+1]; sigW[3]=BR[0][i+2];
+      
+      TGraph *graphW = new TGraph(indexW, xmhW, sigW);
+      TSpline3 *gsW = new TSpline3("gsW",graphW);
+      gsW->Draw();
+      PartialWidth = gsW->Eval(mH);
+      delete gsW;
+      delete graphW;
+      
+      int indexPW = 4;
+      double xmhPW[indexPW], sigPW[indexPW];
+      xmhPW[0]=mass_BR[i-1];xmhPW[1]=mass_BR[i];xmhPW[2]=mass_BR[i+1];xmhPW[3]=mass_BR[i+2];
+      sigPW[0]=BR[ID][i-1]; sigPW[1]=BR[ID][i]; sigPW[2]=BR[ID][i+1]; sigPW[3]=BR[ID][i+2];
+      
+      TGraph *graphPW = new TGraph(indexPW, xmhPW, sigPW);
+      TSpline3 *gsPW = new TSpline3("gsPW",graphPW);
+      gsPW->Draw();
+      PartialWidth *= gsPW->Eval(mH);
+      delete gsPW;
+      delete graphPW;
+      
+      Width = PartialWidth;
+      
+    }
+    
   }
   
   return Width;
@@ -713,7 +974,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH, bool spline){
 
 
 // HiggsWidth takes process ID and higgs mass mH
-double HiggsCSandWidth::HiggsBR(int ID, double mH, bool spline){
+double HiggsCSandWidth::HiggsBR(int ID, double mH){
 
 
   /***********************IDs************************/
@@ -751,9 +1012,7 @@ double HiggsCSandWidth::HiggsBR(int ID, double mH, bool spline){
   double BranchRatio = 0;
   int i = 0;
   double closestMass = 0;
-  double tmpLow1, tmpHigh1, deltaX, deltaY1, slope1;
   double step;
-
 
   // If ID is unavailable return -1                                           
   if(ID > 25 || ID < 1){return -1;}
@@ -774,39 +1033,23 @@ double HiggsCSandWidth::HiggsBR(int ID, double mH, bool spline){
     if(mH > 400 && mH <= 600 ){step = 20; i = (int)(166 + (mH-400)/step); closestMass = (int)(step*(i-166) + 400);}
     if(mH > 600){step = 10; i = (int)(176 + (mH-600)/step); closestMass = (int)(step*(i-176) + 600);}
 
-
-      tmpLow1 = BR[ID][i];                                                                                                                        
-      tmpHigh1 = BR[ID][i+1];                                                                                                                   
-
-      deltaX = mH - closestMass;
-
-      deltaY1 = tmpHigh1 - tmpLow1;
-      slope1 = deltaY1/step;
-
-      if(!spline)
-	{
-	  if(deltaX == 0){ PartialBR = tmpLow1;}
-	  else{ PartialBR = slope1*deltaX + tmpLow1;}
-	}
-      else if(spline)
-	{
-	  if(i < 1){i = 1;}
-	  if(i+2 >= N_BR){i = N_BR - 3;}
-	  int indexBR = 4;
-	  double xmhBR[indexBR], sigBR[indexBR];
-	  xmhBR[0]=mass_BR[i-1];xmhBR[1]=mass_BR[i];xmhBR[2]=mass_BR[i+1];xmhBR[3]=mass_BR[i+2];
-	  sigBR[0]=BR[ID][i-1]; sigBR[1]=BR[ID][i]; sigBR[2]=BR[ID][i+1]; sigBR[3]=BR[ID][i+2];
-	  
-	  TGraph *graphBR = new TGraph(indexBR, xmhBR, sigBR);
-	  TSpline3 *gsBR = new TSpline3("gsBR",graphBR);
-	  gsBR->Draw();
-	  PartialBR = gsBR->Eval(mH);
-	  delete gsBR;
-	  delete graphBR;
-	}
-
-      BranchRatio = PartialBR;
-
+    
+    if(i < 1){i = 1;}
+    if(i+2 >= N_BR){i = N_BR - 3;}
+    int indexBR = 4;
+    double xmhBR[indexBR], sigBR[indexBR];
+    xmhBR[0]=mass_BR[i-1];xmhBR[1]=mass_BR[i];xmhBR[2]=mass_BR[i+1];xmhBR[3]=mass_BR[i+2];
+    sigBR[0]=BR[ID][i-1]; sigBR[1]=BR[ID][i]; sigBR[2]=BR[ID][i+1]; sigBR[3]=BR[ID][i+2];
+    
+    TGraph *graphBR = new TGraph(indexBR, xmhBR, sigBR);
+    TSpline3 *gsBR = new TSpline3("gsBR",graphBR);
+    gsBR->Draw();
+    PartialBR = gsBR->Eval(mH);
+    delete gsBR;
+    delete graphBR;
+    
+    BranchRatio = PartialBR;
+    
   }
 
   return BranchRatio;
