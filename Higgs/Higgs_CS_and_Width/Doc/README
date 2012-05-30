@@ -15,6 +15,10 @@
 #                                                         #
 ###########################################################
 
+
+May 30, 2012
+***SPLINE IS NOW DEFAULT FOR SM***
+
 April 5, 2012
 
 ***SPLINE IS NOW AVAILABLE***
@@ -36,12 +40,12 @@ e.g.   HiggsCSandWidth *myCSW = new HiggsCSandWidth();
 Then call the function you want
 
 e.g.    bool spline = true;
-	double TotalWidth = myCSW->HiggsWidth(0,<mH>,spline);
+	double TotalWidth = myCSW->HiggsWidth(0,<mH>);
 
 The following function are included:
 
   For cross section
-	 double HiggsCS(int ID, double mH, double sqrts, bool spline);
+	 double HiggsCS(int ID, double mH, double sqrts);
 
   For cross section errors
 	double HiggsCSErrPlus(int ID, double mH, double sqrts);
@@ -64,8 +68,8 @@ ID's for CS functions are
   /************************/
 
   For width
-	double Width = myCSW->HiggsWidth(0,<mH>, spline);
-	double BR = myCSW->HiggsBR(<ID>,<mH>, spline);
+	double Width = myCSW->HiggsWidth(0,<mH>);
+	double BR = myCSW->HiggsBR(<ID>,<mH>);
 
 
 ID's for Width/BR are 
@@ -116,8 +120,6 @@ double CSErrMinus = CS + myCSW->HiggsCSErrMinus(<ID>,<mH>,<sqrts>)*CS;
 In keeping to this, we make this class the most flexible for the user.
 Errors on CS are always linearly interpolated, as they are never rapidly changing.
 
-
-Only numbers for sqrts = 7 are given in this version.
 
 NOTE: The HiggsWidth function returns width in GeV. 
          
