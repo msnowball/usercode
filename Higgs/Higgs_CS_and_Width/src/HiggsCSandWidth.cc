@@ -24,8 +24,9 @@ HiggsCSandWidth::HiggsCSandWidth()
 
   N_BR = 217;
   N_CS = 197;
-  N_CSggToH_8tev = 178;
+  N_CSggToH_8tev = 223;
   N_CSvbf_8tev = 223;
+  N_CSttH_8tev = 33;
 
   ifstream file;
  
@@ -101,7 +102,6 @@ HiggsCSandWidth::HiggsCSandWidth()
 
   // ---------------- Read 8 TeV CS into memory ------------------ //         
   file.open("../txtFiles/8TeV-ggH.txt");//directory of input file
-  if(!file) std::cout << "file not found!" << std::endl;
   for(int k = 0; k < N_CSggToH_8tev; k++){
 
     file >> mass_XS_8tev[ID_ggToH][k] >> CS_8tev[ID_ggToH][k] >> CSerrPlus_8tev[ID_ggToH][k] >> CSerrMinus_8tev[ID_ggToH][k] 
@@ -117,6 +117,15 @@ HiggsCSandWidth::HiggsCSandWidth()
 
     file >> mass_XS_8tev[ID_VBF][k] >> CS_8tev[ID_VBF][k] >> CSerrPlus_8tev[ID_VBF][k] >> CSerrMinus_8tev[ID_VBF][k] >> CSscaleErrPlus_8tev[ID_VBF][k]
 	 >> CSscaleErrMinus_8tev[ID_VBF][k] >> CSpdfErrPlus_8tev[ID_VBF][k] >> CSpdfErrMinus_8tev[ID_VBF][k];
+
+  }
+  file.close();
+
+  file.open("../txtFiles/8TeV-ttH.txt");//directory of input file
+  for(int k = 0; k < N_CSttH_8tev; k++){
+
+    file >> mass_XS_8tev[ID_ttH][k] >> CS_8tev[ID_ttH][k] >> CSerrPlus_8tev[ID_ttH][k] >> CSerrMinus_8tev[ID_ttH][k] >> CSscaleErrPlus_8tev[ID_ttH][k]
+	 >> CSscaleErrMinus_8tev[ID_ttH][k] >> CSpdfErrPlus_8tev[ID_ttH][k] >> CSpdfErrMinus_8tev[ID_ttH][k];
 
   }
   file.close();
@@ -186,17 +195,15 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
 	
 	if(ID == ID_ggToH)
 	  {
-	    //for(int j = 0;j < N_CSggToH_8tev; j++)
-	    //  {
-	    //	cout << mass_XS_8tev[ID][j] << "  " << CS_8tev[ID][j] << endl;
-	    // }
+
 	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
 	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
 	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
 	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 300) return 0;
-	    
+	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); closestMass = (int)(step*(i-187) + 350);}
+	    if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); closestMass = (int)(step*(i-192) + 400);}
+	    	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
@@ -215,6 +222,18 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
 	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); closestMass = (step*(i-22) + 200);}
+	    if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
 	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
 	    
@@ -292,12 +311,14 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
 	if(ID == ID_ggToH)
 	  {
 	    
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 300) return 0;
+            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); closestMass = (int)(step*(i-187) + 350);}
+            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); closestMass = (int)(step*(i-192) + 400);}
+
 	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
@@ -317,6 +338,18 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
 	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+            if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+            if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); closestMass = (step*(i-22) + 200);}
+            if(mH > 300) return 0;
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
 	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
 	    
@@ -394,12 +427,14 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
 	if(ID == ID_ggToH)
 	  {
 	    
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 300) return 0;
+            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); closestMass = (int)(step*(i-187) + 350);}
+            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); closestMass = (int)(step*(i-192) + 400);}
+
 	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
@@ -419,6 +454,19 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
 	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+            if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+            if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); closestMass = (step*(i-22) + 200);}
+            if(mH > 300) return 0;
+
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
 	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
 	    
@@ -496,13 +544,14 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
 	if(ID == ID_ggToH)
 	  {
 	    
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 300) return 0;
-	    
+            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); closestMass = (int)(step*(i-187) + 350);}
+            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); closestMass = (int)(step*(i-192) + 400);}
+
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
@@ -521,6 +570,18 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
 	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+            if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+            if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); closestMass = (step*(i-22) + 200);}
+            if(mH > 300) return 0;
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
 	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
 	    
@@ -599,31 +660,28 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
 	if(ID == ID_ggToH)
 	  {
 	    
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 300) return 0;
-	    
+            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); closestMass = (int)(step*(i-187) + 350);}
+            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); closestMass = (int)(step*(i-192) + 400);}
+
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
 	    sig[0]=CSscaleErrMinus_8tev[ID][i-1]; sig[1]=CSscaleErrMinus_8tev[ID][i]; sig[2]=CSscaleErrMinus_8tev[ID][i+1]; sig[3]=CSscaleErrMinus_8tev[ID][i+2];
 	    
 	  }
-	else if(ID == ID_VBF)
+	else if(ID == ID_ttH)
 	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
-	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
-	    
+            if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+            if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); closestMass = (step*(i-22) + 200);}
+            if(mH > 300) return 0;
+
 	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
 	    sig[0]=CSscaleErrMinus_8tev[ID][i-1]; sig[1]=CSscaleErrMinus_8tev[ID][i]; sig[2]=CSscaleErrMinus_8tev[ID][i+1]; sig[3]=CSscaleErrMinus_8tev[ID][i+2];
 	    
@@ -701,13 +759,14 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
 	if(ID == ID_ggToH)
 	  {
 	    
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 300) return 0;
-	    
+            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); closestMass = (int)(step*(i-187) + 350);}
+            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); closestMass = (int)(step*(i-192) + 400);}
+
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
@@ -726,6 +785,18 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
 	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
+	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+            if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+            if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); closestMass = (step*(i-22) + 200);}
+            if(mH > 300) return 0;
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
 	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
 	    
@@ -806,12 +877,14 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 	if(ID == ID_ggToH)
 	  {
 	    
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 300) return 0;
+            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
+            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
+            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
+            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
+            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
+            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); closestMass = (int)(step*(i-187) + 350);}
+            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); closestMass = (int)(step*(i-192) + 400);}
+
 	    
 	    if(i < 1){i = 1;}
 	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
@@ -819,18 +892,14 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 	    sig[0]=CSpdfErrMinus_8tev[ID][i-1]; sig[1]=CSpdfErrMinus_8tev[ID][i]; sig[2]=CSpdfErrMinus_8tev[ID][i+1]; sig[3]=CSpdfErrMinus_8tev[ID][i+2];
 	    
 	  }
-	else if(ID == ID_VBF)
+	else if(ID == ID_ttH)
 	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); closestMass = (int)(step*i + 80);}
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); closestMass = (step*(i-30) + 110);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); closestMass = (int)(step*(i-90) + 140);}
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); closestMass = (int)(step*(i-110) + 160);}
-	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); closestMass = (int)(step*(i-175) + 290);}
-	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); closestMass = (int)(step*(i-187) + 350);}
-	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); closestMass = (int)(step*(i-192) + 400);}
+            if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); closestMass = (int)(step*i + 90);}
+            if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); closestMass = (step*(i-22) + 200);}
+            if(mH > 300) return 0;
 	    
 	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
+	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
 	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
 	    sig[0]=CSpdfErrMinus_8tev[ID][i-1]; sig[1]=CSpdfErrMinus_8tev[ID][i]; sig[2]=CSpdfErrMinus_8tev[ID][i+1]; sig[3]=CSpdfErrMinus_8tev[ID][i+2];
 	    

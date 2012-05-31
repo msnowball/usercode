@@ -15,7 +15,7 @@ int main()
 
   HiggsCSandWidth *myCSW = new HiggsCSandWidth();
 
-  for( int i = 1; i < 3; i++)
+  for( int i = 0; i < 6; i++)
     {
       
       fileOut.open(fileName_[i]);
