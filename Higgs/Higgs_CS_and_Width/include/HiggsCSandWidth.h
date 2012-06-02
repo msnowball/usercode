@@ -94,6 +94,8 @@ class HiggsCSandWidth
   int N_CS;
   int N_CSggToH_8tev;  
   int N_CSvbf_8tev;
+  int N_CSWH_8tev;
+  int N_CSZH_8tev;
   int N_CSttH_8tev;
   std::string FileLoc;
 
