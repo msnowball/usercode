@@ -25,7 +25,7 @@ int main()
       double CS;
       double CSErrPlusPercent, CSErrMinusPercent;
       double CSErrPlus, CSErrMinus;
-      double sqrts = 8;
+      double sqrts = 14;
       bool spline = true;
 
       for( double j = 110; j < 140; j += 0.5)

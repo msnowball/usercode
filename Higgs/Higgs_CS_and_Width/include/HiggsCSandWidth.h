@@ -90,6 +90,15 @@ class HiggsCSandWidth
   double CSpdfErrPlus_8tev[6][223];
   double CSpdfErrMinus_8tev[6][223];
 
+  double mass_XS_14tev[6][223];
+  double CS_14tev[6][223];
+  double CSerrPlus_14tev[6][223];
+  double CSerrMinus_14tev[6][223];
+  double CSscaleErrPlus_14tev[6][223];
+  double CSscaleErrMinus_14tev[6][223];
+  double CSpdfErrPlus_14tev[6][223];
+  double CSpdfErrMinus_14tev[6][223];
+
   int N_BR;
   int N_CS;
   int N_CSggToH_8tev;  
@@ -97,6 +106,11 @@ class HiggsCSandWidth
   int N_CSWH_8tev;
   int N_CSZH_8tev;
   int N_CSttH_8tev;
+  int N_CSggToH_14tev;  
+  int N_CSvbf_14tev;
+  int N_CSWH_14tev;
+  int N_CSZH_14tev;
+  int N_CSttH_14tev;
   std::string FileLoc;
 
 

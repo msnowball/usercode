@@ -30,6 +30,12 @@ HiggsCSandWidth::HiggsCSandWidth()
   N_CSZH_8tev = 178;
   N_CSWH_8tev = 178;
 
+  N_CSggToH_14tev = 50;
+  N_CSvbf_14tev = 50;
+  N_CSttH_14tev = 33;
+  N_CSZH_14tev = 33;
+  N_CSWH_14tev = 33;
+
   ifstream file;
  
   // Read Widths into memory
@@ -146,6 +152,52 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
+
+  // ---------------- Read 14 TeV CS into memory ------------------ //         
+  file.open("../txtFiles/14TeV-ggH.txt");//directory of input file
+  for(int k = 0; k < N_CSggToH_14tev; k++){
+
+    file >> mass_XS_14tev[ID_ggToH][k] >> CS_14tev[ID_ggToH][k] >> CSerrPlus_14tev[ID_ggToH][k] >> CSerrMinus_14tev[ID_ggToH][k] 
+	 >> CSscaleErrPlus_14tev[ID_ggToH][k] >> CSscaleErrMinus_14tev[ID_ggToH][k] >> CSpdfErrPlus_14tev[ID_ggToH][k] >> CSpdfErrMinus_14tev[ID_ggToH][k];
+  
+  }
+  file.close();
+
+  file.open("../txtFiles/14TeV-vbfH.txt");//directory of input file
+  for(int k = 0; k < N_CSvbf_14tev; k++){
+
+    file >> mass_XS_14tev[ID_VBF][k] >> CS_14tev[ID_VBF][k] >> CSerrPlus_14tev[ID_VBF][k] >> CSerrMinus_14tev[ID_VBF][k] >> CSscaleErrPlus_14tev[ID_VBF][k]
+	 >> CSscaleErrMinus_14tev[ID_VBF][k] >> CSpdfErrPlus_14tev[ID_VBF][k] >> CSpdfErrMinus_14tev[ID_VBF][k];
+
+  }
+  file.close();
+
+  file.open("../txtFiles/14TeV-ttH.txt");//directory of input file
+  for(int k = 0; k < N_CSttH_14tev; k++){
+
+    file >> mass_XS_14tev[ID_ttH][k] >> CS_14tev[ID_ttH][k] >> CSerrPlus_14tev[ID_ttH][k] >> CSerrMinus_14tev[ID_ttH][k] >> CSscaleErrPlus_14tev[ID_ttH][k]
+	 >> CSscaleErrMinus_14tev[ID_ttH][k] >> CSpdfErrPlus_14tev[ID_ttH][k] >> CSpdfErrMinus_14tev[ID_ttH][k];
+
+  }
+  file.close();
+
+  file.open("../txtFiles/14TeV-ZH.txt");//directory of input file
+  for(int k = 0; k < N_CSZH_14tev; k++){
+
+    file >> mass_XS_14tev[ID_ZH][k] >> CS_14tev[ID_ZH][k] >> CSerrPlus_14tev[ID_ZH][k] >> CSerrMinus_14tev[ID_ZH][k] >> CSscaleErrPlus_14tev[ID_ZH][k]
+	 >> CSscaleErrMinus_14tev[ID_ZH][k] >> CSpdfErrPlus_14tev[ID_ZH][k] >> CSpdfErrMinus_14tev[ID_ZH][k];
+  }
+  file.close();
+
+  file.open("../txtFiles/14TeV-WH.txt");//directory of input file
+  for(int k = 0; k < N_CSWH_14tev; k++){
+
+    file >> mass_XS_14tev[ID_WH][k] >> CS_14tev[ID_WH][k] >> CSerrPlus_14tev[ID_WH][k] >> CSerrMinus_14tev[ID_WH][k] >> CSscaleErrPlus_14tev[ID_WH][k]
+	 >> CSscaleErrMinus_14tev[ID_WH][k] >> CSpdfErrPlus_14tev[ID_WH][k] >> CSpdfErrMinus_14tev[ID_WH][k];
+  }
+  file.close();
+
+
 }
 
 
@@ -178,7 +230,7 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
   // If ID is unavailable return -1                                                                                                
   if(ID > ID_ttH || ID < ID_Total) return -1;
   // If Ecm is not 7 or 8 TeV return -1
-  if(sqrts != 7 && sqrts != 8) return -1;
+  if(sqrts != 7 && sqrts != 8 && sqrts != 14) return -1;
   //Don't interpolate btw 0 and numbers for mH300
   if(ID > ID_VBF && mH > 300) return 0;
 
@@ -289,7 +341,76 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
 	else{ return 0;}
 	
       }
-    else{cout << "HiggsCSandWidth::HiggsCS --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
+    else if(sqrts == 14)
+      {
+
+	if(ID == ID_ggToH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_WH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ZH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+
+      }
+    else{cout << "HiggsCSandWidth::HiggsCS --- unknown sqrts! Choose 7,8, or 14." << endl; return -1;}
   }  
   
   TGraph *graph = new TGraph(index, xmh, sig);
@@ -326,7 +447,7 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
   // If Ecm is not 7 or 8 TeV return -1                                                                                                
-  if(sqrts != 7 && sqrts != 8){return -1;}
+  if(sqrts != 7 && sqrts != 8 && sqrts != 14){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                        
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -437,6 +558,75 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
 	  }
 	else{ return 0;}
       }
+    else if(sqrts == 14)
+      {
+
+	if(ID == ID_ggToH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_WH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ZH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+
+      }
     else{cout << "HiggsCSandWidth::HiggsCSErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
   }
   TGraph *graph = new TGraph(index, xmh, sig);
@@ -475,7 +665,7 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
   // If Ecm is not 7 or 8 TeV return -1                                                                                           
-  if(sqrts != 7 && sqrts != 8){return -1;}
+  if(sqrts != 7 && sqrts != 8 && sqrts != 14){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                                        
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -585,6 +775,75 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
 	  }
 	else{ return 0;}
       }
+    else if(sqrts == 14)
+      {
+
+	if(ID == ID_ggToH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_WH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ZH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+
+      }
     else{cout << "HiggsCSandWidth::HiggsCSErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
   }
@@ -623,7 +882,7 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
   // If Ecm is not 7 or 8 TeV return -1                                                
-  if(sqrts != 7 && sqrts != 8){return -1;}
+  if(sqrts != 7 && sqrts != 8 && sqrts != 14){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                           
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -732,6 +991,75 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
 	  }
 	else{ return 0;}
       }
+    else if(sqrts == 14)
+      {
+
+	if(ID == ID_ggToH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_WH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ZH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+
+      }
     else{cout << "HiggsCSandWidth::HiggsCSscaleErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
   }
@@ -771,7 +1099,7 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
   // If Ecm is not 7 or 8 TeV return -1                                                               
-  if(sqrts != 7 && sqrts != 8){return -1;}
+  if(sqrts != 7 && sqrts != 8 && sqrts != 14){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                   
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -864,6 +1192,75 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
 	  }
 	else{ return 0;}
       }
+    else if(sqrts == 14)
+      {
+
+	if(ID == ID_ggToH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_WH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ZH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+
+      }
     else{cout << "HiggsCSandWidth::HiggsCSscaleErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
   }
   
@@ -903,7 +1300,7 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
   // If Ecm is not 7 or 8 TeV return -1                                                                                         
-  if(sqrts != 7 && sqrts != 8){return -1;}
+  if(sqrts != 7 && sqrts != 8 && sqrts != 14){return -1;}
   //Don't interpolate btw 0 and numbers for mH300                                                  
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -1011,6 +1408,75 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
 	  }
 	else{ return 0;}
       }
+    else if(sqrts == 14)
+      {
+
+	if(ID == ID_ggToH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_WH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ZH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+
+      }
     else{cout << "HiggsCSandWidth::HiggsCSpdfErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
   }
@@ -1052,7 +1518,7 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
   if(ID > ID_ttH || ID < ID_Total){return -1;}
   if(ID == ID_Total){return 0;}
   // If Ecm is not 7 or 8 TeV return -1                                                                 
-  if(sqrts != 7 && sqrts != 8){return -1;}
+  if(sqrts != 7 && sqrts != 8 && sqrts != 14){return -1;}
   //Don't interpolate btw 0 and numbers for mH300             
   if(ID > ID_VBF && mH > 300){return 0;}
 
@@ -1145,6 +1611,75 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 	    
 	  }
 	else{ return 0;}
+      }
+    else if(sqrts == 14)
+      {
+
+	if(ID == ID_ggToH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_VBF)
+	  {
+	
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_WH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ZH)
+	  {
+
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else if(ID == ID_ttH)
+	  {
+	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	    
+	    if(i < 1){i = 1;}
+	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
+	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
+	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
+	    
+	  }
+	else{ return 0;}
+
       }
     else{cout << "HiggsCSandWidth::HiggsCSpdfErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
