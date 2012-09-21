@@ -11,7 +11,7 @@ int main()
 {
 
   ofstream fileOut;
-  char* fileName_[25] = {"Hbb.txt","Htautau.txt","Hmumu.txt","Hss.txt","Hcc.txt","Htt.txt","Hgg.txt","Hgamgam.txt","HgammaZ.txt","HWW.txt","HZZ.txt",
+  string fileName_[25] = {"Hbb.txt","Htautau.txt","Hmumu.txt","Hss.txt","Hcc.txt","Htt.txt","Hgg.txt","Hgamgam.txt","HgammaZ.txt","HWW.txt","HZZ.txt",
 			"HZZ4e.txt","HZZ2e2mu.txt","HZZ4lep(emu).txt","HZZ4lep(emutau).txt","HWW2e2nu.txt","HWWeNuMuNu.txt","HZZ2l2nu(emu).txt",
 			 "HZZ2l2nu(emutau).txt","HZZ2l2q(emu).txt","HZZ2l2q(emutau).txt","HWWlnuqq(emu).txt","HZZ2nu2q.txt","H4q.txt","H4f.txt"};
   string channel[25] = {"H->bb","H->tautau","H->mumu","H->ss","H->cc","H->tt","H->gg","H->gamgam","H->gammaZ","H->WW","H->ZZ",
@@ -23,7 +23,7 @@ int main()
   for( int i = 0; i < 25; i++)
     {
       
-      fileOut.open(fileName_[i]);
+      fileOut.open(fileName_[i].c_str());
       fileOut << " mH     Width   TotalCS    BR(H->ZZ)     BR("+channel[i]+")  " << endl;
 
       double mH;
@@ -32,7 +32,6 @@ int main()
       double BRHZZ;
       double BRChan;
       double sqrts = 7;
-      bool spline = true;
 
       for( double j = 110; j < 140; j += 0.5)
 	{

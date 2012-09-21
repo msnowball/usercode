@@ -11,14 +11,14 @@ int main()
 {
 
   ofstream fileOut;
-  char* fileName_[6] = {"Total_cs_pdf.txt","GluGlu_cs_pdf.txt","VBF_cs_pdf.txt","WH_cs_pdf.txt","ZH_cs_pdf.txt","ttH_cs_pdf.txt"};
+  string fileName_[6] = {"Total_cs_pdf.txt","GluGlu_cs_pdf.txt","VBF_cs_pdf.txt","WH_cs_pdf.txt","ZH_cs_pdf.txt","ttH_cs_pdf.txt"};
 
   HiggsCSandWidth *myCSW = new HiggsCSandWidth();
 
   for( int i = 0; i < 6; i++)
     {
       
-      fileOut.open(fileName_[i]);
+      fileOut.open(fileName_[i].c_str());
       fileOut << " mH      CS   CSErr Plus%   CSErr Plus   CSErr Minus%  CSErr Minus " << endl;
 
       double mH;
@@ -26,8 +26,7 @@ int main()
       double CSErrPlusPercent, CSErrMinusPercent;
       double CSErrPlus, CSErrMinus;
       double sqrts = 7;
-      bool spline = true;
-
+ 
       for( double j = 110; j < 140; j += 0.5)
 	{
 

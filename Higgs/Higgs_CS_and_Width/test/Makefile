@@ -33,7 +33,7 @@ validateBR: validationTest_BR.o
 	$(CXX) -o validationTest_BR.exe $(OBJSSSSS) $(LIBS)
 
 clean:
-	@rm *.o *.exe *~ 
+	@rm *.o *.exe *~ *.txt
 
 new:
 	@rm *.root *.eps *.gif *~
