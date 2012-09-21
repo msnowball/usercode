@@ -18,7 +18,7 @@
 
 using namespace std;
 
-HiggsCSandWidthFermi::HiggsCSandWidthFermi()
+HiggsCSandWidthFermi::HiggsCSandWidthFermi(std::string fileLoc="../txtFiles")
 {
 
   N_BR = 681;
@@ -26,9 +26,8 @@ HiggsCSandWidthFermi::HiggsCSandWidthFermi()
   ifstream file;
  
   // Read Widths into memory
-  FileLoc = "../txtFiles/Higgs_BR_Fermiophobic.txt"; //directory of input file
-  const char* BranchRatioFileLoc = FileLoc.c_str(); 
-  file.open(BranchRatioFileLoc);
+  fileName = fileLoc+"/Higgs_BR_Fermiophobic.txt"; //directory of input file
+  file.open(fileName.c_str());
   for(int k = 0; k < N_BR; k++){
 
     file >> mass_BR[k] >> BR[7][k] >> BR[8][k] >> BR[9][k] >> BR[10][k] >> BR[11][k] >> BR[0][k];

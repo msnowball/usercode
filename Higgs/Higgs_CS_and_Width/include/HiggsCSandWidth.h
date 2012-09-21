@@ -53,7 +53,7 @@ class HiggsCSandWidth
 
  public:
 
-  HiggsCSandWidth();
+  HiggsCSandWidth(std::string fileLoc);
   ~HiggsCSandWidth();
 
   double HiggsCS(int ID, double mH, double sqrts);
@@ -68,6 +68,8 @@ class HiggsCSandWidth
 
  private:
 
+  std::string fileName;
+  
   double scratchMass;
   double mass_BR[217];
   double mass_XS[197];
@@ -111,7 +113,6 @@ class HiggsCSandWidth
   int N_CSWH_14tev;
   int N_CSZH_14tev;
   int N_CSttH_14tev;
-  std::string FileLoc;
 
 
 };

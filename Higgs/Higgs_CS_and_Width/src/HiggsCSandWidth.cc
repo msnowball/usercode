@@ -19,7 +19,7 @@
 
 using namespace std;
 
-HiggsCSandWidth::HiggsCSandWidth()
+HiggsCSandWidth::HiggsCSandWidth(std::string fileLoc = "../txtFiles")
 {
 
   N_BR = 217;
@@ -37,9 +37,9 @@ HiggsCSandWidth::HiggsCSandWidth()
   N_CSWH_14tev = 33;
 
   ifstream file;
- 
-  // Read Widths into memory
-  file.open("../txtFiles/HiggsBR_7TeV_Official.txt");
+  // ---------------- Read 7 TeV CS into memory ------------------ //         
+  fileName = fileLoc+"/HiggsBR_7TeV_Official.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_BR; k++){
 
     file >> mass_BR[k] >> BR[0][k] >> BR[1][k] >> BR[2][k] >> BR[3][k] >> BR[4][k] >> BR[5][k] >> BR[6][k] >> BR[7][k] >> BR[8][k] >> BR[9][k]
@@ -51,7 +51,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   file.close();
 
   // ---------------- Read 7 TeV CS into memory ------------------ //         
-  file.open("../txtFiles/HiggsCS_Official.txt");//directory of input file
+  fileName = fileLoc+"/HiggsCS_Official.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CS; k++){
 
     file >> mass_XS[k] >> CS[ID_ggToH][k] >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
@@ -59,7 +60,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/HiggsCS_ErrorPlus_Official.txt");//directory of input file                       
+  fileName = fileLoc+"/HiggsCS_ErrorPlus_Official.txt";                     
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CS; k++){
 
     file >> scratchMass >> CSerrPlus[ID_ggToH][k] >> CSerrPlus[ID_VBF][k] >> CSerrPlus[ID_WH][k] >> CSerrPlus[ID_ZH][k] >> CSerrPlus[ID_ttH][k];
@@ -67,7 +69,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/HiggsCS_ErrorMinus_Official.txt");//directory of input file                                                
+  fileName = fileLoc+"/HiggsCS_ErrorMinus_Official.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CS; k++){
 
     file >> scratchMass >> CSerrMinus[ID_ggToH][k] >> CSerrMinus[ID_VBF][k] >> CSerrMinus[ID_WH][k] >> CSerrMinus[ID_ZH][k] >> CSerrMinus[ID_ttH][k];
@@ -75,7 +78,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/HiggsCS_ScaleErrorPlus_Official.txt");//directory of input file                                                
+  fileName = fileLoc+"/HiggsCS_ScaleErrorPlus_Official.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CS; k++){
 
     file >> scratchMass >> CSscaleErrPlus[ID_ggToH][k] >> CSscaleErrPlus[ID_VBF][k] >> CSscaleErrPlus[ID_WH][k] >> CSscaleErrPlus[ID_ZH][k] >> CSscaleErrPlus[ID_ttH][k];
@@ -83,7 +87,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/HiggsCS_ScaleErrorMinus_Official.txt");//directory of input file                                     
+  fileName = fileLoc+"/HiggsCS_ScaleErrorMinus_Official.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CS; k++){
 
     file >> scratchMass >> CSscaleErrMinus[ID_ggToH][k] >> CSscaleErrMinus[ID_VBF][k] >> CSscaleErrMinus[ID_WH][k] >> CSscaleErrMinus[ID_ZH][k] >> CSscaleErrMinus[ID_ttH][k];
@@ -91,7 +96,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/HiggsCS_PdfErrorPlus_Official.txt");//directory of input file                  
+  fileName = fileLoc+"/HiggsCS_PdfErrorPlus_Official.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CS; k++){
 
     file >> scratchMass >> CSpdfErrPlus[ID_ggToH][k] >> CSpdfErrPlus[ID_VBF][k] >> CSpdfErrPlus[ID_WH][k] >> CSpdfErrPlus[ID_ZH][k] >> CSpdfErrPlus[ID_ttH][k];
@@ -99,7 +105,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/HiggsCS_PdfErrorMinus_Official.txt");//directory of input file                           
+  fileName = fileLoc+"/HiggsCS_PdfErrorMinus_Official.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CS; k++){
 
     file >> scratchMass >> CSpdfErrMinus[ID_ggToH][k] >> CSpdfErrMinus[ID_VBF][k] >> CSpdfErrMinus[ID_WH][k] >> CSpdfErrMinus[ID_ZH][k] >> CSpdfErrMinus[ID_ttH][k];
@@ -109,7 +116,8 @@ HiggsCSandWidth::HiggsCSandWidth()
 
 
   // ---------------- Read 8 TeV CS into memory ------------------ //         
-  file.open("../txtFiles/8TeV-ggH.txt");//directory of input file
+  fileName = fileLoc+"/8TeV-ggH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSggToH_8tev; k++){
 
     file >> mass_XS_8tev[ID_ggToH][k] >> CS_8tev[ID_ggToH][k] >> CSerrPlus_8tev[ID_ggToH][k] >> CSerrMinus_8tev[ID_ggToH][k] 
@@ -118,7 +126,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/8TeV-vbfH.txt");//directory of input file
+  fileName = fileLoc+"/8TeV-vbfH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSvbf_8tev; k++){
 
     file >> mass_XS_8tev[ID_VBF][k] >> CS_8tev[ID_VBF][k] >> CSerrPlus_8tev[ID_VBF][k] >> CSerrMinus_8tev[ID_VBF][k] >> CSscaleErrPlus_8tev[ID_VBF][k]
@@ -127,7 +136,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/8TeV-ttH.txt");//directory of input file
+  fileName = fileLoc+"/8TeV-ttH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSttH_8tev; k++){
 
     file >> mass_XS_8tev[ID_ttH][k] >> CS_8tev[ID_ttH][k] >> CSerrPlus_8tev[ID_ttH][k] >> CSerrMinus_8tev[ID_ttH][k] >> CSscaleErrPlus_8tev[ID_ttH][k]
@@ -136,7 +146,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/8TeV-ZH.txt");//directory of input file
+  fileName = fileLoc+"/8TeV-ZH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSZH_8tev; k++){
 
     file >> mass_XS_8tev[ID_ZH][k] >> CS_8tev[ID_ZH][k] >> CSerrPlus_8tev[ID_ZH][k] >> CSerrMinus_8tev[ID_ZH][k] >> CSscaleErrPlus_8tev[ID_ZH][k]
@@ -144,7 +155,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/8TeV-WH.txt");//directory of input file
+  fileName = fileLoc+"/8TeV-WH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSWH_8tev; k++){
 
     file >> mass_XS_8tev[ID_WH][k] >> CS_8tev[ID_WH][k] >> CSerrPlus_8tev[ID_WH][k] >> CSerrMinus_8tev[ID_WH][k] >> CSscaleErrPlus_8tev[ID_WH][k]
@@ -154,7 +166,8 @@ HiggsCSandWidth::HiggsCSandWidth()
 
 
   // ---------------- Read 14 TeV CS into memory ------------------ //         
-  file.open("../txtFiles/14TeV-ggH.txt");//directory of input file
+  fileName = fileLoc+"/14TeV-ggH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSggToH_14tev; k++){
 
     file >> mass_XS_14tev[ID_ggToH][k] >> CS_14tev[ID_ggToH][k] >> CSerrPlus_14tev[ID_ggToH][k] >> CSerrMinus_14tev[ID_ggToH][k] 
@@ -163,7 +176,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/14TeV-vbfH.txt");//directory of input file
+  fileName = fileLoc+"/14TeV-vbfH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSvbf_14tev; k++){
 
     file >> mass_XS_14tev[ID_VBF][k] >> CS_14tev[ID_VBF][k] >> CSerrPlus_14tev[ID_VBF][k] >> CSerrMinus_14tev[ID_VBF][k] >> CSscaleErrPlus_14tev[ID_VBF][k]
@@ -172,7 +186,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/14TeV-ttH.txt");//directory of input file
+  fileName = fileLoc+"/14TeV-ttH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSttH_14tev; k++){
 
     file >> mass_XS_14tev[ID_ttH][k] >> CS_14tev[ID_ttH][k] >> CSerrPlus_14tev[ID_ttH][k] >> CSerrMinus_14tev[ID_ttH][k] >> CSscaleErrPlus_14tev[ID_ttH][k]
@@ -181,7 +196,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/14TeV-ZH.txt");//directory of input file
+  fileName = fileLoc+"/14TeV-ZH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSZH_14tev; k++){
 
     file >> mass_XS_14tev[ID_ZH][k] >> CS_14tev[ID_ZH][k] >> CSerrPlus_14tev[ID_ZH][k] >> CSerrMinus_14tev[ID_ZH][k] >> CSscaleErrPlus_14tev[ID_ZH][k]
@@ -189,7 +205,8 @@ HiggsCSandWidth::HiggsCSandWidth()
   }
   file.close();
 
-  file.open("../txtFiles/14TeV-WH.txt");//directory of input file
+  fileName = fileLoc+"/14TeV-WH.txt";
+  file.open(fileName.c_str());
   for(int k = 0; k < N_CSWH_14tev; k++){
 
     file >> mass_XS_14tev[ID_WH][k] >> CS_14tev[ID_WH][k] >> CSerrPlus_14tev[ID_WH][k] >> CSerrMinus_14tev[ID_WH][k] >> CSscaleErrPlus_14tev[ID_WH][k]
@@ -1735,7 +1752,6 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH){
 
 
 
-  double TotalWidth = 0;
   double PartialWidth = 0;
   double Width = 0;
   int i = 0;
