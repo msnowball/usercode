@@ -23,22 +23,28 @@ HiggsCSandWidth::HiggsCSandWidth(std::string fileLoc = "../txtFiles")
 {
 
   N_BR = 217;
-  N_CS = 197;
-  N_CSggToH_8tev = 223;
-  N_CSvbf_8tev = 223;
-  N_CSttH_8tev = 178;
-  N_CSZH_8tev = 178;
-  N_CSWH_8tev = 178;
 
-  N_CSggToH_14tev = 50;
-  N_CSvbf_14tev = 50;
-  N_CSttH_14tev = 33;
-  N_CSZH_14tev = 33;
-  N_CSWH_14tev = 33;
+  N_CS_7tev[ID_ggToH] = 197;
+  N_CS_7tev[ID_VBF] = 197;
+  N_CS_7tev[ID_WH]  = 152;
+  N_CS_7tev[ID_ZH]  = 152;
+  N_CS_7tev[ID_ttH] = 152;
+
+  N_CS_8tev[ID_ggToH] = 223;
+  N_CS_8tev[ID_VBF] = 223;
+  N_CS_8tev[ID_WH]  = 178;
+  N_CS_8tev[ID_ZH]  = 178;
+  N_CS_8tev[ID_ttH] = 178;
+
+  N_CS_14tev[ID_ggToH] = 50;
+  N_CS_14tev[ID_VBF] = 50;
+  N_CS_14tev[ID_WH]  = 33;
+  N_CS_14tev[ID_ZH]  = 33;
+  N_CS_14tev[ID_ttH] = 33;
 
   ifstream file;
-  // ---------------- Read 7 TeV CS into memory ------------------ //         
-  fileName = fileLoc+"/HiggsBR_7TeV_Official.txt";
+  // ---------------- Read BR into memory ------------------ //         
+  fileName = fileLoc+"/HiggsBR_Official.txt";
   file.open(fileName.c_str());
   for(int k = 0; k < N_BR; k++){
 
@@ -50,117 +56,101 @@ HiggsCSandWidth::HiggsCSandWidth(std::string fileLoc = "../txtFiles")
   }
   file.close();
 
-  // ---------------- Read 7 TeV CS into memory ------------------ //         
-  fileName = fileLoc+"/HiggsCS_Official.txt";
+  // ---------------- Read 8 TeV CS into memory ------------------ //         
+  fileName = fileLoc+"/7TeV-ggH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CS; k++){
+  for(int k = 0; k < N_CS_7tev[ID_ggToH]; k++){
 
-    file >> mass_XS[k] >> CS[ID_ggToH][k] >> CS[ID_VBF][k] >> CS[ID_WH][k] >> CS[ID_ZH][k] >> CS[ID_ttH][k] >> CS[ID_Total][k];
+    file >> mass_XS_7tev[k][ID_ggToH] >> CS_7tev[k][ID_ggToH] >> CSerrPlus_7tev[k][ID_ggToH] >> CSerrMinus_7tev[k][ID_ggToH] 
+	 >> CSscaleErrPlus_7tev[k][ID_ggToH] >> CSscaleErrMinus_7tev[k][ID_ggToH] >> CSpdfErrPlus_7tev[k][ID_ggToH] >> CSpdfErrMinus_7tev[k][ID_ggToH];
+  
+  }
+  file.close();
+
+  fileName = fileLoc+"/7TeV-vbfH.txt";
+  file.open(fileName.c_str());
+  for(int k = 0; k < N_CS_7tev[ID_VBF]; k++){
+
+    file >> mass_XS_7tev[k][ID_VBF] >> CS_7tev[k][ID_VBF] >> CSerrPlus_7tev[k][ID_VBF] >> CSerrMinus_7tev[k][ID_VBF] >> CSscaleErrPlus_7tev[k][ID_VBF]
+	 >> CSscaleErrMinus_7tev[k][ID_VBF] >> CSpdfErrPlus_7tev[k][ID_VBF] >> CSpdfErrMinus_7tev[k][ID_VBF];
 
   }
   file.close();
 
-  fileName = fileLoc+"/HiggsCS_ErrorPlus_Official.txt";                     
+  fileName = fileLoc+"/7TeV-ttH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CS; k++){
+  for(int k = 0; k < N_CS_7tev[ID_ttH]; k++){
 
-    file >> scratchMass >> CSerrPlus[ID_ggToH][k] >> CSerrPlus[ID_VBF][k] >> CSerrPlus[ID_WH][k] >> CSerrPlus[ID_ZH][k] >> CSerrPlus[ID_ttH][k];
+    file >> mass_XS_7tev[k][ID_ttH] >> CS_7tev[k][ID_ttH] >> CSerrPlus_7tev[k][ID_ttH] >> CSerrMinus_7tev[k][ID_ttH] >> CSscaleErrPlus_7tev[k][ID_ttH]
+	 >> CSscaleErrMinus_7tev[k][ID_ttH] >> CSpdfErrPlus_7tev[k][ID_ttH] >> CSpdfErrMinus_7tev[k][ID_ttH];
 
   }
   file.close();
 
-  fileName = fileLoc+"/HiggsCS_ErrorMinus_Official.txt";
+  fileName = fileLoc+"/7TeV-ZH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CS; k++){
+  for(int k = 0; k < N_CS_7tev[ID_ZH]; k++){
 
-    file >> scratchMass >> CSerrMinus[ID_ggToH][k] >> CSerrMinus[ID_VBF][k] >> CSerrMinus[ID_WH][k] >> CSerrMinus[ID_ZH][k] >> CSerrMinus[ID_ttH][k];
-
+    file >> mass_XS_7tev[k][ID_ZH] >> CS_7tev[k][ID_ZH] >> CSerrPlus_7tev[k][ID_ZH] >> CSerrMinus_7tev[k][ID_ZH] >> CSscaleErrPlus_7tev[k][ID_ZH]
+	 >> CSscaleErrMinus_7tev[k][ID_ZH] >> CSpdfErrPlus_7tev[k][ID_ZH] >> CSpdfErrMinus_7tev[k][ID_ZH];
   }
   file.close();
 
-  fileName = fileLoc+"/HiggsCS_ScaleErrorPlus_Official.txt";
+  fileName = fileLoc+"/7TeV-WH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CS; k++){
+  for(int k = 0; k < N_CS_7tev[ID_WH]; k++){
 
-    file >> scratchMass >> CSscaleErrPlus[ID_ggToH][k] >> CSscaleErrPlus[ID_VBF][k] >> CSscaleErrPlus[ID_WH][k] >> CSscaleErrPlus[ID_ZH][k] >> CSscaleErrPlus[ID_ttH][k];
-
+    file >> mass_XS_7tev[k][ID_WH] >> CS_7tev[k][ID_WH] >> CSerrPlus_7tev[k][ID_WH] >> CSerrMinus_7tev[k][ID_WH] >> CSscaleErrPlus_7tev[k][ID_WH]
+	 >> CSscaleErrMinus_7tev[k][ID_WH] >> CSpdfErrPlus_7tev[k][ID_WH] >> CSpdfErrMinus_7tev[k][ID_WH];
   }
   file.close();
-
-  fileName = fileLoc+"/HiggsCS_ScaleErrorMinus_Official.txt";
-  file.open(fileName.c_str());
-  for(int k = 0; k < N_CS; k++){
-
-    file >> scratchMass >> CSscaleErrMinus[ID_ggToH][k] >> CSscaleErrMinus[ID_VBF][k] >> CSscaleErrMinus[ID_WH][k] >> CSscaleErrMinus[ID_ZH][k] >> CSscaleErrMinus[ID_ttH][k];
-
-  }
-  file.close();
-
-  fileName = fileLoc+"/HiggsCS_PdfErrorPlus_Official.txt";
-  file.open(fileName.c_str());
-  for(int k = 0; k < N_CS; k++){
-
-    file >> scratchMass >> CSpdfErrPlus[ID_ggToH][k] >> CSpdfErrPlus[ID_VBF][k] >> CSpdfErrPlus[ID_WH][k] >> CSpdfErrPlus[ID_ZH][k] >> CSpdfErrPlus[ID_ttH][k];
-
-  }
-  file.close();
-
-  fileName = fileLoc+"/HiggsCS_PdfErrorMinus_Official.txt";
-  file.open(fileName.c_str());
-  for(int k = 0; k < N_CS; k++){
-
-    file >> scratchMass >> CSpdfErrMinus[ID_ggToH][k] >> CSpdfErrMinus[ID_VBF][k] >> CSpdfErrMinus[ID_WH][k] >> CSpdfErrMinus[ID_ZH][k] >> CSpdfErrMinus[ID_ttH][k];
-
-  }
-  file.close();
-
 
   // ---------------- Read 8 TeV CS into memory ------------------ //         
   fileName = fileLoc+"/8TeV-ggH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSggToH_8tev; k++){
+  for(int k = 0; k < N_CS_8tev[ID_ggToH]; k++){
 
-    file >> mass_XS_8tev[ID_ggToH][k] >> CS_8tev[ID_ggToH][k] >> CSerrPlus_8tev[ID_ggToH][k] >> CSerrMinus_8tev[ID_ggToH][k] 
-	 >> CSscaleErrPlus_8tev[ID_ggToH][k] >> CSscaleErrMinus_8tev[ID_ggToH][k] >> CSpdfErrPlus_8tev[ID_ggToH][k] >> CSpdfErrMinus_8tev[ID_ggToH][k];
+    file >> mass_XS_8tev[k][ID_ggToH] >> CS_8tev[k][ID_ggToH] >> CSerrPlus_8tev[k][ID_ggToH] >> CSerrMinus_8tev[k][ID_ggToH] 
+	 >> CSscaleErrPlus_8tev[k][ID_ggToH] >> CSscaleErrMinus_8tev[k][ID_ggToH] >> CSpdfErrPlus_8tev[k][ID_ggToH] >> CSpdfErrMinus_8tev[k][ID_ggToH];
   
   }
   file.close();
 
   fileName = fileLoc+"/8TeV-vbfH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSvbf_8tev; k++){
+  for(int k = 0; k < N_CS_8tev[ID_VBF]; k++){
 
-    file >> mass_XS_8tev[ID_VBF][k] >> CS_8tev[ID_VBF][k] >> CSerrPlus_8tev[ID_VBF][k] >> CSerrMinus_8tev[ID_VBF][k] >> CSscaleErrPlus_8tev[ID_VBF][k]
-	 >> CSscaleErrMinus_8tev[ID_VBF][k] >> CSpdfErrPlus_8tev[ID_VBF][k] >> CSpdfErrMinus_8tev[ID_VBF][k];
+    file >> mass_XS_8tev[k][ID_VBF] >> CS_8tev[k][ID_VBF] >> CSerrPlus_8tev[k][ID_VBF] >> CSerrMinus_8tev[k][ID_VBF] >> CSscaleErrPlus_8tev[k][ID_VBF]
+	 >> CSscaleErrMinus_8tev[k][ID_VBF] >> CSpdfErrPlus_8tev[k][ID_VBF] >> CSpdfErrMinus_8tev[k][ID_VBF];
 
   }
   file.close();
 
   fileName = fileLoc+"/8TeV-ttH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSttH_8tev; k++){
+  for(int k = 0; k < N_CS_8tev[ID_ttH]; k++){
 
-    file >> mass_XS_8tev[ID_ttH][k] >> CS_8tev[ID_ttH][k] >> CSerrPlus_8tev[ID_ttH][k] >> CSerrMinus_8tev[ID_ttH][k] >> CSscaleErrPlus_8tev[ID_ttH][k]
-	 >> CSscaleErrMinus_8tev[ID_ttH][k] >> CSpdfErrPlus_8tev[ID_ttH][k] >> CSpdfErrMinus_8tev[ID_ttH][k];
+    file >> mass_XS_8tev[k][ID_ttH] >> CS_8tev[k][ID_ttH] >> CSerrPlus_8tev[k][ID_ttH] >> CSerrMinus_8tev[k][ID_ttH] >> CSscaleErrPlus_8tev[k][ID_ttH]
+	 >> CSscaleErrMinus_8tev[k][ID_ttH] >> CSpdfErrPlus_8tev[k][ID_ttH] >> CSpdfErrMinus_8tev[k][ID_ttH];
 
   }
   file.close();
 
   fileName = fileLoc+"/8TeV-ZH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSZH_8tev; k++){
+  for(int k = 0; k < N_CS_8tev[ID_ZH]; k++){
 
-    file >> mass_XS_8tev[ID_ZH][k] >> CS_8tev[ID_ZH][k] >> CSerrPlus_8tev[ID_ZH][k] >> CSerrMinus_8tev[ID_ZH][k] >> CSscaleErrPlus_8tev[ID_ZH][k]
-	 >> CSscaleErrMinus_8tev[ID_ZH][k] >> CSpdfErrPlus_8tev[ID_ZH][k] >> CSpdfErrMinus_8tev[ID_ZH][k];
+    file >> mass_XS_8tev[k][ID_ZH] >> CS_8tev[k][ID_ZH] >> CSerrPlus_8tev[k][ID_ZH] >> CSerrMinus_8tev[k][ID_ZH] >> CSscaleErrPlus_8tev[k][ID_ZH]
+	 >> CSscaleErrMinus_8tev[k][ID_ZH] >> CSpdfErrPlus_8tev[k][ID_ZH] >> CSpdfErrMinus_8tev[k][ID_ZH];
   }
   file.close();
 
   fileName = fileLoc+"/8TeV-WH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSWH_8tev; k++){
+  for(int k = 0; k < N_CS_8tev[ID_WH]; k++){
 
-    file >> mass_XS_8tev[ID_WH][k] >> CS_8tev[ID_WH][k] >> CSerrPlus_8tev[ID_WH][k] >> CSerrMinus_8tev[ID_WH][k] >> CSscaleErrPlus_8tev[ID_WH][k]
-	 >> CSscaleErrMinus_8tev[ID_WH][k] >> CSpdfErrPlus_8tev[ID_WH][k] >> CSpdfErrMinus_8tev[ID_WH][k];
+    file >> mass_XS_8tev[k][ID_WH] >> CS_8tev[k][ID_WH] >> CSerrPlus_8tev[k][ID_WH] >> CSerrMinus_8tev[k][ID_WH] >> CSscaleErrPlus_8tev[k][ID_WH]
+	 >> CSscaleErrMinus_8tev[k][ID_WH] >> CSpdfErrPlus_8tev[k][ID_WH] >> CSpdfErrMinus_8tev[k][ID_WH];
   }
   file.close();
 
@@ -168,49 +158,49 @@ HiggsCSandWidth::HiggsCSandWidth(std::string fileLoc = "../txtFiles")
   // ---------------- Read 14 TeV CS into memory ------------------ //         
   fileName = fileLoc+"/14TeV-ggH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSggToH_14tev; k++){
+  for(int k = 0; k < N_CS_14tev[ID_ggToH]; k++){
 
-    file >> mass_XS_14tev[ID_ggToH][k] >> CS_14tev[ID_ggToH][k] >> CSerrPlus_14tev[ID_ggToH][k] >> CSerrMinus_14tev[ID_ggToH][k] 
-	 >> CSscaleErrPlus_14tev[ID_ggToH][k] >> CSscaleErrMinus_14tev[ID_ggToH][k] >> CSpdfErrPlus_14tev[ID_ggToH][k] >> CSpdfErrMinus_14tev[ID_ggToH][k];
+    file >> mass_XS_14tev[k][ID_ggToH] >> CS_14tev[k][ID_ggToH] >> CSerrPlus_14tev[k][ID_ggToH] >> CSerrMinus_14tev[k][ID_ggToH] 
+	 >> CSscaleErrPlus_14tev[k][ID_ggToH] >> CSscaleErrMinus_14tev[k][ID_ggToH] >> CSpdfErrPlus_14tev[k][ID_ggToH] >> CSpdfErrMinus_14tev[k][ID_ggToH];
   
   }
   file.close();
 
   fileName = fileLoc+"/14TeV-vbfH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSvbf_14tev; k++){
+  for(int k = 0; k < N_CS_14tev[ID_VBF]; k++){
 
-    file >> mass_XS_14tev[ID_VBF][k] >> CS_14tev[ID_VBF][k] >> CSerrPlus_14tev[ID_VBF][k] >> CSerrMinus_14tev[ID_VBF][k] >> CSscaleErrPlus_14tev[ID_VBF][k]
-	 >> CSscaleErrMinus_14tev[ID_VBF][k] >> CSpdfErrPlus_14tev[ID_VBF][k] >> CSpdfErrMinus_14tev[ID_VBF][k];
+    file >> mass_XS_14tev[k][ID_VBF] >> CS_14tev[k][ID_VBF] >> CSerrPlus_14tev[k][ID_VBF] >> CSerrMinus_14tev[k][ID_VBF] >> CSscaleErrPlus_14tev[k][ID_VBF]
+	 >> CSscaleErrMinus_14tev[k][ID_VBF] >> CSpdfErrPlus_14tev[k][ID_VBF] >> CSpdfErrMinus_14tev[k][ID_VBF];
 
   }
   file.close();
 
   fileName = fileLoc+"/14TeV-ttH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSttH_14tev; k++){
+  for(int k = 0; k < N_CS_14tev[ID_ttH]; k++){
 
-    file >> mass_XS_14tev[ID_ttH][k] >> CS_14tev[ID_ttH][k] >> CSerrPlus_14tev[ID_ttH][k] >> CSerrMinus_14tev[ID_ttH][k] >> CSscaleErrPlus_14tev[ID_ttH][k]
-	 >> CSscaleErrMinus_14tev[ID_ttH][k] >> CSpdfErrPlus_14tev[ID_ttH][k] >> CSpdfErrMinus_14tev[ID_ttH][k];
+    file >> mass_XS_14tev[k][ID_ttH] >> CS_14tev[k][ID_ttH] >> CSerrPlus_14tev[k][ID_ttH] >> CSerrMinus_14tev[k][ID_ttH] >> CSscaleErrPlus_14tev[k][ID_ttH]
+	 >> CSscaleErrMinus_14tev[k][ID_ttH] >> CSpdfErrPlus_14tev[k][ID_ttH] >> CSpdfErrMinus_14tev[k][ID_ttH];
 
   }
   file.close();
 
   fileName = fileLoc+"/14TeV-ZH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSZH_14tev; k++){
+  for(int k = 0; k < N_CS_14tev[ID_ZH]; k++){
 
-    file >> mass_XS_14tev[ID_ZH][k] >> CS_14tev[ID_ZH][k] >> CSerrPlus_14tev[ID_ZH][k] >> CSerrMinus_14tev[ID_ZH][k] >> CSscaleErrPlus_14tev[ID_ZH][k]
-	 >> CSscaleErrMinus_14tev[ID_ZH][k] >> CSpdfErrPlus_14tev[ID_ZH][k] >> CSpdfErrMinus_14tev[ID_ZH][k];
+    file >> mass_XS_14tev[k][ID_ZH] >> CS_14tev[k][ID_ZH] >> CSerrPlus_14tev[k][ID_ZH] >> CSerrMinus_14tev[k][ID_ZH] >> CSscaleErrPlus_14tev[k][ID_ZH]
+	 >> CSscaleErrMinus_14tev[k][ID_ZH] >> CSpdfErrPlus_14tev[k][ID_ZH] >> CSpdfErrMinus_14tev[k][ID_ZH];
   }
   file.close();
 
   fileName = fileLoc+"/14TeV-WH.txt";
   file.open(fileName.c_str());
-  for(int k = 0; k < N_CSWH_14tev; k++){
+  for(int k = 0; k < N_CS_14tev[ID_WH]; k++){
 
-    file >> mass_XS_14tev[ID_WH][k] >> CS_14tev[ID_WH][k] >> CSerrPlus_14tev[ID_WH][k] >> CSerrMinus_14tev[ID_WH][k] >> CSscaleErrPlus_14tev[ID_WH][k]
-	 >> CSscaleErrMinus_14tev[ID_WH][k] >> CSpdfErrPlus_14tev[ID_WH][k] >> CSpdfErrMinus_14tev[ID_WH][k];
+    file >> mass_XS_14tev[k][ID_WH] >> CS_14tev[k][ID_WH] >> CSerrPlus_14tev[k][ID_WH] >> CSerrMinus_14tev[k][ID_WH] >> CSscaleErrPlus_14tev[k][ID_WH]
+	 >> CSscaleErrMinus_14tev[k][ID_WH] >> CSpdfErrPlus_14tev[k][ID_WH] >> CSpdfErrMinus_14tev[k][ID_WH];
   }
   file.close();
 
@@ -237,12 +227,7 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
   /*     Total = 0          */
   /**************************/
  
-  int i = 0;
-  double reqCS = 0;
-  double step = 0;
-  int index = 4;
-  double xmh[index], sig[index];
-
+  double val = -1;
 
   // If ID is unavailable return -1                                                                                                
   if(ID > ID_ttH || ID < ID_Total) return -1;
@@ -258,186 +243,41 @@ double HiggsCSandWidth::HiggsCS(int ID, double mH, double sqrts){
     
     if(sqrts == 7)
       {
-	
-	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
-	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); }
-	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
-	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); }
-	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); }
-	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); }
-	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); }
-	
-        
-	if(i < 1){i = 1;}
-	if(i+2 >= N_CS){i = N_CS - 3;}
-	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
-	sig[0]=CS[ID][i-1]; sig[1]=CS[ID][i]; sig[2]=CS[ID][i+1]; sig[3]=CS[ID][i+2];
-	
+	if(ID == 0)
+	  {
+	    for(int i = 1; i <= 5; i++)
+	      {
+		val += getInterpXS(sqrts,i,mH,N_CS_7tev[i],mass_XS_7tev,CS_7tev);
+	      }
+	  }
+	else val = getInterpXS(sqrts,ID,mH,N_CS_7tev[ID],mass_XS_7tev,CS_7tev);
       }
     else if (sqrts == 8)
       {
-	
-	if(ID == ID_ggToH)
+	if(ID == 0)
 	  {
-
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); }
-	    	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
-	    
+	    for(int i = 1; i <= 5; i++)
+	      {
+		val += getInterpXS(sqrts,i,mH,N_CS_8tev[i],mass_XS_8tev,CS_8tev);
+	      }
 	  }
-	else if(ID == ID_VBF)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); }
-	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_8tev){i = N_CSWH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_8tev){i = N_CSZH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CS_8tev[ID][i-1]; sig[1]=CS_8tev[ID][i]; sig[2]=CS_8tev[ID][i+1]; sig[3]=CS_8tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
-	
+	else val = getInterpXS(sqrts,ID,mH,N_CS_8tev[ID],mass_XS_8tev,CS_8tev);
       }
     else if(sqrts == 14)
       {
-
-	if(ID == ID_ggToH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CS_14tev[ID][i-1]; sig[1]=CS_14tev[ID][i]; sig[2]=CS_14tev[ID][i+1]; sig[3]=CS_14tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
-
+        if(ID == 0)
+          {
+            for(int i =1; i <= 5; i++)
+	      { 
+		val += getInterpXS(sqrts,i,mH,N_CS_14tev[i],mass_XS_14tev,CS_14tev);
+	      } 
+          }
+	else val = getInterpXS(sqrts,ID,mH,N_CS_14tev[ID],mass_XS_14tev,CS_14tev);
       }
     else{cout << "HiggsCSandWidth::HiggsCS --- unknown sqrts! Choose 7,8, or 14." << endl; return -1;}
   }  
   
-  TGraph *graph = new TGraph(index, xmh, sig);
-  TSpline3 *gs = new TSpline3("gs",graph);
-  gs->Draw();
-  reqCS = gs->Eval(mH);
-  delete gs;
-  delete graph;
-  
-  return reqCS;
+  return val;
 }
   
   
@@ -453,11 +293,7 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
   /*       ttH = 5          */
   /**************************/
 
-  int i = 0;
-  double reqCSerr = 0;
-  double step = 0;
-  int index = 4;
-  double xmh[index], sig[index];
+  double val = 0;
 
 
   // If ID is unavailable return -1                                                                                    
@@ -475,187 +311,22 @@ double HiggsCSandWidth::HiggsCSErrPlus(int ID, double mH, double sqrts){
 
     if(sqrts == 7)
       {
-	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
-	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); }
-	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
-	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step);}
-	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); }
-	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); }
-	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); }
-	
-	
-	if(i < 1){i = 1;}
-	if(i+2 >= N_CS){i = N_CS - 3;}
-	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
-	sig[0]=CSerrPlus[ID][i-1]; sig[1]=CSerrPlus[ID][i]; sig[2]=CSerrPlus[ID][i+1]; sig[3]=CSerrPlus[ID][i+2];
-	
+	val = getInterpXS(sqrts,ID,mH,N_CS_7tev[ID],mass_XS_7tev,CSerrPlus_7tev);
       }
     else if (sqrts == 8)
       {
-	
-	if(ID == ID_ggToH)
-	  {
-	    
-            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); }
-            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); }
-
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); }
-	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_8tev){i = N_CSWH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_8tev){i = N_CSZH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrPlus_8tev[ID][i-1]; sig[1]=CSerrPlus_8tev[ID][i]; sig[2]=CSerrPlus_8tev[ID][i+1]; sig[3]=CSerrPlus_8tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
+	val = getInterpXS(sqrts,ID,mH,N_CS_8tev[ID],mass_XS_8tev,CSerrPlus_8tev);
       }
     else if(sqrts == 14)
       {
-
-	if(ID == ID_ggToH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrPlus_14tev[ID][i-1]; sig[1]=CSerrPlus_14tev[ID][i]; sig[2]=CSerrPlus_14tev[ID][i+1]; sig[3]=CSerrPlus_14tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
-
+	val = getInterpXS(sqrts,ID,mH,N_CS_14tev[ID],mass_XS_14tev,CSerrPlus_14tev);
       }
     else{cout << "HiggsCSandWidth::HiggsCSErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
   }
-  TGraph *graph = new TGraph(index, xmh, sig);
-  TSpline3 *gs = new TSpline3("gs",graph);
-  gs->Draw();
-  reqCSerr = gs->Eval(mH);
-  delete gs;
-  delete graph;
+
+  val *= .01;
   
-  reqCSerr *= .01; //Account for percentage  
-  
-  return reqCSerr;
+  return val;
   
 }
 
@@ -671,12 +342,7 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
   /*       ttH = 5          */
   /**************************/
 
-  int i = 0;
-  double reqCSerr = 0;
-  double step = 0;
-  int index = 4;
-  double xmh[index], sig[index];
-
+  double val = 0;
 
   // If ID is unavailable return -1                                                                                       
   if(ID > ID_ttH || ID < ID_Total){return -1;}
@@ -694,186 +360,23 @@ double HiggsCSandWidth::HiggsCSErrMinus(int ID, double mH, double sqrts){
 
     if(sqrts == 7)
       {
-	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
-	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); }
-	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
-	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); }
-	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); }
-	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); }
-	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); }
-	
-	if(i < 1){i = 1;}
-	if(i+2 >= N_CS){i = N_CS - 3;}
-	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
-	sig[0]=CSerrMinus[ID][i-1]; sig[1]=CSerrMinus[ID][i]; sig[2]=CSerrMinus[ID][i+1]; sig[3]=CSerrMinus[ID][i+2];
-	
+        val = getInterpXS(sqrts,ID,mH,N_CS_7tev[ID],mass_XS_7tev,CSerrMinus_7tev);
       }
     else if (sqrts == 8)
       {
-	
-	if(ID == ID_ggToH)
-	  {
-	    
-            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); }
-            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); }
-
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); }
-	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_8tev){i = N_CSWH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_8tev){i = N_CSZH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSerrMinus_8tev[ID][i-1]; sig[1]=CSerrMinus_8tev[ID][i]; sig[2]=CSerrMinus_8tev[ID][i+1]; sig[3]=CSerrMinus_8tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
+        val = getInterpXS(sqrts,ID,mH,N_CS_8tev[ID],mass_XS_8tev,CSerrMinus_8tev);
       }
     else if(sqrts == 14)
       {
-
-	if(ID == ID_ggToH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSerrMinus_14tev[ID][i-1]; sig[1]=CSerrMinus_14tev[ID][i]; sig[2]=CSerrMinus_14tev[ID][i+1]; sig[3]=CSerrMinus_14tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
-
+        val = getInterpXS(sqrts,ID,mH,N_CS_14tev[ID],mass_XS_14tev,CSerrMinus_14tev);
       }
     else{cout << "HiggsCSandWidth::HiggsCSErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
   }
-  TGraph *graph = new TGraph(index, xmh, sig);
-  TSpline3 *gs = new TSpline3("gs",graph);
-  gs->Draw();
-  reqCSerr = gs->Eval(mH);
-  delete gs;
-  delete graph;
-  
-  reqCSerr *= .01; //Account for percentage  
-  
-  return reqCSerr;
+
+  val *= .01;
+
+  return val;
 
 }
 
@@ -888,12 +391,8 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
   /*       ttH = 5          */
   /**************************/
 
-  int i = 0;
-  double reqCSerr = 0;
-  double step = 0;
-  int index = 4;
-  double xmh[index], sig[index];
 
+  double val = 0;
 
   // If ID is unavailable return -1                                                         
   if(ID > ID_ttH || ID < ID_Total){return -1;}
@@ -911,186 +410,24 @@ double HiggsCSandWidth::HiggsCSscaleErrPlus(int ID, double mH, double sqrts){
     
     if(sqrts == 7)
       {
-	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
-	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); }
-	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
-	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); }
-	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); }
-	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); }
-	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); }
-	
-	if(i < 1){i = 1;}
-	if(i+2 >= N_CS){i = N_CS - 3;}
-	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
-	sig[0]=CSscaleErrPlus[ID][i-1]; sig[1]=CSscaleErrPlus[ID][i]; sig[2]=CSscaleErrPlus[ID][i+1]; sig[3]=CSscaleErrPlus[ID][i+2];
-	
+        val = getInterpXS(sqrts,ID,mH,N_CS_7tev[ID],mass_XS_7tev,CSscaleErrPlus_7tev);
       }
     else if (sqrts == 8)
       {
-	
-	if(ID == ID_ggToH)
-	  {
-	    
-            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); }
-            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); }
-	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_8tev){i = N_CSWH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step);}
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_8tev){i = N_CSZH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_8tev[ID][i-1]; sig[1]=CSscaleErrPlus_8tev[ID][i]; sig[2]=CSscaleErrPlus_8tev[ID][i+1]; sig[3]=CSscaleErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
+        val = getInterpXS(sqrts,ID,mH,N_CS_8tev[ID],mass_XS_8tev,CSscaleErrPlus_8tev);
       }
     else if(sqrts == 14)
       {
-
-	if(ID == ID_ggToH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrPlus_14tev[ID][i-1]; sig[1]=CSscaleErrPlus_14tev[ID][i]; sig[2]=CSscaleErrPlus_14tev[ID][i+1]; sig[3]=CSscaleErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
-
+        val = getInterpXS(sqrts,ID,mH,N_CS_14tev[ID],mass_XS_14tev,CSscaleErrPlus_14tev);
       }
     else{cout << "HiggsCSandWidth::HiggsCSscaleErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
   }
   
-  TGraph *graph = new TGraph(index, xmh, sig);
-  TSpline3 *gs = new TSpline3("gs",graph);
-  gs->Draw();
-  reqCSerr = gs->Eval(mH);
-  delete gs;
-  delete graph;
   
-  reqCSerr *= .01; //Account for percentage  
+  val *= .01; //Account for percentage  
   
-  return reqCSerr;
+  return val;
   
 }
 
@@ -1105,12 +442,7 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
   /*       ttH = 5          */
   /**************************/
 
-  int i = 0;
-  double reqCSerr = 0;
-  double step = 0;
-  int index = 4;
-  double xmh[index], sig[index];
-
+  double val = 0;
 
   // If ID is unavailable return -1                     
   if(ID > ID_ttH || ID < ID_Total){return -1;}
@@ -1128,169 +460,22 @@ double HiggsCSandWidth::HiggsCSscaleErrMinus(int ID, double mH, double sqrts){
 
     if(sqrts == 7)
       {
-	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
-	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); }
-	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
-	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); }
-	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); }
-	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); }
-	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); }
-	
-	if(i < 1){i = 1;}
-	if(i+2 >= N_CS){i = N_CS - 3;}
-	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
-	sig[0]=CSscaleErrMinus[ID][i-1]; sig[1]=CSscaleErrMinus[ID][i]; sig[2]=CSscaleErrMinus[ID][i+1]; sig[3]=CSscaleErrMinus[ID][i+2];
-	
+        val = getInterpXS(sqrts,ID,mH,N_CS_7tev[ID],mass_XS_7tev,CSscaleErrMinus_7tev);
       }
     else if (sqrts == 8)
       {
-	
-	if(ID == ID_ggToH)
-	  {
-	    
-            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); }
-            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_8tev[ID][i-1]; sig[1]=CSscaleErrMinus_8tev[ID][i]; sig[2]=CSscaleErrMinus_8tev[ID][i+1]; sig[3]=CSscaleErrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_8tev){i = N_CSWH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_8tev[ID][i-1]; sig[1]=CSscaleErrMinus_8tev[ID][i]; sig[2]=CSscaleErrMinus_8tev[ID][i+1]; sig[3]=CSscaleErrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_8tev){i = N_CSZH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_8tev[ID][i-1]; sig[1]=CSscaleErrMinus_8tev[ID][i]; sig[2]=CSscaleErrMinus_8tev[ID][i+1]; sig[3]=CSscaleErrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_8tev[ID][i-1]; sig[1]=CSscaleErrMinus_8tev[ID][i]; sig[2]=CSscaleErrMinus_8tev[ID][i+1]; sig[3]=CSscaleErrMinus_8tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
+        val = getInterpXS(sqrts,ID,mH,N_CS_8tev[ID],mass_XS_8tev,CSscaleErrMinus_8tev);
       }
     else if(sqrts == 14)
       {
-
-	if(ID == ID_ggToH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSscaleErrMinus_14tev[ID][i-1]; sig[1]=CSscaleErrMinus_14tev[ID][i]; sig[2]=CSscaleErrMinus_14tev[ID][i+1]; sig[3]=CSscaleErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
-
+        val = getInterpXS(sqrts,ID,mH,N_CS_14tev[ID],mass_XS_14tev,CSscaleErrMinus_14tev);
       }
     else{cout << "HiggsCSandWidth::HiggsCSscaleErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
   }
   
-  TGraph *graph = new TGraph(index, xmh, sig);
-  TSpline3 *gs = new TSpline3("gs",graph);
-  gs->Draw();
-  reqCSerr = gs->Eval(mH);
-  delete gs;
-  delete graph;
+  val *= .01; //Account for percentage  
   
-  reqCSerr *= .01; //Account for percentage  
-  
-  return reqCSerr;
+  return val;
 
 }
 
@@ -1306,12 +491,7 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
   /*       ttH = 5          */
   /**************************/
 
-  int i = 0;
-  double reqCSerr = 0;
-  double step = 0;
-  int index = 4;
-  double xmh[index], sig[index];
-
+  double val = 0;
 
   // If ID is unavailable return -1                                                                           
   if(ID > ID_ttH || ID < ID_Total){return -1;}
@@ -1328,186 +508,23 @@ double HiggsCSandWidth::HiggsCSpdfErrPlus(int ID, double mH, double sqrts){
 
     if(sqrts == 7)
       {
-	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
-	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); }
-	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
-	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); }
-	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); }
-	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); }
-	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); }
-	
-	if(i < 1){i = 1;}
-	if(i+2 >= N_CS){i = N_CS - 3;}
-	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
-	sig[0]=CSpdfErrPlus[ID][i-1]; sig[1]=CSpdfErrPlus[ID][i]; sig[2]=CSpdfErrPlus[ID][i+1]; sig[3]=CSpdfErrPlus[ID][i+2];
-	
+        val = getInterpXS(sqrts,ID,mH,N_CS_7tev[ID],mass_XS_7tev,CSpdfErrPlus_7tev);
       }
     else if (sqrts == 8)
       {
-	
-	if(ID == ID_ggToH)
-	  {
-	    
-            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); }
-            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-	    if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-	    if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); }
-	    if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_8tev){i = N_CSvbf_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_8tev){i = N_CSWH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_8tev){i = N_CSZH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  { 
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_8tev[ID][i-1]; sig[1]=CSpdfErrPlus_8tev[ID][i]; sig[2]=CSpdfErrPlus_8tev[ID][i+1]; sig[3]=CSpdfErrPlus_8tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
+        val = getInterpXS(sqrts,ID,mH,N_CS_8tev[ID],mass_XS_8tev,CSpdfErrPlus_8tev);
       }
     else if(sqrts == 14)
       {
-
-	if(ID == ID_ggToH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrPlus_14tev[ID][i-1]; sig[1]=CSpdfErrPlus_14tev[ID][i]; sig[2]=CSpdfErrPlus_14tev[ID][i+1]; sig[3]=CSpdfErrPlus_14tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
-
+        val = getInterpXS(sqrts,ID,mH,N_CS_14tev[ID],mass_XS_14tev,CSpdfErrPlus_14tev);
       }
     else{cout << "HiggsCSandWidth::HiggsCSpdfErrPlus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
   }
   
-  TGraph *graph = new TGraph(index, xmh, sig);
-  TSpline3 *gs = new TSpline3("gs",graph);
-  gs->Draw();
-  reqCSerr = gs->Eval(mH);
-  delete gs;
-  delete graph;
+  val *= .01; //Account for percentage  
   
-  reqCSerr *= .01; //Account for percentage  
-  
-  return reqCSerr;
+  return val;
 
 
 }
@@ -1524,12 +541,7 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
   /*       ttH = 5          */
   /**************************/
 
-  int i = 0;
-  double reqCSerr = 0;
-  double step = 0;
-  int index = 4;
-  double xmh[index], sig[index];
-
+  double val = 0;
 
   // If ID is unavailable return -1                           
   if(ID > ID_ttH || ID < ID_Total){return -1;}
@@ -1547,171 +559,23 @@ double HiggsCSandWidth::HiggsCSpdfErrMinus(int ID, double mH, double sqrts){
 
     if(sqrts == 7)
       {
-	if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
-	if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); }
-	if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
-	if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); }
-	if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step);}
-	if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); }
-	if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); }
-	
-	if(i < 1){i = 1;}
-	if(i+2 >= N_CS){i = N_CS - 3;}
-	xmh[0]=mass_XS[i-1];xmh[1]=mass_XS[i];xmh[2]=mass_XS[i+1];xmh[3]=mass_XS[i+2];
-	sig[0]=CSpdfErrMinus[ID][i-1]; sig[1]=CSpdfErrMinus[ID][i]; sig[2]=CSpdfErrMinus[ID][i+1]; sig[3]=CSpdfErrMinus[ID][i+2];
-	
+        val = getInterpXS(sqrts,ID,mH,N_CS_7tev[ID],mass_XS_7tev,CSpdfErrMinus_7tev);
       }
     else if (sqrts == 8)
       {
-	
-	if(ID == ID_ggToH)
-	  {
-	    
-            if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-            if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
-            if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step);}
-            if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-            if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); }
-            if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); }
-
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_8tev){i = N_CSggToH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_8tev[ID][i-1]; sig[1]=CSpdfErrMinus_8tev[ID][i]; sig[2]=CSpdfErrMinus_8tev[ID][i+1]; sig[3]=CSpdfErrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step);}
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step);}
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_8tev){i = N_CSWH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_8tev[ID][i-1]; sig[1]=CSpdfErrMinus_8tev[ID][i]; sig[2]=CSpdfErrMinus_8tev[ID][i+1]; sig[3]=CSpdfErrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_8tev){i = N_CSZH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_8tev[ID][i-1]; sig[1]=CSpdfErrMinus_8tev[ID][i]; sig[2]=CSpdfErrMinus_8tev[ID][i+1]; sig[3]=CSpdfErrMinus_8tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
-	    if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step);}
-	    if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
-            if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
-            if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
-	    if(mH > 300) return 0;
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_8tev){i = N_CSttH_8tev - 3;}
-	    xmh[0]=mass_XS_8tev[ID][i-1];xmh[1]=mass_XS_8tev[ID][i];xmh[2]=mass_XS_8tev[ID][i+1];xmh[3]=mass_XS_8tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_8tev[ID][i-1]; sig[1]=CSpdfErrMinus_8tev[ID][i]; sig[2]=CSpdfErrMinus_8tev[ID][i+1]; sig[3]=CSpdfErrMinus_8tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
+        val = getInterpXS(sqrts,ID,mH,N_CS_8tev[ID],mass_XS_8tev,CSpdfErrMinus_8tev);
       }
     else if(sqrts == 14)
       {
-
-	if(ID == ID_ggToH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSggToH_14tev){i = N_CSggToH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_VBF)
-	  {
-	
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
-	    if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSvbf_14tev){i = N_CSvbf_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_WH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSWH_14tev){i = N_CSWH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ZH)
-	  {
-
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSZH_14tev){i = N_CSZH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else if(ID == ID_ttH)
-	  {
-	    if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
-	    if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
-	    
-	    if(i < 1){i = 1;}
-	    if(i+2 >= N_CSttH_14tev){i = N_CSttH_14tev - 3;}
-	    xmh[0]=mass_XS_14tev[ID][i-1];xmh[1]=mass_XS_14tev[ID][i];xmh[2]=mass_XS_14tev[ID][i+1];xmh[3]=mass_XS_14tev[ID][i+2];
-	    sig[0]=CSpdfErrMinus_14tev[ID][i-1]; sig[1]=CSpdfErrMinus_14tev[ID][i]; sig[2]=CSpdfErrMinus_14tev[ID][i+1]; sig[3]=CSpdfErrMinus_14tev[ID][i+2];
-	    
-	  }
-	else{ return 0;}
-
+        val = getInterpXS(sqrts,ID,mH,N_CS_14tev[ID],mass_XS_14tev,CSpdfErrMinus_14tev);
       }
     else{cout << "HiggsCSandWidth::HiggsCSpdfErrMinus --- unknown sqrts! Choose 7 or 8." << endl; return -1;}
 
   }
   
-  TGraph *graph = new TGraph(index, xmh, sig);
-  TSpline3 *gs = new TSpline3("gs",graph);
-  gs->Draw();
-  reqCSerr = gs->Eval(mH);
-  delete gs;
-  delete graph;
+  val *= .01; //Account for percentage  
   
-  reqCSerr *= .01; //Account for percentage  
-  
-  return reqCSerr;
+  return val;
 
 }
 
@@ -1913,6 +777,109 @@ double HiggsCSandWidth::HiggsBR(int ID, double mH){
   return BranchRatio;
 
 } 
+
+
+double HiggsCSandWidth::getInterpXS(int sqrts, int ID, double mH, int maxI, double mhArray[][6], double varArray[][6])
+{
+
+  using namespace std;
+
+  int i = 0;
+  double reqCS = 0;
+  double step = 0;
+  int index = 4;
+  double xmh[index], sig[index];
+  
+  if(sqrts == 7)
+    {
+      if(ID == ID_ggToH || ID == ID_VBF)
+	{
+	  if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
+	  if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step); }
+	  if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
+	  if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); }
+	  if(mH > 290 && mH <= 350 ){step = 5; i = (int)(149 + (mH - 290)/step); }
+	  if(mH > 350 && mH <= 400 ){step = 10; i = (int)(161 + (mH-350)/step); }
+	  if(mH > 400){step = 20; i = (int)(166 + (mH-400)/step); }
+	}
+      else if(ID == ID_WH || ID == ID_ZH || ID == ID_ttH)
+	{
+	  if(mH <= 110 ){step = 5; i = (int)((mH - 90)/step); }
+          if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(4 + (mH - 110)/step);}
+          if(mH > 140 && mH <= 160 ){step = 1; i = (int)(64 + (mH - 140)/step); }
+          if(mH > 160 && mH <= 290 ){step = 2; i = (int)(84 + (mH - 160)/step); }
+          if(mH > 290 && mH <= 300 ){step = 5; i = (int)(149 + (mH - 290)/step); }
+          if(mH > 300) return 0;	  
+	}
+    }
+  else if (sqrts == 8)
+    {
+      if(ID == ID_ggToH)
+	{
+	  if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
+	  if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
+	  if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
+	  if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
+	  if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
+	  if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH - 350)/step); }
+	  if(mH > 400 && mH <= 1000 ){step = 20; i = (int)(192 + (mH - 400)/step); }
+	}
+      else if(ID == ID_VBF)
+	{
+	  if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
+	  if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step); }
+	  if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
+	  if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
+	  if(mH > 290 && mH <= 350 ){step = 5; i = (int)(175 + (mH - 290)/step); }
+	  if(mH > 350 && mH <= 400 ){step = 10; i = (int)(187 + (mH-350)/step); }
+	  if(mH > 400){step = 20; i = (int)(192 + (mH-400)/step); }
+	}
+      else if(ID == ID_WH || ID == ID_ZH || ID == ID_ttH)
+	{
+	  if(mH <= 110 ){step = 1; i = (int)((mH - 80)/step); }
+	  if(mH > 110 && mH <= 140 ){step = 0.5; i = (int)(30 + (mH - 110)/step);}
+	  if(mH > 140 && mH <= 160 ){step = 1; i = (int)(90 + (mH - 140)/step); }
+	  if(mH > 160 && mH <= 290 ){step = 2; i = (int)(110 + (mH - 160)/step); }
+	  if(mH > 290 && mH <= 300 ){step = 5; i = (int)(175 + (mH - 290)/step); }
+	  if(mH > 300) return 0;
+	}
+      else{ return 0;}
+    }
+  else if(sqrts == 14)
+    {
+      if(ID == ID_ggToH || ID == ID_VBF)
+	{
+	  if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	  if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	  if(mH > 300 && mH <= 400 ){step = 20; i = (int)(32 + (mH - 300)/step); }
+	  if(mH > 400 && mH <= 1000 ){step = 50; i = (int)(37 + (mH - 400)/step); }
+	}
+      else if(ID == ID_WH || ID == ID_ZH || ID == ID_ttH)
+	{
+	  if(mH <= 200 ){step = 5; i = (int)((mH - 90)/step); }
+	  if(mH > 200 && mH <= 300 ){step = 10; i = (int)(22 + (mH - 200)/step); }
+	}
+      else{ return 0;}
+    }
+  else{cout << "HiggsCSandWidth --- unknown sqrts! Choose 7,8, or 14." << endl; return -1;}
+ 
+  //Do the interpolation
+  if(i < 1){i = 1;}
+  if(i+2 >= maxI){i = maxI - 3;}
+  xmh[0]=mhArray[i-1][ID];  xmh[1]=mhArray[i][ID];  xmh[2]=mhArray[i+1][ID];  xmh[3]=mhArray[i+2][ID];
+  sig[0]=varArray[i-1][ID]; sig[1]=varArray[i][ID]; sig[2]=varArray[i+1][ID]; sig[3]=varArray[i+2][ID];
+  
+  TGraph *graph = new TGraph(index, xmh, sig);
+  TSpline3 *gs = new TSpline3("gs",graph);
+  gs->Draw();
+  reqCS = gs->Eval(mH);
+  delete gs;
+  delete graph;
+
+  return reqCS;  
+
+}
+
 
 
 
