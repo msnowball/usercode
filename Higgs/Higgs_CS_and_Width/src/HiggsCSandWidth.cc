@@ -645,7 +645,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH){
       {
 	if(i < 1){i = 1;}
 	if(i+2 >= N_BR){i = N_BR - 3;}
-	int indexW = 4;
+	const int indexW = 4;
 	double xmhW[indexW], sigW[indexW];
 	xmhW[0]=mass_BR[i-1];xmhW[1]=mass_BR[i];xmhW[2]=mass_BR[i+1];xmhW[3]=mass_BR[i+2];
 	sigW[0]=BR[ID][i-1]; sigW[1]=BR[ID][i]; sigW[2]=BR[ID][i+1]; sigW[3]=BR[ID][i+2];
@@ -661,7 +661,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH){
       if(i < 1){i = 1;}
       if(i+2 >= N_BR){i = N_BR - 3;}
       
-      int indexW = 4;
+      const int indexW = 4;
       double xmhW[indexW], sigW[indexW];
       xmhW[0]=mass_BR[i-1];xmhW[1]=mass_BR[i];xmhW[2]=mass_BR[i+1];xmhW[3]=mass_BR[i+2];
       sigW[0]=BR[0][i-1]; sigW[1]=BR[0][i]; sigW[2]=BR[0][i+1]; sigW[3]=BR[0][i+2];
@@ -673,7 +673,7 @@ double HiggsCSandWidth::HiggsWidth(int ID, double mH){
       delete gsW;
       delete graphW;
       
-      int indexPW = 4;
+      const int indexPW = 4;
       double xmhPW[indexPW], sigPW[indexPW];
       xmhPW[0]=mass_BR[i-1];xmhPW[1]=mass_BR[i];xmhPW[2]=mass_BR[i+1];xmhPW[3]=mass_BR[i+2];
       sigPW[0]=BR[ID][i-1]; sigPW[1]=BR[ID][i]; sigPW[2]=BR[ID][i+1]; sigPW[3]=BR[ID][i+2];
@@ -758,7 +758,7 @@ double HiggsCSandWidth::HiggsBR(int ID, double mH){
     
     if(i < 1){i = 1;}
     if(i+2 >= N_BR){i = N_BR - 3;}
-    int indexBR = 4;
+    const int indexBR = 4;
     double xmhBR[indexBR], sigBR[indexBR];
     xmhBR[0]=mass_BR[i-1];xmhBR[1]=mass_BR[i];xmhBR[2]=mass_BR[i+1];xmhBR[3]=mass_BR[i+2];
     sigBR[0]=BR[ID][i-1]; sigBR[1]=BR[ID][i]; sigBR[2]=BR[ID][i+1]; sigBR[3]=BR[ID][i+2];
@@ -787,7 +787,7 @@ double HiggsCSandWidth::getInterpXS(int sqrts, int ID, double mH, int maxI, doub
   int i = 0;
   double reqCS = 0;
   double step = 0;
-  int index = 4;
+  const int index = 4;
   double xmh[index], sig[index];
   
   if(sqrts == 7)
